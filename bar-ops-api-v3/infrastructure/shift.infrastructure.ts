@@ -1,16 +1,16 @@
 /// <reference path="../.sst/platform/config.d.ts" />
 import * as aws from "@pulumi/aws";
-import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, lambdaName, region, account, HTTP_API_ID, apiPermission, subscribeToBus } from "./_shared.infrastructure";
-
-import { AWS_CONFIG } from "@env/config.env";
+import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, lambdaName, region, account, apiPermission, subscribeToBus, lambdaArn, whatsappAccess } from "./_shared.infrastructure";
 
 const SHIFT_TABLE = stageResourceName("BarOps-Shift");
 const SESSION_TABLE = stageResourceName("BarOps-Session");
 const SHIFT_TOKEN_TABLE = stageResourceName("BarOps-ShiftRegistrationToken");
 
-const shift = dynamoTable(SHIFT_TABLE);
-const shiftToken = dynamoTable(SHIFT_TOKEN_TABLE);
+const shift = dynamoTable("BarOps-Shift");
+const shiftToken = dynamoTable("BarOps-ShiftRegistrationToken");
 const env = { TABLE: shift.name };
+// Meta WhatsApp Cloud API access (token in SSM) for open + notification
+const whatsapp = whatsappAccess();
 
 createStreamPipe("Shift", shift);
 
@@ -118,19 +118,19 @@ apiPermission("ShiftOpen", new sst.aws.Function("ShiftOpen", {
     SESSION_GET_LAMBDA_NAME: lambdaName("session", "get"),
     CLIENT_GET_LAMBDA_NAME: lambdaName("client", "get"),
     EMPLOYEE_GET_LAMBDA_NAME: lambdaName("employee", "get"),
-    WHATSAPP_ACCESS_TOKEN: AWS_CONFIG.whatsapp.accessToken!,
-    WHATSAPP_PHONE_NUMBER_ID: AWS_CONFIG.whatsapp.phoneNumberId!,
+    ...whatsapp.environment,
   },
   permissions: [
+    whatsapp.permission,
     { actions: ["dynamodb:Query", "dynamodb:PutItem", "dynamodb:DeleteItem"], resources: [shiftToken.arn, shiftToken.indexArn] },
     // Query only to skip an employee who already has a shift on the event
     { actions: ["dynamodb:Query"], resources: [shift.arn, shift.indexArn] },
     {
       actions: ["lambda:InvokeFunction"],
       resources: [
-        $interpolate`arn:aws:lambda:${region}:${account}:function:${lambdaName("session", "get")}`,
-        $interpolate`arn:aws:lambda:${region}:${account}:function:${lambdaName("client", "get")}`,
-        $interpolate`arn:aws:lambda:${region}:${account}:function:${lambdaName("employee", "get")}`,
+        lambdaArn("session", "get"),
+        lambdaArn("client", "get"),
+        lambdaArn("employee", "get"),
       ],
     },
   ],
@@ -182,21 +182,22 @@ const shiftNotification = new sst.aws.Function("ShiftNotification", {
     SESSION_GET_LAMBDA_NAME: lambdaName("session", "get"),
     SHIFT_LIST_LAMBDA_NAME: lambdaName("shift", "list"),
     EMPLOYEE_LIST_LAMBDA_NAME: lambdaName("employee", "list"),
-    WHATSAPP_ACCESS_TOKEN: AWS_CONFIG.whatsapp.accessToken!,
-    WHATSAPP_PHONE_NUMBER_ID: AWS_CONFIG.whatsapp.phoneNumberId!,
+    ...whatsapp.environment,
   },
   permissions: [
-    { actions: ["lambda:InvokeFunction"], resources: ["*"] },
+    whatsapp.permission,
+    {
+      actions: ["lambda:InvokeFunction"],
+      resources: [
+        lambdaArn("session", "get"),
+        lambdaArn("shift", "list"),
+        lambdaArn("employee", "list"),
+      ],
+    },
   ],
 });
 
-new aws.lambda.Permission("ShiftNotificationApiInvoke", {
-  statementId: "apigw-shift-notification",
-  action: "lambda:InvokeFunction",
-  function: shiftNotification.name,
-  principal: "apigateway.amazonaws.com",
-  sourceArn: $interpolate`arn:aws:execute-api:${region}:${account}:${HTTP_API_ID}/*/*/shift/notification/*`,
-});
+apiPermission("ShiftNotification", shiftNotification);
 
 const shiftNotify = new sst.aws.Function("ShiftNotify", {
   handler: "packages/functions/shift/notify/index.handler",
@@ -210,17 +211,11 @@ const shiftNotify = new sst.aws.Function("ShiftNotify", {
     {
       actions: ["lambda:InvokeFunction"],
       resources: [
-        $interpolate`arn:aws:lambda:${region}:${account}:function:${lambdaName("session", "get")}`,
-        $interpolate`arn:aws:lambda:${region}:${account}:function:${lambdaName("employee", "notify")}`,
+        lambdaArn("session", "get"),
+        lambdaArn("employee", "notify"),
       ],
     },
   ],
 });
 
-new aws.lambda.Permission("ShiftNotifyApiInvoke", {
-  statementId: "apigw-shift-notify",
-  action: "lambda:InvokeFunction",
-  function: shiftNotify.name,
-  principal: "apigateway.amazonaws.com",
-  sourceArn: $interpolate`arn:aws:execute-api:${region}:${account}:${HTTP_API_ID}/*/*/shift/notify/*`,
-});
+apiPermission("ShiftNotify", shiftNotify);

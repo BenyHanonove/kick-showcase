@@ -1,13 +1,13 @@
 /// <reference path="../.sst/platform/config.d.ts" />
 import * as aws from "@pulumi/aws";
-import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, lambdaName, region, account, FONTS_PREFIX, PDF_TEMPLATE_KEY, HTTP_API_ID, apiPermission, subscribeToBus } from "./_shared.infrastructure";
+import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, lambdaName, region, account, FONTS_PREFIX, PDF_TEMPLATE_KEY, apiPermission, subscribeToBus, lambdaArn } from "./_shared.infrastructure";
 
 import { AWS_CONFIG } from "@env/config.env";
 
 const SESSION_TABLE = stageResourceName("BarOps-Session");
 const CLIENT_TABLE = stageResourceName("BarOps-Client");
 
-const session = dynamoTable(SESSION_TABLE);
+const session = dynamoTable("BarOps-Session");
 const env = { TABLE: session.name };
 
 createStreamPipe("Session", session);
@@ -72,11 +72,26 @@ const sessionSummary = new sst.aws.Function("SessionSummary", {
     PDF_TEMPLATE_KEY,
   },
   permissions: [
-    { actions: ["lambda:InvokeFunction"], resources: ["*"] },
+    {
+      actions: ["lambda:InvokeFunction"],
+      resources: [
+        lambdaArn("session", "get"),
+        lambdaArn("client", "get"),
+        lambdaArn("cashier", "list"),
+        lambdaArn("consume", "list"),
+        lambdaArn("expense", "list"),
+        lambdaArn("product", "list"),
+      ],
+    },
+    // Fonts and PDF template only
     {
       actions: ["s3:GetObject"],
-      resources: [$interpolate`arn:aws:s3:::${AWS_CONFIG.s3.globalBucket}/*`],
+      resources: [
+        $interpolate`arn:aws:s3:::${AWS_CONFIG.s3.globalBucket}/${FONTS_PREFIX}/*`,
+        $interpolate`arn:aws:s3:::${AWS_CONFIG.s3.globalBucket}/pdf/*`,
+      ],
     },
+    // ListBucket turns a missing asset into NoSuchKey instead of AccessDenied
     {
       actions: ["s3:ListBucket"],
       resources: [$interpolate`arn:aws:s3:::${AWS_CONFIG.s3.globalBucket}`],
@@ -87,13 +102,7 @@ const sessionSummary = new sst.aws.Function("SessionSummary", {
   },
 });
 
-new aws.lambda.Permission("SessionSummaryApiInvoke", {
-  statementId: "apigw-session-summary",
-  action: "lambda:InvokeFunction",
-  function: sessionSummary.name,
-  principal: "apigateway.amazonaws.com",
-  sourceArn: $interpolate`arn:aws:execute-api:${region}:${account}:${HTTP_API_ID}/*/*/session/summary/*`,
-});
+apiPermission("SessionSummary", sessionSummary);
 
 subscribeToBus("SessionObserverRule", {
   handler: "packages/functions/session/observer/index.lambdaHandler",

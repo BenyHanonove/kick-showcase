@@ -1,13 +1,13 @@
 /// <reference path="../.sst/platform/config.d.ts" />
 import * as aws from "@pulumi/aws";
-import { dynamoTable, createStreamPipe, stageResourceName, lambdaName, region, account, FONTS_PREFIX, HTTP_API_ID, apiPermission } from "./_shared.infrastructure";
+import { dynamoTable, createStreamPipe, stageResourceName, lambdaName, region, account, FONTS_PREFIX, apiPermission, lambdaArn } from "./_shared.infrastructure";
 
 import { AWS_CONFIG } from "@env/config.env";
 
 const SUPPLIER_TABLE = stageResourceName("BarOps-Supplier");
 const PRODUCT_TABLE = stageResourceName("BarOps-Product");
 
-const supplier = dynamoTable(SUPPLIER_TABLE);
+const supplier = dynamoTable("BarOps-Supplier");
 const env = { TABLE: supplier.name, PRODUCTTABLE: PRODUCT_TABLE };
 
 createStreamPipe("Supplier", supplier);
@@ -69,11 +69,22 @@ const supplierSummary = new sst.aws.Function("SupplierSummary", {
     FONTS_PREFIX,
   },
   permissions: [
-    { actions: ["lambda:InvokeFunction"], resources: ["*"] },
+    {
+      actions: ["lambda:InvokeFunction"],
+      resources: [
+        lambdaArn("session", "list"),
+        lambdaArn("sale", "list"),
+        lambdaArn("consume", "batch"),
+        lambdaArn("product", "list"),
+      ],
+    },
     { actions: ["dynamodb:GetItem"], resources: [supplier.arn] },
+    // Fonts only
     {
       actions: ["s3:GetObject"],
-      resources: [$interpolate`arn:aws:s3:::${AWS_CONFIG.s3.globalBucket}/*`],
+      resources: [
+        $interpolate`arn:aws:s3:::${AWS_CONFIG.s3.globalBucket}/${FONTS_PREFIX}/*`,
+      ],
     },
   ],
   nodejs: {
@@ -81,10 +92,4 @@ const supplierSummary = new sst.aws.Function("SupplierSummary", {
   },
 });
 
-new aws.lambda.Permission("SupplierSummaryApiInvoke", {
-  statementId: "apigw-supplier-summary",
-  action: "lambda:InvokeFunction",
-  function: supplierSummary.name,
-  principal: "apigateway.amazonaws.com",
-  sourceArn: $interpolate`arn:aws:execute-api:${region}:${account}:${HTTP_API_ID}/*/*/supplier/summary/*`,
-});
+apiPermission("SupplierSummary", supplierSummary);

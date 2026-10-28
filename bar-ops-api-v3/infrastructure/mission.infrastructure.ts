@@ -1,10 +1,10 @@
 /// <reference path="../.sst/platform/config.d.ts" />
-import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, lambdaName, apiPermission, subscribeToBus } from "./_shared.infrastructure";
+import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, lambdaName, apiPermission, subscribeToBus, lambdaArn } from "./_shared.infrastructure";
 
 const MISSION_TABLE = stageResourceName("BarOps-Mission");
 const SESSION_TABLE = stageResourceName("BarOps-Session");
 
-const mission = dynamoTable(MISSION_TABLE);
+const mission = dynamoTable("BarOps-Mission");
 const env = { TABLE: mission.name };
 
 // Streams not enabled on BarOps-Mission table, pipe omitted
@@ -17,7 +17,12 @@ apiPermission("MissionCreate", new sst.aws.Function("MissionCreate", {
   },
   permissions: [
     { actions: ["dynamodb:PutItem"], resources: [mission.arn] },
-    { actions: ["lambda:InvokeFunction"], resources: ["*"] },
+    {
+      actions: ["lambda:InvokeFunction"],
+      resources: [
+        lambdaArn("session", "get"),
+      ],
+    },
   ],
 }));
 

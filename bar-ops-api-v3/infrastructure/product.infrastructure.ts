@@ -4,7 +4,7 @@ import { dynamoTable, projectBus, getStreamArnPrefix, stageResourceName, apiPerm
 const PRODUCT_TABLE = stageResourceName("BarOps-Product");
 const SUPPLIER_TABLE = stageResourceName("BarOps-Supplier");
 
-const product = dynamoTable(PRODUCT_TABLE);
+const product = dynamoTable("BarOps-Product");
 const env = { TABLE: product.name };
 
 apiPermission("ProductCreate", new sst.aws.Function("ProductCreate", {

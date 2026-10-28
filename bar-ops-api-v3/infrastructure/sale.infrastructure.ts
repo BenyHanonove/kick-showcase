@@ -1,19 +1,17 @@
 /// <reference path="../.sst/platform/config.d.ts" />
 import * as aws from "@pulumi/aws";
-import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, lambdaName, region, account, FONTS_PREFIX, HTTP_API_ID, apiPermission, subscribeToBus } from "./_shared.infrastructure";
+import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, lambdaName, region, account, FONTS_PREFIX, apiPermission, subscribeToBus, lambdaArn } from "./_shared.infrastructure";
 
 import { AWS_CONFIG } from "@env/config.env";
 
 const SALE_TABLE = stageResourceName("BarOps-Sale");
-const CONSUME_TABLE = stageResourceName("BarOps-Consume");
 const CLIENT_TABLE = stageResourceName("BarOps-Client");
 
-const sale = dynamoTable(SALE_TABLE);
+const sale = dynamoTable("BarOps-Sale");
 const env = { TABLE: sale.name };
 
-// Build consume ARNs directly to avoid a duplicate Pulumi resource
-const consumeArn = $interpolate`arn:aws:dynamodb:${region}:${account}:table/${CONSUME_TABLE}`;
-const consumeIndexArn = $interpolate`${consumeArn}/index/*`;
+// Child table of the cascade; declared once in _tables.infrastructure.ts
+const consume = dynamoTable("BarOps-Consume");
 
 createStreamPipe("Sale", sale);
 
@@ -75,11 +73,24 @@ const saleSummary = new sst.aws.Function("SaleSummary", {
     PDF_TEMPLATE_KEY: "pdf/Kick_A4.pdf",
   },
   permissions: [
-    { actions: ["lambda:InvokeFunction"], resources: ["*"] },
+    {
+      actions: ["lambda:InvokeFunction"],
+      resources: [
+        lambdaArn("sale", "get"),
+        lambdaArn("client", "get"),
+        lambdaArn("consume", "list"),
+        lambdaArn("product", "list"),
+      ],
+    },
+    // Fonts and PDF template only
     {
       actions: ["s3:GetObject"],
-      resources: [$interpolate`arn:aws:s3:::${AWS_CONFIG.s3.globalBucket}/*`],
+      resources: [
+        $interpolate`arn:aws:s3:::${AWS_CONFIG.s3.globalBucket}/${FONTS_PREFIX}/*`,
+        $interpolate`arn:aws:s3:::${AWS_CONFIG.s3.globalBucket}/pdf/*`,
+      ],
     },
+    // ListBucket turns a missing asset into NoSuchKey instead of AccessDenied
     {
       actions: ["s3:ListBucket"],
       resources: [$interpolate`arn:aws:s3:::${AWS_CONFIG.s3.globalBucket}`],
@@ -90,13 +101,7 @@ const saleSummary = new sst.aws.Function("SaleSummary", {
   },
 });
 
-new aws.lambda.Permission("SaleSummaryApiInvoke", {
-  statementId: "apigw-sale-summary",
-  action: "lambda:InvokeFunction",
-  function: saleSummary.name,
-  principal: "apigateway.amazonaws.com",
-  sourceArn: $interpolate`arn:aws:execute-api:${region}:${account}:${HTTP_API_ID}/*/*/sale/summary/*`,
-});
+apiPermission("SaleSummary", saleSummary);
 
 apiPermission("SaleSummaryByMonth", new sst.aws.Function("SaleSummaryByMonth", {
   handler: "packages/functions/sale/summary-by-month/index.lambdaHandler",
@@ -105,7 +110,13 @@ apiPermission("SaleSummaryByMonth", new sst.aws.Function("SaleSummaryByMonth", {
     CONSUME_LAMBDA_NAME: lambdaName("consume", "list"),
   },
   permissions: [
-    { actions: ["lambda:InvokeFunction"], resources: ["*"] },
+    {
+      actions: ["lambda:InvokeFunction"],
+      resources: [
+        lambdaArn("sale", "list"),
+        lambdaArn("consume", "list"),
+      ],
+    },
   ],
 }));
 
@@ -114,7 +125,7 @@ subscribeToBus("SaleObserverRule", {
   handler: "packages/functions/sale/observer/index.lambdaHandler",
   environment: {
     TABLE: sale.name,
-    CHILD_TABLE: CONSUME_TABLE,
+    CHILD_TABLE: consume.name,
   },
   permissions: [
     {
@@ -123,7 +134,7 @@ subscribeToBus("SaleObserverRule", {
     },
     {
       actions: ["dynamodb:Query", "dynamodb:BatchWriteItem"],
-      resources: [consumeArn, consumeIndexArn],
+      resources: [consume.arn, consume.indexArn],
     },
   ],
 }, {

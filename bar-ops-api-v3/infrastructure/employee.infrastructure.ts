@@ -1,21 +1,18 @@
 /// <reference path="../.sst/platform/config.d.ts" />
 import * as aws from "@pulumi/aws";
-import { dynamoTable, stageResourceName, lambdaName, region, account, FONTS_PREFIX, HTTP_API_ID, apiPermission } from "./_shared.infrastructure";
+import { dynamoTable, stageResourceName, lambdaName, region, account, FONTS_PREFIX, apiPermission, lambdaArn, whatsappAccess } from "./_shared.infrastructure";
 
 import { AWS_CONFIG } from "@env/config.env";
 
 const EMPLOYEE_TABLE = stageResourceName("BarOps-Employee");
 const EMPLOYEE_TOKEN_TABLE = stageResourceName("BarOps-EmployeeUpdateToken");
 
-const employee = dynamoTable(EMPLOYEE_TABLE);
-const employeeToken = dynamoTable(EMPLOYEE_TOKEN_TABLE);
+const employee = dynamoTable("BarOps-Employee");
+const employeeToken = dynamoTable("BarOps-EmployeeUpdateToken");
 const env = { TABLE: employee.name };
 
-// Meta WhatsApp Cloud API credentials shared by the notify + link functions
-const whatsappEnv = {
-  WHATSAPP_ACCESS_TOKEN: AWS_CONFIG.whatsapp.accessToken!,
-  WHATSAPP_PHONE_NUMBER_ID: AWS_CONFIG.whatsapp.phoneNumberId!,
-};
+// Meta WhatsApp Cloud API access (token in SSM) for the notify + link functions
+const whatsapp = whatsappAccess();
 
 apiPermission("EmployeeCreate", new sst.aws.Function("EmployeeCreate", {
   handler: "packages/functions/employee/create/index.handler",
@@ -72,10 +69,11 @@ apiPermission("EmployeeLink", new sst.aws.Function("EmployeeLink", {
   handler: "packages/functions/employee/link/index.handler",
   environment: {
     ...env,
-    ...whatsappEnv,
+    ...whatsapp.environment,
     TOKEN_TABLE: employeeToken.name,
   },
   permissions: [
+    whatsapp.permission,
     { actions: ["dynamodb:GetItem"], resources: [employee.arn] },
     { actions: ["dynamodb:Query", "dynamodb:PutItem", "dynamodb:DeleteItem"], resources: [employeeToken.arn, employeeToken.indexArn] },
   ],
@@ -101,7 +99,8 @@ apiPermission("EmployeeClaim", new sst.aws.Function("EmployeeClaim", {
   },
   permissions: [
     { actions: ["dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:UpdateItem"], resources: [employee.arn] },
-    { actions: ["dynamodb:UpdateItem"], resources: [employeeToken.arn] },
+    // Reads the token before claiming it
+    { actions: ["dynamodb:GetItem", "dynamodb:UpdateItem"], resources: [employeeToken.arn] },
   ],
 }));
 
@@ -119,9 +118,10 @@ apiPermission("EmployeeNotify", new sst.aws.Function("EmployeeNotify", {
   handler: "packages/functions/employee/notify/index.handler",
   environment: {
     ...env,
-    ...whatsappEnv,
+    ...whatsapp.environment,
   },
   permissions: [
+    whatsapp.permission,
     { actions: ["dynamodb:GetItem"], resources: [employee.arn] },
   ],
 }));
@@ -139,14 +139,12 @@ const employeeSummary = new sst.aws.Function("EmployeeSummary", {
   },
   permissions: [
     { actions: ["dynamodb:BatchGetItem"], resources: [employee.arn] },
-    { actions: ["lambda:InvokeFunction"], resources: ["*"] },
     {
-      actions: ["s3:GetObject"],
-      resources: [$interpolate`arn:aws:s3:::${AWS_CONFIG.s3.globalBucket}/*`],
-    },
-    {
-      actions: ["s3:ListBucket"],
-      resources: [$interpolate`arn:aws:s3:::${AWS_CONFIG.s3.globalBucket}`],
+      actions: ["lambda:InvokeFunction"],
+      resources: [
+        lambdaArn("session", "get"),
+        lambdaArn("shift", "list"),
+      ],
     },
   ],
   nodejs: {
@@ -154,10 +152,4 @@ const employeeSummary = new sst.aws.Function("EmployeeSummary", {
   },
 });
 
-new aws.lambda.Permission("EmployeeSummaryApiInvoke", {
-  statementId: "apigw-employee-summary",
-  action: "lambda:InvokeFunction",
-  function: employeeSummary.name,
-  principal: "apigateway.amazonaws.com",
-  sourceArn: $interpolate`arn:aws:execute-api:${region}:${account}:${HTTP_API_ID}/*/*/employee/summary/{sessionId}`,
-});
+apiPermission("EmployeeSummary", employeeSummary);

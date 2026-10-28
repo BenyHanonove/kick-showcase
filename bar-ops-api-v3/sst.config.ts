@@ -18,6 +18,10 @@ export default $config({
       throw new Error(`Missing .env.${$app.stage} — refusing to deploy stage "${$app.stage}" with production values`);
     }
 
+    const { region, account, optionalEnv, isProduction } = await import("./infrastructure/_config.infrastructure");
+    const { registerFunction } = await import("./infrastructure/_alarms.infrastructure");
+    const logLevel = optionalEnv("POWERTOOLS_LOG_LEVEL") ?? (isProduction ? "INFO" : "DEBUG");
+
     $transform(sst.aws.Function, (args, opts, name) => {
       if (!args) return;
       args.runtime ??= "nodejs24.x";
@@ -39,12 +43,19 @@ export default $config({
         typeof value === "object" && value !== null &&
         typeof (value as OutputLike<T>).apply === "function";
 
+      // Domain module of the handler (packages/functions/<module>/<action>)
+      const handlerParts = typeof args.handler === "string" ? args.handler.split("/") : [];
+      const service = handlerParts.length >= 4 ? handlerParts[2] : "kick-api";
+
       // Password stays in SSM, read at cold start
       const redisPasswordParam = `/bar-ops-api-v3/${$app.stage}/redis-password`;
       const redisEnv: Record<string, string> = {
         REDIS_HOST: process.env.REDIS_HOST,
         REDIS_PORT: process.env.REDIS_PORT,
         REDIS_PASSWORD_PARAM: redisPasswordParam,
+        // Powertools Logger/Tracer: one service per domain module
+        POWERTOOLS_SERVICE_NAME: service,
+        POWERTOOLS_LOG_LEVEL: logLevel,
       };
 
       const envInput = args.environment;
@@ -58,19 +69,36 @@ export default $config({
       }
 
       // Grant every function read access to its stage's Redis password parameter
-      const ssmPermission = {
+      const ssmPermission: { actions: string[]; resources: $util.Input<string>[] } = {
         actions: ["ssm:GetParameter"],
-        resources: [`arn:aws:ssm:*:*:parameter${redisPasswordParam}`],
+        resources: [$interpolate`arn:aws:ssm:${region}:${account}:parameter${redisPasswordParam}`],
+      };
+      // X-Ray segment upload; these actions support no resource scoping
+      const xrayPermission: typeof ssmPermission = {
+        actions: ["xray:PutTraceSegments", "xray:PutTelemetryRecords"],
+        resources: ["*"],
       };
       const permsInput = args.permissions;
       if (isOutputLike<(typeof ssmPermission)[]>(permsInput)) {
         args.permissions = permsInput.apply((actualPerms) => [
           ...(actualPerms || []),
           ssmPermission,
+          xrayPermission,
         ]) as typeof args.permissions;
       } else {
-        args.permissions = [...((permsInput || []) as (typeof ssmPermission)[]), ssmPermission];
+        args.permissions = [...((permsInput || []) as (typeof ssmPermission)[]), ssmPermission, xrayPermission];
       }
+
+      // Active X-Ray tracing on every function, composed with any per-function transform
+      const fnTransform = args.transform?.function;
+      args.transform = {
+        ...args.transform,
+        function: (fnArgs, fnOpts, fnName) => {
+          if (typeof fnTransform === "function") fnTransform(fnArgs, fnOpts, fnName);
+          else if (fnTransform) Object.assign(fnArgs, fnTransform);
+          fnArgs.tracingConfig = { mode: "Active" };
+        },
+      };
 
       // Derive a clean name from the handler path
       let cleanName = name.replace(/Handler$/, "");
@@ -88,6 +116,9 @@ export default $config({
 
       const functionName = `${$app.name}-${$app.stage}-${cleanName}`;
       args.name ??= functionName;
+
+      // Collected for the per-module error alarms (observability.infrastructure.ts)
+      registerFunction(service, args.name);
 
       // Register shareable test events if events.json exists
       if (typeof args.handler === "string") {
@@ -142,6 +173,8 @@ export default $config({
     await import("./infrastructure/tips.infrastructure");
     await import("./infrastructure/vehicle.infrastructure");
     await import("./infrastructure/websocket.infrastructure");
+    // Last: alarms over every function registered above
+    await import("./infrastructure/observability.infrastructure");
 
     // Bootstrap bucket lifecycle rule owned by production
     if ($app.stage === "production") {

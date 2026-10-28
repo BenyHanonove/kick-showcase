@@ -6,7 +6,7 @@ import { AWS_CONFIG } from "@env/config.env";
 const DOCUMENT_TABLE = stageResourceName("BarOps-Document");
 const SESSION_TABLE = stageResourceName("BarOps-Session");
 
-const document = dynamoTable(DOCUMENT_TABLE);
+const document = dynamoTable("BarOps-Document");
 const env = { TABLE: document.name };
 
 apiPermission("DocumentCreate", new sst.aws.Function("DocumentCreate", {
