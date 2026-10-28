@@ -23,7 +23,7 @@
             <v-icon size="17">mdi-instagram</v-icon>
           </a>
           <a
-            href="https://wa.me/972532753040"
+            :href="`https://wa.me/${env.contact.whatsappNumber}`"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="WhatsApp"
@@ -43,6 +43,8 @@
 </template>
 
 <script setup lang="ts">
+import { env } from '@plugins'
+
 const year = new Date().getFullYear()
 </script>
 

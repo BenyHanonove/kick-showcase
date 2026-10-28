@@ -22,6 +22,13 @@ export const env = {
     idpUrl: import.meta.env.VITE_COGNITO_IDP_URL as string,
   },
 
+  // Public contact details shown on the landing and legal pages
+  contact: {
+    email: (import.meta.env.VITE_CONTACT_EMAIL as string | undefined) || 'contact@example.com',
+    // International format without '+', as wa.me expects
+    whatsappNumber: (import.meta.env.VITE_CONTACT_WHATSAPP as string | undefined) || '972500000000',
+  },
+
   // WebSocket Configuration
   websocket: {
     url: import.meta.env.VITE_WS_URL as string,

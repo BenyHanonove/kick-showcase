@@ -133,12 +133,13 @@
 </template>
 
 <script setup lang="ts">
+import { env } from '@plugins'
 import { VThemeProvider } from 'vuetify/components'
 import LandingNav from '@landing/components/LandingNav.vue'
 import AppFooter from '@shared/components/layout/AppFooter.vue'
 
 const coordinatorName = 'צוות KICK'
-const coordinatorEmail = 'kickbarops@gmail.com'
+const coordinatorEmail = env.contact.email
 const lastUpdated = '6 בספטמבר 2026'
 
 const sections = [
