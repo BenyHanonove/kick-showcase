@@ -15,7 +15,7 @@ import { extractId, fakeId } from '../shared/utils.js';
 import { assertForbidden } from '../shared/role-assert.js';
 
 async function createFixtures() {
-  const clientResponse = await createClient({ name: 'TEST', brand: 'TEST', email: null, phone: '0507799799' });
+  const clientResponse = await createClient({ name: 'TEST', brand: 'TEST', email: null, phone: '0501234567' });
   const clientId = extractId(clientResponse);
 
   const sessionResponse = await createSession({

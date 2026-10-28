@@ -28,7 +28,7 @@ async function runForbiddenChecks(role) {
 
 // Admin creates the client/sale/supplier/product/consume fixtures the summary depends on
 async function createFixtures() {
-  const clientResponse = await createClient({ name: 'TEST', brand: 'TEST', email: null, phone: '0507799799' });
+  const clientResponse = await createClient({ name: 'TEST', brand: 'TEST', email: null, phone: '0501234567' });
   const clientId = extractId(clientResponse);
 
   const saleResponse = await createSale({

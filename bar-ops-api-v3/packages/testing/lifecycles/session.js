@@ -52,7 +52,7 @@ async function runManagerChecks() {
   let sessionId;
   let sessionTimestamp;
   await asAdmin(async () => {
-    const clientResponse = await createClient({ name: 'TEST', brand: 'TEST', email: null, phone: '0507799799' });
+    const clientResponse = await createClient({ name: 'TEST', brand: 'TEST', email: null, phone: '0501234567' });
     clientId = extractId(clientResponse);
     const sessionResponse = await createSession(buildSessionPayload(clientId));
     sessionId = extractId(sessionResponse);
@@ -102,7 +102,7 @@ async function runAdminLifecycle() {
     "name": "TEST",
     "brand": "TEST",
     "email": null,
-    "phone": "0507799799"
+    "phone": "0501234567"
   };
   const clientResponse = await createClient(clientPayload);
   const clientId = extractId(clientResponse);
