@@ -7,7 +7,7 @@ import { AWS_CONFIG } from "@env/config.env";
 const SUPPLIER_TABLE = stageResourceName("BarOps-Supplier");
 const PRODUCT_TABLE = stageResourceName("BarOps-Product");
 
-const supplier = dynamoTable(SUPPLIER_TABLE);
+const supplier = dynamoTable("BarOps-Supplier");
 const env = { TABLE: supplier.name, PRODUCTTABLE: PRODUCT_TABLE };
 
 createStreamPipe("Supplier", supplier);
@@ -81,4 +81,4 @@ const supplierSummary = new sst.aws.Function("SupplierSummary", {
   },
 });
 
-apiPermission("SupplierSummary", supplierSummary, "*/*/supplier/summary/*");
+apiPermission("SupplierSummary", supplierSummary);

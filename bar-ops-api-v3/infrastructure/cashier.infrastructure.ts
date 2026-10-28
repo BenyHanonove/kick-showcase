@@ -7,7 +7,7 @@ import { AWS_CONFIG } from "@env/config.env";
 const CASHIER_TABLE = stageResourceName("BarOps-Cashier");
 const SESSION_TABLE = stageResourceName("BarOps-Session");
 
-const cashier = dynamoTable(CASHIER_TABLE);
+const cashier = dynamoTable("BarOps-Cashier");
 const env = { TABLE: cashier.name };
 
 createStreamPipe("Cashier", cashier);
@@ -95,7 +95,7 @@ const cashierPresign = new sst.aws.Function("CashierPresign", {
   ],
 });
 
-apiPermission("CashierPresign", cashierPresign, "*/*/cashier/presign");
+apiPermission("CashierPresign", cashierPresign);
 
 const cashierUnsign = new sst.aws.Function("CashierUnsign", {
   handler: "packages/functions/cashier/unsign/index.handler",
@@ -114,7 +114,7 @@ const cashierUnsign = new sst.aws.Function("CashierUnsign", {
   ],
 });
 
-apiPermission("CashierUnsign", cashierUnsign, "*/*/cashier/unsign");
+apiPermission("CashierUnsign", cashierUnsign);
 
 apiPermission("CashierUpdate", new sst.aws.Function("CashierUpdate", {
   handler: "packages/functions/cashier/update/index.handler",

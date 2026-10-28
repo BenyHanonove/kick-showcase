@@ -1,9 +1,10 @@
 /// <reference path="../.sst/platform/config.d.ts" />
-import { region, account, COGNITO_USER_POOL_ID, COGNITO_CLIENT_ID, apiPermission } from "./_shared.infrastructure";
+import { region, account, apiPermission } from "./_shared.infrastructure";
+import { cognito } from "./_cognito.infrastructure";
 
 import { AWS_CONFIG } from "@env/config.env";
 
-const userPoolArn = $interpolate`arn:aws:cognito-idp:${region}:${account}:userpool/${COGNITO_USER_POOL_ID}`;
+const userPoolArn = cognito.userPoolArn;
 
 // ARN of the verified SES identity for the From address
 const sesIdentityArn = $interpolate`arn:aws:ses:${region}:${account}:identity/${AWS_CONFIG.sesFromAddress}`;
@@ -44,12 +45,12 @@ new sst.aws.Function("AuthPostConfirmation", {
   ],
 });
 
-// Public HTTP routes on the manually-created HTTP API
+// Public HTTP routes (no JWT authorizer, see ROUTES)
 apiPermission("AuthLogin", new sst.aws.Function("AuthLogin", {
   handler: "packages/functions/auth/login/index.handler",
   environment: {
-    COGNITO_USER_POOL_ID,
-    COGNITO_CLIENT_ID,
+    COGNITO_USER_POOL_ID: cognito.userPoolId,
+    COGNITO_CLIENT_ID: cognito.clientId,
   },
   permissions: [
     {
@@ -62,7 +63,7 @@ apiPermission("AuthLogin", new sst.aws.Function("AuthLogin", {
 apiPermission("AuthRefresh", new sst.aws.Function("AuthRefresh", {
   handler: "packages/functions/auth/refresh/index.handler",
   environment: {
-    COGNITO_CLIENT_ID,
+    COGNITO_CLIENT_ID: cognito.clientId,
   },
   // Public InitiateAuth needs no Cognito IAM permission
 }));
@@ -70,7 +71,7 @@ apiPermission("AuthRefresh", new sst.aws.Function("AuthRefresh", {
 apiPermission("AuthLogout", new sst.aws.Function("AuthLogout", {
   handler: "packages/functions/auth/logout/index.handler",
   environment: {
-    COGNITO_CLIENT_ID,
+    COGNITO_CLIENT_ID: cognito.clientId,
   },
   // RevokeToken / GlobalSignOut needs no Cognito IAM permission either
 }));

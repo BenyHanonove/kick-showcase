@@ -3,7 +3,7 @@ import { dynamoTable, createStreamPipe, stageResourceName, apiPermission } from 
 
 const CLIENT_TABLE = stageResourceName("BarOps-Client");
 
-const client = dynamoTable(CLIENT_TABLE);
+const client = dynamoTable("BarOps-Client");
 const env = { TABLE: client.name };
 
 createStreamPipe("Client", client);

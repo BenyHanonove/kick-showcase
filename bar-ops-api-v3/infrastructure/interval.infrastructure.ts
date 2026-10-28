@@ -4,7 +4,7 @@ import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageRes
 const INTERVAL_TABLE = stageResourceName("BarOps-Interval");
 const SHIFT_TABLE = stageResourceName("BarOps-Shift");
 
-const interval = dynamoTable(INTERVAL_TABLE);
+const interval = dynamoTable("BarOps-Interval");
 const env = { TABLE: interval.name };
 
 createStreamPipe("Interval", interval);

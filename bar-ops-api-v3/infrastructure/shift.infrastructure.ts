@@ -8,8 +8,8 @@ const SHIFT_TABLE = stageResourceName("BarOps-Shift");
 const SESSION_TABLE = stageResourceName("BarOps-Session");
 const SHIFT_TOKEN_TABLE = stageResourceName("BarOps-ShiftRegistrationToken");
 
-const shift = dynamoTable(SHIFT_TABLE);
-const shiftToken = dynamoTable(SHIFT_TOKEN_TABLE);
+const shift = dynamoTable("BarOps-Shift");
+const shiftToken = dynamoTable("BarOps-ShiftRegistrationToken");
 const env = { TABLE: shift.name };
 
 createStreamPipe("Shift", shift);
@@ -190,7 +190,7 @@ const shiftNotification = new sst.aws.Function("ShiftNotification", {
   ],
 });
 
-apiPermission("ShiftNotification", shiftNotification, "*/*/shift/notification/*");
+apiPermission("ShiftNotification", shiftNotification);
 
 const shiftNotify = new sst.aws.Function("ShiftNotify", {
   handler: "packages/functions/shift/notify/index.handler",
@@ -211,4 +211,4 @@ const shiftNotify = new sst.aws.Function("ShiftNotify", {
   ],
 });
 
-apiPermission("ShiftNotify", shiftNotify, "*/*/shift/notify/*");
+apiPermission("ShiftNotify", shiftNotify);

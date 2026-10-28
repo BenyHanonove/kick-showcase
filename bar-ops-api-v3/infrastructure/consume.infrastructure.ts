@@ -4,7 +4,7 @@ import { dynamoTable, projectBus, getStreamArnPrefix, stageResourceName, apiPerm
 const CONSUME_TABLE = stageResourceName("BarOps-Consume");
 const SESSION_TABLE = stageResourceName("BarOps-Session");
 
-const consume = dynamoTable(CONSUME_TABLE);
+const consume = dynamoTable("BarOps-Consume");
 const env = { TABLE: consume.name };
 
 apiPermission("ConsumeCreate", new sst.aws.Function("ConsumeCreate", {

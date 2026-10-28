@@ -7,7 +7,7 @@ import { AWS_CONFIG } from "@env/config.env";
 const EXPENSE_TABLE = stageResourceName("BarOps-Expense");
 const SESSION_TABLE = stageResourceName("BarOps-Session");
 
-const expense = dynamoTable(EXPENSE_TABLE);
+const expense = dynamoTable("BarOps-Expense");
 const env = { TABLE: expense.name };
 
 apiPermission("ExpenseCreate", new sst.aws.Function("ExpenseCreate", {
@@ -68,7 +68,7 @@ const expensePresign = new sst.aws.Function("ExpensePresign", {
   ],
 });
 
-apiPermission("ExpensePresign", expensePresign, "*/*/expense/presign");
+apiPermission("ExpensePresign", expensePresign);
 
 const expenseUnsign = new sst.aws.Function("ExpenseUnsign", {
   handler: "packages/functions/expense/unsign/index.handler",
@@ -87,7 +87,7 @@ const expenseUnsign = new sst.aws.Function("ExpenseUnsign", {
   ],
 });
 
-apiPermission("ExpenseUnsign", expenseUnsign, "*/*/expense/unsign");
+apiPermission("ExpenseUnsign", expenseUnsign);
 
 apiPermission("ExpenseUpdate", new sst.aws.Function("ExpenseUpdate", {
   handler: "packages/functions/expense/update/index.handler",

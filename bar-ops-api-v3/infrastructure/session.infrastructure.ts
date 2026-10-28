@@ -7,7 +7,7 @@ import { AWS_CONFIG } from "@env/config.env";
 const SESSION_TABLE = stageResourceName("BarOps-Session");
 const CLIENT_TABLE = stageResourceName("BarOps-Client");
 
-const session = dynamoTable(SESSION_TABLE);
+const session = dynamoTable("BarOps-Session");
 const env = { TABLE: session.name };
 
 createStreamPipe("Session", session);
@@ -87,7 +87,7 @@ const sessionSummary = new sst.aws.Function("SessionSummary", {
   },
 });
 
-apiPermission("SessionSummary", sessionSummary, "*/*/session/summary/*");
+apiPermission("SessionSummary", sessionSummary);
 
 subscribeToBus("SessionObserverRule", {
   handler: "packages/functions/session/observer/index.lambdaHandler",

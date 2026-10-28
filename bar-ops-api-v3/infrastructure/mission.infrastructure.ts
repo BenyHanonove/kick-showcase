@@ -4,7 +4,7 @@ import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageRes
 const MISSION_TABLE = stageResourceName("BarOps-Mission");
 const SESSION_TABLE = stageResourceName("BarOps-Session");
 
-const mission = dynamoTable(MISSION_TABLE);
+const mission = dynamoTable("BarOps-Mission");
 const env = { TABLE: mission.name };
 
 // Streams not enabled on BarOps-Mission table, pipe omitted

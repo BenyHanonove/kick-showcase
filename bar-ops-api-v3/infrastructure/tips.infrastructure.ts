@@ -4,7 +4,7 @@ import { dynamoTable, projectBus, getStreamArnPrefix, stageResourceName, apiPerm
 const TIPS_TABLE = stageResourceName("BarOps-Tips");
 const SESSION_TABLE = stageResourceName("BarOps-Session");
 
-const tips = dynamoTable(TIPS_TABLE);
+const tips = dynamoTable("BarOps-Tips");
 const env = { TABLE: tips.name };
 
 subscribeToBus("TipsSyncCashier", {

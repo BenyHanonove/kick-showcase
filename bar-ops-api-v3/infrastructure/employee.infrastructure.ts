@@ -7,8 +7,8 @@ import { AWS_CONFIG } from "@env/config.env";
 const EMPLOYEE_TABLE = stageResourceName("BarOps-Employee");
 const EMPLOYEE_TOKEN_TABLE = stageResourceName("BarOps-EmployeeUpdateToken");
 
-const employee = dynamoTable(EMPLOYEE_TABLE);
-const employeeToken = dynamoTable(EMPLOYEE_TOKEN_TABLE);
+const employee = dynamoTable("BarOps-Employee");
+const employeeToken = dynamoTable("BarOps-EmployeeUpdateToken");
 const env = { TABLE: employee.name };
 
 // Meta WhatsApp Cloud API credentials shared by the notify + link functions
@@ -154,4 +154,4 @@ const employeeSummary = new sst.aws.Function("EmployeeSummary", {
   },
 });
 
-apiPermission("EmployeeSummary", employeeSummary, "*/*/employee/summary/{sessionId}");
+apiPermission("EmployeeSummary", employeeSummary);

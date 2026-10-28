@@ -4,7 +4,7 @@ import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageRes
 const VEHICLE_TABLE = stageResourceName("BarOps-Vehicle");
 const SESSION_TABLE = stageResourceName("BarOps-Session");
 
-const vehicle = dynamoTable(VEHICLE_TABLE);
+const vehicle = dynamoTable("BarOps-Vehicle");
 const env = { TABLE: vehicle.name };
 
 createStreamPipe("Vehicle", vehicle);

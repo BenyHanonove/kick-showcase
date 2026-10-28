@@ -5,15 +5,13 @@ import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageRes
 import { AWS_CONFIG } from "@env/config.env";
 
 const SALE_TABLE = stageResourceName("BarOps-Sale");
-const CONSUME_TABLE = stageResourceName("BarOps-Consume");
 const CLIENT_TABLE = stageResourceName("BarOps-Client");
 
-const sale = dynamoTable(SALE_TABLE);
+const sale = dynamoTable("BarOps-Sale");
 const env = { TABLE: sale.name };
 
-// Build consume ARNs directly to avoid a duplicate Pulumi resource
-const consumeArn = $interpolate`arn:aws:dynamodb:${region}:${account}:table/${CONSUME_TABLE}`;
-const consumeIndexArn = $interpolate`${consumeArn}/index/*`;
+// Child table of the cascade; declared once in _tables.infrastructure.ts
+const consume = dynamoTable("BarOps-Consume");
 
 createStreamPipe("Sale", sale);
 
@@ -90,7 +88,7 @@ const saleSummary = new sst.aws.Function("SaleSummary", {
   },
 });
 
-apiPermission("SaleSummary", saleSummary, "*/*/sale/summary/*");
+apiPermission("SaleSummary", saleSummary);
 
 apiPermission("SaleSummaryByMonth", new sst.aws.Function("SaleSummaryByMonth", {
   handler: "packages/functions/sale/summary-by-month/index.lambdaHandler",
@@ -108,7 +106,7 @@ subscribeToBus("SaleObserverRule", {
   handler: "packages/functions/sale/observer/index.lambdaHandler",
   environment: {
     TABLE: sale.name,
-    CHILD_TABLE: CONSUME_TABLE,
+    CHILD_TABLE: consume.name,
   },
   permissions: [
     {
@@ -117,7 +115,7 @@ subscribeToBus("SaleObserverRule", {
     },
     {
       actions: ["dynamodb:Query", "dynamodb:BatchWriteItem"],
-      resources: [consumeArn, consumeIndexArn],
+      resources: [consume.arn, consume.indexArn],
     },
   ],
 }, {
