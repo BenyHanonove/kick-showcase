@@ -125,15 +125,17 @@ in the AWS console and only *referenced* by the IaC:
 | Cognito user pool + app client | Console; IDs hardcoded | Shared by both stages |
 | Redis (Upstash/hosted) | `.env.<stage>` + SSM parameter | `REDIS_HOST`/`REDIS_PORT` must exist or deploy throws |
 
-## 6. Health snapshot — 2026-09-04
+## 6. Health snapshot
 
-| Check | Command | Result |
-| --- | --- | --- |
-| Backend types | `npx tsc --noEmit` (bar-ops-api-v3) | ✅ clean |
-| Frontend types | `npm run type-check` (vue-tsc) | ✅ clean |
-| Frontend lint | `npx eslint .` | ✅ clean |
-| Git tree | `git status` | ✅ clean |
+CI is the source of truth: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml)
+runs on every push and pull request.
 
-Known operational notes: `quotation.js` is skipped in the API test suite (model not in
-use), `/employee/notify` has no API Gateway route yet, and `beny_admin` MFA is still
-deferred.
+| Job | Steps |
+| --- | --- |
+| `dashboard` | `npm ci` → `npm run type-check` (vue-tsc) → `npm run lint` → `npm test` (Vitest) |
+| `api` | `npm ci --ignore-scripts` → `npm run typecheck` (tsc, Lambda code only) → `npm test` (Vitest) |
+
+The black-box API suites in [`packages/testing/`](../bar-ops-api-v3/packages/testing/)
+need a deployed stage and Cognito test users, so they run in the deploy pipeline
+(`npm run deploy:barops`: deploy dev → clean → test as each role → deploy production),
+not in public CI.
