@@ -1,0 +1,48 @@
+flowchart TB
+  subgraph Browser
+    SPA["Vue 3 SPA<br/>Pinia · Vuetify · Hebrew RTL<br/>access token in memory only"]
+  end
+
+  subgraph Cloudflare
+    PAGES["Pages<br/>static SPA + edge middleware"]
+    PROXY["Worker<br/>api.* / ws.* proxy"]
+  end
+
+  subgraph AWS["AWS · eu-west-1"]
+    HTTP["HTTP API<br/>Cognito JWT authorizer"]
+    WSAPI["WebSocket API"]
+    API["105 HTTP Lambdas<br/>one per action<br/>RolesGuard · DTO validation"]
+    TRIG["5 Cognito trigger Lambdas<br/>email OTP · post-confirmation"]
+    COG[("Cognito<br/>groups = roles")]
+    DDB[("DynamoDB<br/>19 tables + GSIs")]
+    REDIS[("Redis<br/>versioned read cache")]
+    S3[("S3<br/>receipts · documents · PDFs")]
+    PIPE["9 EventBridge Pipes"]
+    BUS["Project event bus"]
+    OBS["18 observer Lambdas<br/>cascade delete · cross-entity sync"]
+    BC["Broadcaster Lambda<br/>room-scoped fan-out"]
+    SOCK["connect · disconnect · rooms<br/>JWT verified on $connect"]
+  end
+
+  SPA -->|static assets| PAGES
+  SPA -->|"REST · Bearer token"| PROXY
+  SPA <-->|"WSS · token in subprotocol"| PROXY
+  PROXY --> HTTP
+  PROXY <--> WSAPI
+  HTTP --> API
+  API --> COG
+  COG --> TRIG
+  API --> DDB
+  API <--> REDIS
+  API --> S3
+  DDB -->|Streams| PIPE --> BUS --> OBS --> DDB
+  DDB -->|Streams| BC
+  BC -->|"notify {action, id}"| WSAPI
+  WSAPI --> SOCK
+
+  classDef store fill:#fff7ed,stroke:#c2410c,color:#431407
+  classDef fn fill:#ecfdf5,stroke:#047857,color:#022c22
+  classDef edge fill:#eff6ff,stroke:#1d4ed8,color:#172554
+  class COG,DDB,REDIS,S3 store
+  class API,TRIG,OBS,BC,SOCK fn
+  class PAGES,PROXY,HTTP,WSAPI,PIPE,BUS edge
