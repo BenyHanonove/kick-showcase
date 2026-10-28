@@ -1,4 +1,4 @@
-# KICK 🍸 — Real-time serverless operations platform for bars & event venues
+# KICK — Real-time serverless operations platform for bars & event venues
 
 [![CI](https://github.com/BenyHanonove/kick-showcase/actions/workflows/ci.yml/badge.svg)](https://github.com/BenyHanonove/kick-showcase/actions/workflows/ci.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -10,8 +10,8 @@
 > Hebrew / RTL interface. Designed, built, deployed, and operated solo (2026).
 
 <div align="center">
-  <img src="docs/demo.gif" alt="KICK real-time dashboard demo — two sessions syncing shifts, registers, and tips live over WebSockets" width="100%" />
-  <p><sub>Live demo recorded against the deterministic fixture harness (<a href="docs/demo.mp4">MP4 video</a> · reproduce locally with <code>npm run demo</code>)</sub></p>
+  <img src="docs/demo.gif" alt="KICK dashboard demo: a remote shift change arrives over WebSocket and the open event refetches it live, then the closing wizard produces the night report" width="100%" />
+  <p><sub>Live demo recorded against the deterministic fixture harness (<a href="docs/demo.mp4">MP4 video</a> · re-record locally with <code>npm run demo:record</code>)</sub></p>
 </div>
 
 ---
@@ -22,7 +22,7 @@
 - **Zero-account staff management via WhatsApp bot & ephemeral single-use tokens** — Field staff (bartenders, waiters, runners) never create user accounts or passwords. An automated WhatsApp Cloud API bot dispatches short-lived, cryptographically random single-use tokens (`TOKEN_TTL_HOURS = 24`, DynamoDB TTL) pointing to isolated public routes (`/shift/resolve`, `/shift/register`, `/employee/claim`) for onboarding, shift self-registration, and arrival/schedule notifications — consumed atomically via `TransactWriteCommand` so a link can never be replayed or double-spent.
 - **Real-time fan-out without data leaks** — WebSocket broadcasts push only `{ action, id }` invalidation signals scoped to the active session room; clients refetch through role-guarded REST endpoints so authorization and field-level redaction stay in one place.
 - **Concurrency & idempotency** — Optimistic locking (`timestamp` condition on every `UpdateCommand`, returning `409 Conflict` with automatic client diff/refetch), deterministic composite IDs (`deterministicId('shift-registration', sessionId, employeeId)`) preventing duplicate shift creation across concurrent tabs, and race-free versioned Redis caching (`version:<table>`).
-- **Defense-in-depth security** — Short-lived access JWT kept in memory only + `HttpOnly; Secure; SameSite=None` refresh cookie, Cognito JWT verification on both HTTP API Gateway and WebSocket `$connect`, fail-closed `RolesGuard([Admin, Manager, Users])`, field-level financial redaction for non-admin roles, per-Lambda least-privilege IAM, and PII-redacting structured logs (AWS Lambda Powertools + X-Ray active tracing).
+- **Defense-in-depth security** — Short-lived access JWT kept in memory only + `HttpOnly; Secure; SameSite=Lax` refresh cookie scoped to `/auth`, Cognito JWT verification on both HTTP API Gateway and WebSocket `$connect`, fail-closed `RolesGuard` (Admin / Manager per endpoint; self-registered `Users` get no API access until promoted), field-level financial redaction for non-admin roles, per-Lambda least-privilege IAM, and PII-redacting structured logs (AWS Lambda Powertools + X-Ray active tracing).
 - **Verified across roles** — 307 frontend unit tests and 108 backend unit tests run on every push in GitHub Actions; black-box lifecycle suites execute against the `dev` stage as `Admin`, `Manager`, and `User` before any production deployment (`pipeline/deploy.js`).
 
 ---
