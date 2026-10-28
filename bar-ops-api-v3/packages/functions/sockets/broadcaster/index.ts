@@ -5,12 +5,13 @@ import { ApiGatewayManagementApiClient, PostToConnectionCommand } from '@aws-sdk
 
 import { scanAll } from '@aws/dynamo/paginate.dynamo';
 import { logger } from '@utils/logger/logger.util';
+import { traceClient } from '@utils/observability/tracer.util';
 
-const docClient = DynamoDBDocumentClient.from(new DynamoDBClient({}));
+const docClient = DynamoDBDocumentClient.from(traceClient(new DynamoDBClient({})));
 
-const apiGwClient = new ApiGatewayManagementApiClient({
+const apiGwClient = traceClient(new ApiGatewayManagementApiClient({
   endpoint: process.env.WEBSOCKET_ENDPOINT
-});
+}));
 
 type ClientAction = 'CREATE' | 'UPDATE' | 'DELETE';
 
