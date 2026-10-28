@@ -149,27 +149,52 @@ sequenceDiagram
 
 </details>
 
-### A request, end to end
+### Global Request Lifecycle (Standardized Across All 19 Modules)
 
-When a manager edits a client record, the request flows through every layer of the stack:
+Every domain module in the system follows the exact same end-to-end pipeline — from the Vue view down to DynamoDB, Redis, and EventBridge, with standardized error handling at every boundary:
 
-```text
-ClientView.vue                     user clicks "עדכן", edits, submits GenericForm
- └─ useClientCrud().handleUpdate   diffs form vs. snapshot, attaches id + timestamp
-     └─ clientProvider.update      safeCall → {success, message, data, statusCode}
-         └─ clientRepository       BaseRepository.update → PUT /client/:id
-             └─ api.ts             axios: Bearer access token, 401 → refresh + retry
-─────────────────────────────────── network ───────────────────────────────────
-API Gateway                        JWT authorizer validates the Cognito token
- └─ ClientUpdate lambda            RolesGuard([ADMIN]) → 403 if role too low
-     └─ validateBody(UpdateClientDto)  class-validator, 400 on failure
-         └─ update() helper        DynamoDB conditional write on `timestamp`
-             ├─ conflict → 409     ConcurrencyConflictError
-             └─ ok → Redis version bump + cache prime
-                 └─ DynamoDB stream → Pipe → bus → observers → WebSocket broadcast
-─────────────────────────────────── response ──────────────────────────────────
-useCrud                            409 → refetch + warning snackbar
-                                   200 → store.update(entity) + success snackbar
+```mermaid
+flowchart TD
+  subgraph FE["1 · Frontend Layer (Vue 3 SPA)"]
+    V["1. ⟨Entity⟩View.vue<br/>User submits GenericForm / triggers action"]
+    C["2. useCrud⟨T⟩() Composable<br/>Diffs form vs. snapshot · attaches id + timestamp"]
+    P["3. BaseProvider⟨T⟩<br/>safeCall() wrapper → normalized response envelope"]
+    R["4. BaseRepository⟨T⟩ → api.ts<br/>REST request with in-memory Bearer JWT (401 → silent refresh & retry)"]
+    V --> C --> P --> R
+  end
+
+  subgraph BE["2 · Backend Layer (AWS Serverless)"]
+    GW["5. HTTP API Gateway<br/>Cognito JWT Authorizer (401 Unauthorized if invalid)"]
+    GUARD["6. ⟨Resource⟩⟨Action⟩ Lambda · RolesGuard(allowedRoles)<br/>Fail-closed RBAC check"]
+    DTO["7. validateBody(Dto)<br/>class-validator schema & type enforcement"]
+    DDB["8. Shared DB Helper (create / update / delete)<br/>DynamoDB write with optimistic concurrency check on timestamp"]
+    GW --> GUARD --> DTO --> DDB
+  end
+
+  subgraph OUT["3 · Outcomes, Cache & Async CDC"]
+    ERR403["403 Forbidden<br/>Insufficient role"]
+    ERR400["400 Bad Request<br/>Field validation errors"]
+    ERR409["409 Conflict<br/>ConcurrencyConflictError (stale timestamp)"]
+    CACHE["9. Versioned Redis Cache<br/>INCR version:BarOps-⟨Table⟩ + prime item"]
+    CDC["10. DynamoDB Stream → EventBridge Pipe → Bus<br/>18 Observer Lambdas + WebSocket notify (store, action, id)"]
+  end
+
+  subgraph RES["4 · Client Resolution (useCrud)"]
+    UIERR["Error snackbar (localized Hebrew message from ResourceMessages)"]
+    UI409["Auto-refetch latest entity + conflict warning snackbar"]
+    UI200["Pinia store sync (create / update / remove) + success snackbar"]
+  end
+
+  R -- "HTTPS" --> GW
+  GUARD -- "Role rejected" --> ERR403
+  DTO -- "Invalid payload" --> ERR400
+  DDB -- "Condition failed" --> ERR409
+  DDB -- "Write succeeded" --> CACHE
+  DDB -. "Async Stream" .-> CDC
+
+  ERR403 & ERR400 --> UIERR
+  ERR409 --> UI409
+  CACHE -- "200 / 201 OK" --> UI200
 ```
 
 ---

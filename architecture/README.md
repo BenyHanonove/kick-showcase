@@ -68,27 +68,52 @@ graph TD
 **Naming:** the user-facing brand is **KICK 🍸**. Internal resources keep the
 historical `BarOps-*` prefix (tables, app name, protocol names) — never rename them.
 
-## 3. One request, end to end
+## 3. Global request lifecycle (standardized across all modules)
 
-A manager edits a client name. This is the full trace — every layer you will ever touch:
+Every write request across all 19 domain modules flows through this exact pipeline — with uniform guards, validation, optimistic locking, cache invalidation, and error handling at every boundary:
 
-```
-ClientView.vue                     user clicks "עדכן", edits, submits GenericForm
- └─ useClientCrud().handleUpdate   diffs form vs. snapshot, attaches id + timestamp
-     └─ clientProvider.update      safeCall → {success, message, data, statusCode}
-         └─ clientRepository       BaseRepository.update → PUT /client/:id
-             └─ api.ts             axios: Bearer access token, 401 → refresh + retry
-─────────────────────────────────── network ───────────────────────────────────
-API Gateway                        JWT authorizer validates the Cognito token
- └─ ClientUpdate lambda            RolesGuard([ADMIN]) → 403 if role too low
-     └─ validateBody(UpdateClientDto)  class-validator, 400 on failure
-         └─ update() helper        DynamoDB conditional write on `timestamp`
-             ├─ conflict → 409     ConcurrencyConflictError
-             └─ ok → Redis version bump + cache prime
-                 └─ DynamoDB stream → Pipe → bus → observers → WebSocket broadcast
-─────────────────────────────────── response ──────────────────────────────────
-useCrud                            409 → refetch + warning snackbar
-                                   200 → store.update(entity) + success snackbar
+```mermaid
+flowchart TD
+  subgraph FE["1 · Frontend Layer (Vue 3 SPA)"]
+    V["1. ⟨Entity⟩View.vue<br/>User submits GenericForm / triggers action"]
+    C["2. useCrud⟨T⟩() Composable<br/>Diffs form vs. snapshot · attaches id + timestamp"]
+    P["3. BaseProvider⟨T⟩<br/>safeCall() wrapper → normalized response envelope"]
+    R["4. BaseRepository⟨T⟩ → api.ts<br/>REST request with in-memory Bearer JWT (401 → silent refresh & retry)"]
+    V --> C --> P --> R
+  end
+
+  subgraph BE["2 · Backend Layer (AWS Serverless)"]
+    GW["5. HTTP API Gateway<br/>Cognito JWT Authorizer (401 Unauthorized if invalid)"]
+    GUARD["6. ⟨Resource⟩⟨Action⟩ Lambda · RolesGuard(allowedRoles)<br/>Fail-closed RBAC check"]
+    DTO["7. validateBody(Dto)<br/>class-validator schema & type enforcement"]
+    DDB["8. Shared DB Helper (create / update / delete)<br/>DynamoDB write with optimistic concurrency check on timestamp"]
+    GW --> GUARD --> DTO --> DDB
+  end
+
+  subgraph OUT["3 · Outcomes, Cache & Async CDC"]
+    ERR403["403 Forbidden<br/>Insufficient role"]
+    ERR400["400 Bad Request<br/>Field validation errors"]
+    ERR409["409 Conflict<br/>ConcurrencyConflictError (stale timestamp)"]
+    CACHE["9. Versioned Redis Cache<br/>INCR version:BarOps-⟨Table⟩ + prime item"]
+    CDC["10. DynamoDB Stream → EventBridge Pipe → Bus<br/>18 Observer Lambdas + WebSocket notify (store, action, id)"]
+  end
+
+  subgraph RES["4 · Client Resolution (useCrud)"]
+    UIERR["Error snackbar (localized Hebrew message from ResourceMessages)"]
+    UI409["Auto-refetch latest entity + conflict warning snackbar"]
+    UI200["Pinia store sync (create / update / remove) + success snackbar"]
+  end
+
+  R -- "HTTPS" --> GW
+  GUARD -- "Role rejected" --> ERR403
+  DTO -- "Invalid payload" --> ERR400
+  DDB -- "Condition failed" --> ERR409
+  DDB -- "Write succeeded" --> CACHE
+  DDB -. "Async Stream" .-> CDC
+
+  ERR403 & ERR400 --> UIERR
+  ERR409 --> UI409
+  CACHE -- "200 / 201 OK" --> UI200
 ```
 
 ## 4. The invariants that make new features fast
