@@ -15,7 +15,10 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
     "lint": "eslint . --fix --cache",
-    "format": "prettier --write --experimental-cli src/"
+    "format": "prettier --write --experimental-cli src/",
+    "demo": "playwright test -c demo/playwright.config.ts --project=explore --headed",
+    "demo:record": "playwright test -c demo/playwright.config.ts --project=record && bash demo/make-gif.sh",
+    "demo:screenshots": "playwright test -c demo/playwright.config.ts --project=screenshots"
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",

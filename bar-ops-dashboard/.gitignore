@@ -46,3 +46,6 @@ env.d.ts
 
 # Visual brainstorm companion
 .superpowers/
+
+# Demo recording artifacts
+demo/.output/
