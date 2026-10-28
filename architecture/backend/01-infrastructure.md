@@ -13,8 +13,8 @@ IAM they need, wiring DynamoDB streams to the event bus, and nothing else.
 
 | Stage | Purpose | Env file | HTTP API | Table prefix |
 | --- | --- | --- | --- | --- |
-| `dev` | integration testing, local frontend | `.env.dev` | `pit93c7c4h` | `dev-BarOps-*` |
-| `production` | live | `.env.production` | `dn3xyet6gl` (`api.kicks.ltd`) | `BarOps-*` |
+| `dev` | integration testing, local frontend | `.env.dev` | `<HTTP_API_ID>` (dev) | `dev-BarOps-*` |
+| `production` | live | `.env.production` | `<HTTP_API_ID>` (prod, `api.kicks.ltd`) | `BarOps-*` |
 
 `production` is `protect`ed and set to `retain` on removal. A non-production stage
 without its own `.env.<stage>` **throws at deploy time** rather than silently falling

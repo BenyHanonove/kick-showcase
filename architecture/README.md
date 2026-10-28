@@ -6,7 +6,7 @@ existing path**, not a design exercise. Every document here describes what the c
 
 | I want to… | Read |
 | --- | --- |
-| Start a chat with any AI agent on this repo | [AI-AGENT-PROMPT.md](AI-AGENT-PROMPT.md) — paste it as the first message (or run `/kick` in Claude Code) |
+| Start a chat with any AI agent on this repo | [AI-WORKFLOW.md](AI-WORKFLOW.md) — how agents are used here, and the prompt each one starts with |
 | Add a new API resource (table + endpoints) | [backend/README.md](backend/README.md) → *Golden path* |
 | Add a new screen / module in the dashboard | [frontend/README.md](frontend/README.md) → *Golden path* |
 | Understand one layer in depth | The numbered files inside [backend/](backend/) and [frontend/](frontend/) |
@@ -119,10 +119,10 @@ in the AWS console and only *referenced* by the IaC:
 | Resource | Where it is declared | Consequence |
 | --- | --- | --- |
 | DynamoDB tables + GSIs | Console; referenced via `dynamoTable()` | Create the table **before** deploying |
-| HTTP API Gateway (`dn3xyet6gl` prod / `pit93c7c4h` dev) | Console; ID hardcoded in [`_shared.infrastructure.ts`](../bar-ops-api-v3/infrastructure/_shared.infrastructure.ts) | Routes + integrations are wired by hand, per stage |
+| HTTP API Gateway (one per stage) | Console; ID read from `.env.<stage>` (`HTTP_API_ID`) in [`_shared.infrastructure.ts`](../bar-ops-api-v3/infrastructure/_shared.infrastructure.ts) | Routes + integrations are wired by hand, per stage |
 | API Gateway CORS + throttling | Console | A new origin (e.g. `http://localhost:5173`) must be added there |
 | WebSocket API | Console | Same as above |
-| Cognito user pool + app client | Console; IDs hardcoded | Shared by both stages |
+| Cognito user pool + app client | Console; IDs read from `.env.<stage>` | Shared by both stages |
 | Redis (Upstash/hosted) | `.env.<stage>` + SSM parameter | `REDIS_HOST`/`REDIS_PORT` must exist or deploy throws |
 
 ## 6. Health snapshot — 2026-09-04
@@ -135,5 +135,4 @@ in the AWS console and only *referenced* by the IaC:
 | Git tree | `git status` | ✅ clean |
 
 Known operational notes: `quotation.js` is skipped in the API test suite (model not in
-use), `/employee/notify` has no API Gateway route yet, and `beny_admin` MFA is still
-deferred.
+use), and `/employee/notify` has no API Gateway route yet.

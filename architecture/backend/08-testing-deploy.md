@@ -17,8 +17,8 @@ matters is "what does the deployed endpoint return for this role".
 | `pipeline/` | `run-tests.js`, `deploy.js` |
 | `logs/<timestamp>/` | per-run output |
 
-`shared/config.js` maps `STAGE` → gateway URL (`dev` → `pit93c7c4h`,
-`production` → `dn3xyet6gl`) and requires `VITE_COGNITO_CLIENT_ID` plus the six
+`shared/config.js` reads the gateway URL from `API_BASE_URL` in the stage env file
+(`.env.<stage>`) and requires `VITE_COGNITO_CLIENT_ID` plus the six
 `TEST_{ADMIN,MANAGER,USER}_{EMAIL,PASSWORD}` variables from the stage env file.
 
 ## A lifecycle test

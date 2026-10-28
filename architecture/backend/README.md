@@ -133,7 +133,7 @@ npx sst deploy --stage dev
 ### Step 7 — Wire the API Gateway routes (console, per stage)
 
 The IaC only grants `apigateway.amazonaws.com` permission to invoke the functions —
-**routes are created by hand** in the HTTP API (dev `pit93c7c4h`, prod `dn3xyet6gl`):
+**routes are created by hand** in each stage's HTTP API (`<HTTP_API_ID>` from `.env.<stage>`):
 
 | Route | Integration (Lambda) | Authorizer |
 | --- | --- | --- |
