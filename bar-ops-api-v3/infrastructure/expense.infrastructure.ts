@@ -1,6 +1,6 @@
 /// <reference path="../.sst/platform/config.d.ts" />
 import * as aws from "@pulumi/aws";
-import { dynamoTable, projectBus, getStreamArnPrefix, stageResourceName, region, account, HTTP_API_ID, apiPermission, subscribeToBus } from "./_shared.infrastructure";
+import { dynamoTable, projectBus, getStreamArnPrefix, stageResourceName, region, account, apiPermission, subscribeToBus } from "./_shared.infrastructure";
 
 import { AWS_CONFIG } from "@env/config.env";
 
@@ -68,13 +68,7 @@ const expensePresign = new sst.aws.Function("ExpensePresign", {
   ],
 });
 
-new aws.lambda.Permission("ExpensePresignApiInvoke", {
-  statementId: "apigw-expense-presign",
-  action: "lambda:InvokeFunction",
-  function: expensePresign.name,
-  principal: "apigateway.amazonaws.com",
-  sourceArn: $interpolate`arn:aws:execute-api:${region}:${account}:${HTTP_API_ID}/*/*/expense/presign`,
-});
+apiPermission("ExpensePresign", expensePresign, "*/*/expense/presign");
 
 const expenseUnsign = new sst.aws.Function("ExpenseUnsign", {
   handler: "packages/functions/expense/unsign/index.handler",
@@ -93,13 +87,7 @@ const expenseUnsign = new sst.aws.Function("ExpenseUnsign", {
   ],
 });
 
-new aws.lambda.Permission("ExpenseUnsignApiInvoke", {
-  statementId: "apigw-expense-unsign",
-  action: "lambda:InvokeFunction",
-  function: expenseUnsign.name,
-  principal: "apigateway.amazonaws.com",
-  sourceArn: $interpolate`arn:aws:execute-api:${region}:${account}:${HTTP_API_ID}/*/*/expense/unsign`,
-});
+apiPermission("ExpenseUnsign", expenseUnsign, "*/*/expense/unsign");
 
 apiPermission("ExpenseUpdate", new sst.aws.Function("ExpenseUpdate", {
   handler: "packages/functions/expense/update/index.handler",

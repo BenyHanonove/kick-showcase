@@ -1,5 +1,6 @@
 /// <reference path="../.sst/platform/config.d.ts" />
 import * as aws from "@pulumi/aws";
+import { requireEnv } from "./_config.infrastructure";
 
 export const region = aws.getRegionOutput().name;
 export const account = aws.getCallerIdentityOutput({}).accountId;
@@ -22,29 +23,23 @@ export const lambdaName = (service: string, action: string) =>
 export const FONTS_PREFIX = "fonts";
 export const PDF_TEMPLATE_KEY = "pdf/base.pdf";
 
-// Cognito user pool shared by all stages
-export const COGNITO_USER_POOL_ID = "eu-west-1_EcYLFbA3Q";
+// Console-created resources, referenced by id from .env.<stage>
+export const COGNITO_USER_POOL_ID = requireEnv("COGNITO_USER_POOL_ID");
+export const COGNITO_CLIENT_ID = requireEnv("COGNITO_CLIENT_ID");
+export const HTTP_API_ID = requireEnv("HTTP_API_ID");
+export const WEBSOCKET_ENDPOINT = requireEnv("WEBSOCKET_ENDPOINT");
 
-// Cognito app client shared by all stages (dashboard client)
-export const COGNITO_CLIENT_ID = "439ldfj689k03nmphv65aaepev";
-
-// Manually created HTTP API Gateway per stage
-export const HTTP_API_ID = $app.stage === "production" ? "dn3xyet6gl" : "pit93c7c4h";
-
-// Manually created WebSocket API management endpoint per stage
-export const WEBSOCKET_ENDPOINT =
-  $app.stage === "production"
-    ? "https://q5tfo2tmuk.execute-api.eu-west-1.amazonaws.com/production"
-    : "https://fd1rovci2f.execute-api.eu-west-1.amazonaws.com/dev";
+// Execution ARN of the HTTP API, resolved from its id at deploy time
+export const httpApiExecutionArn = aws.apigatewayv2.getApiOutput({ apiId: HTTP_API_ID }).executionArn;
 
 // Grants the HTTP API Gateway permission to invoke a Lambda function
-export const apiPermission = (name: string, fn: sst.aws.Function) => {
+export const apiPermission = (name: string, fn: sst.aws.Function, routePath = "*/*/*") => {
   new aws.lambda.Permission(`${name}ApiInvoke`, {
     statementId: "apigw-invoke",
     action: "lambda:InvokeFunction",
     function: fn.name,
     principal: "apigateway.amazonaws.com",
-    sourceArn: $interpolate`arn:aws:execute-api:${region}:${account}:${HTTP_API_ID}/*/*/*`,
+    sourceArn: $interpolate`${httpApiExecutionArn}/${routePath}`,
   });
 };
 

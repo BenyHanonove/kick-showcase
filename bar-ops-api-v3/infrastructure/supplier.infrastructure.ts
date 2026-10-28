@@ -1,6 +1,6 @@
 /// <reference path="../.sst/platform/config.d.ts" />
 import * as aws from "@pulumi/aws";
-import { dynamoTable, createStreamPipe, stageResourceName, lambdaName, region, account, FONTS_PREFIX, HTTP_API_ID, apiPermission } from "./_shared.infrastructure";
+import { dynamoTable, createStreamPipe, stageResourceName, lambdaName, region, account, FONTS_PREFIX, apiPermission } from "./_shared.infrastructure";
 
 import { AWS_CONFIG } from "@env/config.env";
 
@@ -81,10 +81,4 @@ const supplierSummary = new sst.aws.Function("SupplierSummary", {
   },
 });
 
-new aws.lambda.Permission("SupplierSummaryApiInvoke", {
-  statementId: "apigw-supplier-summary",
-  action: "lambda:InvokeFunction",
-  function: supplierSummary.name,
-  principal: "apigateway.amazonaws.com",
-  sourceArn: $interpolate`arn:aws:execute-api:${region}:${account}:${HTTP_API_ID}/*/*/supplier/summary/*`,
-});
+apiPermission("SupplierSummary", supplierSummary, "*/*/supplier/summary/*");

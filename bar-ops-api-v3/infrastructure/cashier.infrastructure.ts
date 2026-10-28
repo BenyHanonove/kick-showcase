@@ -1,6 +1,6 @@
 /// <reference path="../.sst/platform/config.d.ts" />
 import * as aws from "@pulumi/aws";
-import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, region, account, HTTP_API_ID, apiPermission, subscribeToBus } from "./_shared.infrastructure";
+import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, region, account, apiPermission, subscribeToBus } from "./_shared.infrastructure";
 
 import { AWS_CONFIG } from "@env/config.env";
 
@@ -95,13 +95,7 @@ const cashierPresign = new sst.aws.Function("CashierPresign", {
   ],
 });
 
-new aws.lambda.Permission("CashierPresignApiInvoke", {
-  statementId: "apigw-cashier-presign",
-  action: "lambda:InvokeFunction",
-  function: cashierPresign.name,
-  principal: "apigateway.amazonaws.com",
-  sourceArn: $interpolate`arn:aws:execute-api:${region}:${account}:${HTTP_API_ID}/*/*/cashier/presign`,
-});
+apiPermission("CashierPresign", cashierPresign, "*/*/cashier/presign");
 
 const cashierUnsign = new sst.aws.Function("CashierUnsign", {
   handler: "packages/functions/cashier/unsign/index.handler",
@@ -120,13 +114,7 @@ const cashierUnsign = new sst.aws.Function("CashierUnsign", {
   ],
 });
 
-new aws.lambda.Permission("CashierUnsignApiInvoke", {
-  statementId: "apigw-cashier-unsign",
-  action: "lambda:InvokeFunction",
-  function: cashierUnsign.name,
-  principal: "apigateway.amazonaws.com",
-  sourceArn: $interpolate`arn:aws:execute-api:${region}:${account}:${HTTP_API_ID}/*/*/cashier/unsign`,
-});
+apiPermission("CashierUnsign", cashierUnsign, "*/*/cashier/unsign");
 
 apiPermission("CashierUpdate", new sst.aws.Function("CashierUpdate", {
   handler: "packages/functions/cashier/update/index.handler",

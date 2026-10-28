@@ -1,6 +1,6 @@
 /// <reference path="../.sst/platform/config.d.ts" />
 import * as aws from "@pulumi/aws";
-import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, lambdaName, region, account, HTTP_API_ID, apiPermission, subscribeToBus } from "./_shared.infrastructure";
+import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, lambdaName, region, account, apiPermission, subscribeToBus } from "./_shared.infrastructure";
 
 import { AWS_CONFIG } from "@env/config.env";
 
@@ -190,13 +190,7 @@ const shiftNotification = new sst.aws.Function("ShiftNotification", {
   ],
 });
 
-new aws.lambda.Permission("ShiftNotificationApiInvoke", {
-  statementId: "apigw-shift-notification",
-  action: "lambda:InvokeFunction",
-  function: shiftNotification.name,
-  principal: "apigateway.amazonaws.com",
-  sourceArn: $interpolate`arn:aws:execute-api:${region}:${account}:${HTTP_API_ID}/*/*/shift/notification/*`,
-});
+apiPermission("ShiftNotification", shiftNotification, "*/*/shift/notification/*");
 
 const shiftNotify = new sst.aws.Function("ShiftNotify", {
   handler: "packages/functions/shift/notify/index.handler",
@@ -217,10 +211,4 @@ const shiftNotify = new sst.aws.Function("ShiftNotify", {
   ],
 });
 
-new aws.lambda.Permission("ShiftNotifyApiInvoke", {
-  statementId: "apigw-shift-notify",
-  action: "lambda:InvokeFunction",
-  function: shiftNotify.name,
-  principal: "apigateway.amazonaws.com",
-  sourceArn: $interpolate`arn:aws:execute-api:${region}:${account}:${HTTP_API_ID}/*/*/shift/notify/*`,
-});
+apiPermission("ShiftNotify", shiftNotify, "*/*/shift/notify/*");

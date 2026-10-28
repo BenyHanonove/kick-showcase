@@ -1,6 +1,6 @@
 /// <reference path="../.sst/platform/config.d.ts" />
 import * as aws from "@pulumi/aws";
-import { dynamoTable, stageResourceName, lambdaName, region, account, FONTS_PREFIX, HTTP_API_ID, apiPermission } from "./_shared.infrastructure";
+import { dynamoTable, stageResourceName, lambdaName, region, account, FONTS_PREFIX, apiPermission } from "./_shared.infrastructure";
 
 import { AWS_CONFIG } from "@env/config.env";
 
@@ -154,10 +154,4 @@ const employeeSummary = new sst.aws.Function("EmployeeSummary", {
   },
 });
 
-new aws.lambda.Permission("EmployeeSummaryApiInvoke", {
-  statementId: "apigw-employee-summary",
-  action: "lambda:InvokeFunction",
-  function: employeeSummary.name,
-  principal: "apigateway.amazonaws.com",
-  sourceArn: $interpolate`arn:aws:execute-api:${region}:${account}:${HTTP_API_ID}/*/*/employee/summary/{sessionId}`,
-});
+apiPermission("EmployeeSummary", employeeSummary, "*/*/employee/summary/{sessionId}");

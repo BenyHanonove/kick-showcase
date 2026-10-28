@@ -1,6 +1,6 @@
 /// <reference path="../.sst/platform/config.d.ts" />
 import * as aws from "@pulumi/aws";
-import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, lambdaName, region, account, FONTS_PREFIX, PDF_TEMPLATE_KEY, HTTP_API_ID, apiPermission, subscribeToBus } from "./_shared.infrastructure";
+import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, lambdaName, region, account, FONTS_PREFIX, PDF_TEMPLATE_KEY, apiPermission, subscribeToBus } from "./_shared.infrastructure";
 
 import { AWS_CONFIG } from "@env/config.env";
 
@@ -87,13 +87,7 @@ const sessionSummary = new sst.aws.Function("SessionSummary", {
   },
 });
 
-new aws.lambda.Permission("SessionSummaryApiInvoke", {
-  statementId: "apigw-session-summary",
-  action: "lambda:InvokeFunction",
-  function: sessionSummary.name,
-  principal: "apigateway.amazonaws.com",
-  sourceArn: $interpolate`arn:aws:execute-api:${region}:${account}:${HTTP_API_ID}/*/*/session/summary/*`,
-});
+apiPermission("SessionSummary", sessionSummary, "*/*/session/summary/*");
 
 subscribeToBus("SessionObserverRule", {
   handler: "packages/functions/session/observer/index.lambdaHandler",

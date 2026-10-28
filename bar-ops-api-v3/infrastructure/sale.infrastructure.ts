@@ -1,6 +1,6 @@
 /// <reference path="../.sst/platform/config.d.ts" />
 import * as aws from "@pulumi/aws";
-import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, lambdaName, region, account, FONTS_PREFIX, HTTP_API_ID, apiPermission, subscribeToBus } from "./_shared.infrastructure";
+import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, lambdaName, region, account, FONTS_PREFIX, apiPermission, subscribeToBus } from "./_shared.infrastructure";
 
 import { AWS_CONFIG } from "@env/config.env";
 
@@ -90,13 +90,7 @@ const saleSummary = new sst.aws.Function("SaleSummary", {
   },
 });
 
-new aws.lambda.Permission("SaleSummaryApiInvoke", {
-  statementId: "apigw-sale-summary",
-  action: "lambda:InvokeFunction",
-  function: saleSummary.name,
-  principal: "apigateway.amazonaws.com",
-  sourceArn: $interpolate`arn:aws:execute-api:${region}:${account}:${HTTP_API_ID}/*/*/sale/summary/*`,
-});
+apiPermission("SaleSummary", saleSummary, "*/*/sale/summary/*");
 
 apiPermission("SaleSummaryByMonth", new sst.aws.Function("SaleSummaryByMonth", {
   handler: "packages/functions/sale/summary-by-month/index.lambdaHandler",
