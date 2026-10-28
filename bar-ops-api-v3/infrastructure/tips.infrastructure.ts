@@ -71,6 +71,8 @@ subscribeToBus("TipsObserverRule", {
       actions: ["dynamodb:Query", "dynamodb:BatchWriteItem"],
       resources: [tips.arn, tips.indexArn],
     },
+    // Idempotent create: conditional Put keyed by session + area
+    { actions: ["dynamodb:PutItem"], resources: [tips.arn] },
   ],
 }, {
   pattern: {

@@ -99,7 +99,8 @@ apiPermission("EmployeeClaim", new sst.aws.Function("EmployeeClaim", {
   },
   permissions: [
     { actions: ["dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:UpdateItem"], resources: [employee.arn] },
-    { actions: ["dynamodb:UpdateItem"], resources: [employeeToken.arn] },
+    // Reads the token before claiming it
+    { actions: ["dynamodb:GetItem", "dynamodb:UpdateItem"], resources: [employeeToken.arn] },
   ],
 }));
 
