@@ -35,6 +35,11 @@ interface ConnectionRecord {
 }
 
 // Broadcast real-time event updates to all connected WebSocket clients across API
+// Non-production stages prefix table names with their stage (dev-, pr-42-, ...);
+// the client store name is the table's entity without that prefix.
+export const storeFromStreamArn = (arn: string | undefined): string =>
+  (arn?.split('/')[1] || '').replace(/^.*BarOps-/, '').toLowerCase();
+
 export const handler = async (event: DynamoDBStreamEvent): Promise<void> => {
   // 1. Fetch active WebSocket clients with their room membership
   let connections: ConnectionRecord[] = [];
@@ -58,9 +63,7 @@ export const handler = async (event: DynamoDBStreamEvent): Promise<void> => {
 
   const routedPayloads: RoutedPayload[] = [];
   for (const record of event.Records) {
-    // Extract entity name from table name, e.g. product
-    const tableName = record.eventSourceARN?.split('/')[1] || '';
-    const targetStore = tableName.replace(/^dev-/, '').replace('BarOps-', '').toLowerCase();
+    const targetStore = storeFromStreamArn(record.eventSourceARN);
 
     const id = record.dynamodb?.Keys?.id?.S || '';
     if (!id) continue;

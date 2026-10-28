@@ -9,9 +9,9 @@ once, which is why handlers must never bypass them.
 
 | Helper | Signature | Does |
 | --- | --- | --- |
-| `create` | `(table, body, Dto, dateSplitKeys?)` | uuid + `timestamp`, validate, split date parts, stamp `lastEditor`, `PutCommand`, bump cache version, prime cache |
+| `create` | `(table, body, Dto, dateSplitKeys?)` | uuid + `timestamp`, validate, split date parts, stamp `lastEditor`, `PutCommand`, bump cache version (writers only invalidate; the next read repopulates) |
 | `get` | `(table, id, Dto, dateSplitKeys?)` | cache read → `GetCommand` → recombine date → validate → cache write |
-| `list` | `(table, Dto, options?, dateSplitKeys?)` | cache read by query hash → `Query` (if `keyConditionExpression`) or `Scan` → validate each |
+| `list` | `(table, Dto, options?, dateSplitKeys?)` | cache read by query hash → `Query` (if `keyConditionExpression`) or `Scan`, following `LastEvaluatedKey` until every page is read → validate each → strip `lastEditor` |
 | `update` | `(table, id, body, Dto, dateSplitKeys?)` | strip `id`/`timestamp`/undefined, new `timestamp`, `lastEditor`, **conditional** `UpdateCommand`, bump version, strip `lastEditor` from the response |
 | `remove` / `cascadeDeleteByField` | `(table, id)` / `(table, index, field, value, key?)` | delete (or batch-delete children with retry+jitter), bump version |
 
@@ -69,6 +69,16 @@ await list(process.env.TABLE!, SaleDto, {
 
 No `keyConditionExpression` → full `Scan`. Fine for small reference tables (clients,
 products), not for event data — add a GSI and query it.
+
+Pagination lives in `paginate.dynamo.ts` (`queryAll` / `scanAll`): DynamoDB returns at
+most 1MB per call, so the helpers keep passing `ExclusiveStartKey` until
+`LastEvaluatedKey` is empty. Results are never silently truncated.
+
+## Why writers do not prime the cache
+
+A writer that cached its own result after bumping the version could race another writer
+and leave an older item under the newest version for the full TTL. Writers therefore only
+`INCR` the version; the first read under the new version fills the cache.
 
 ## Rules
 

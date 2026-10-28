@@ -32,7 +32,7 @@ Defined once in `sst.config.ts`; you never repeat it per function:
 - **Function naming is derived from the handler path**:
   `packages/functions/<service>/<action>/index.handler` →
   `bar-ops-api-v3-<stage>-<service>-<action>`. Keep the folder layout and the names
-  stay predictable (this is what the console route wiring points at).
+  stay predictable (the HTTP API route table in `_http-api.infrastructure.ts` relies on it).
 - If an action folder contains `events.json`, its entries are registered as shareable
   **Lambda test events** in EventBridge Schemas — that is why you can hit "Test" in the
   console with a real payload already filled in.
@@ -41,15 +41,18 @@ Defined once in `sst.config.ts`; you never repeat it per function:
 
 | Helper | Use |
 | --- | --- |
-| `stageResourceName(name)` | `BarOps-X` in production, `dev-BarOps-X` elsewhere |
-| `dynamoTable(name)` | References an **existing** table; returns `{name, arn, indexArn, streamArn, table}` |
+| `stageResourceName(name)` | `BarOps-X` in production, `<stage>-BarOps-X` elsewhere |
+| `dynamoTable(name)` | Declares the table (keys, GSIs, stream, TTL) in `_tables.infrastructure.ts`; adopted via `import` when `IMPORT_EXISTING=true`, created fresh otherwise; returns `{name, arn, indexArn, streamArn, table}` |
 | `apiPermission(name, fn)` | Grants API Gateway permission to invoke the function |
 | `createStreamPipe(name, table)` | DynamoDB stream → EventBridge Pipe → project bus, with its IAM role (includes a 15s IAM-propagation wait) |
 | `subscribeToBus(...)` | Subscribes an observer Lambda to bus events |
 | `lambdaName(service, action)` | Same naming rule as the transform, for cross-references |
 
-Constants that are hardcoded on purpose (all console-created): `COGNITO_USER_POOL_ID`,
-`COGNITO_CLIENT_ID`, `HTTP_API_ID`, `WEBSOCKET_ENDPOINT`.
+No resource id is hard-coded. Stage config comes from `.env.<stage>` through the
+`requireEnv` / `optionalEnv` helpers in `_config.infrastructure.ts` (see
+`bar-ops-api-v3/.env.example`). Production adopts the console-created pool and APIs;
+other stages get their own Cognito pool, tables and APIs. Details:
+[infrastructure-as-code.md](../infrastructure-as-code.md).
 
 ## IAM: least privilege per action
 
@@ -67,7 +70,7 @@ The pattern to copy — each function gets only its verb:
 
 - **Adding an infrastructure file does nothing until you `await import` it** in
   `sst.config.ts`.
-- **Deploy does not create routes.** New endpoints are invisible until wired in the API
-  Gateway console for that stage.
+- **New endpoints need a row in the `ROUTES` table** in `_http-api.infrastructure.ts`
+  (unless the stage runs with `MANAGE_API_ROUTES=false`, where routes stay in the console).
 - The production bootstrap bucket gets a 7-day asset lifecycle rule — production-only
   branch at the bottom of `run()`.
