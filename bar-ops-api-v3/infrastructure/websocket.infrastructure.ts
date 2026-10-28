@@ -1,5 +1,4 @@
 /// <reference path="../.sst/platform/config.d.ts" />
-// Import external framework dependencies and status codes from third party packages
 import { stageResourceName, COGNITO_USER_POOL_ID, COGNITO_CLIENT_ID, WEBSOCKET_ENDPOINT } from "./_shared.infrastructure";
 
 const WEBSOCKET_CONNECTIONS_TABLE = stageResourceName("BarOps-WebSocketConnections");

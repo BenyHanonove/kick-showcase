@@ -113,11 +113,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-// Import custom components
 import AuthWrapper from '@auth/components/AuthWrapper.vue'
 import SearchBar from '@shared/components/forms/SearchBar.vue'
 
-// Import types
 import type { UserRole } from '@auth/types/IUser.types'
 import type { PageHeaderAction } from '@shared/types/PageHeader.types'
 

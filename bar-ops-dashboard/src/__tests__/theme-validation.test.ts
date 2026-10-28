@@ -1,7 +1,5 @@
-// Import test runtime
 import { describe, it, expect } from 'vitest'
 
-// Import vuetify instance and theme color sources
 import { vuetify } from '../config/theme'
 import lightColors from '../config/theme/light-colors'
 import darkColors from '../config/theme/dark-colors'

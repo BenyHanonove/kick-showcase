@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { IsArray, IsDateString, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
 
 export class UpdateVehicleDto {

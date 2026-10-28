@@ -161,32 +161,24 @@
 </template>
 
 <script setup lang="ts">
-// Import vue APIs
 import { computed, ref } from 'vue'
 
-// Import custom components
 import AuthWrapper from '@auth/components/AuthWrapper.vue'
 import InitialsAvatar from '@shared/components/layout/InitialsAvatar.vue'
 
-// Import stores
 import { ProductsStore, SuppliersStore } from '@stores'
 
-// Import composables
 import { getConsumedQuantity } from '@consume/composables/consume.calc'
 
-// Import utils
 import { addVat, VAT_PERCENT } from '@shared/utils/vat.util'
 
-// Import types
 import type { ConsumeQuantityField, IConsume } from '@consume/types/IConsume.types'
 import { ProductType } from '@product/types/ProductType.types'
 import { UserRole } from '@auth/types/IUser.types'
 import type { IListAction } from '@shared/types/IListAction.types'
 
-// Define emits
 const emit = defineEmits(['edit', 'delete', 'quick-update'])
 
-// Define props
 const props = withDefaults(defineProps<{ consume: IConsume; basic?: boolean }>(), {
   basic: false,
 })

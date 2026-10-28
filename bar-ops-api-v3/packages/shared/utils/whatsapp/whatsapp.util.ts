@@ -1,4 +1,3 @@
-// Import shared AWS services, guard security middleware, and utility helpers
 import { type APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 import { StatusCodes } from 'http-status-codes';
 import { logger } from '@utils/logger/logger.util';

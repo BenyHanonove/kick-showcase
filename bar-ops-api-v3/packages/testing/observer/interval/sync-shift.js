@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import assert from 'assert';
 import { createClient } from '../../endpoints/client/create.js';
 import { deleteClient } from '../../endpoints/client/delete.js';
@@ -61,7 +60,7 @@ async function assertCascadeDeleted(name, fetchFn) {
   });
 }
 
-// Run the shift hours sync test configuration setting for module
+// Run the shift hours sync test
 export async function runSyncTest() {
   await selectUserRoleAndLogin();
   console.log('=== Starting Interval Shift Hours Sync Verification ===');
@@ -113,7 +112,7 @@ export async function runSyncTest() {
   const shiftResponse = await createShift(shiftPayload);
   const shiftId = extractId(shiftResponse);
 
-  // Assert shift starts with no accumulated hours configuration setting for
+  // Assert shift starts with no accumulated hours
   const initialShift = await getShift(shiftId);
   const initialHours = initialShift.data?.data?.totalHours || 0;
   assert.strictEqual(initialHours, 0, 'Shift totalHours must start at 0');

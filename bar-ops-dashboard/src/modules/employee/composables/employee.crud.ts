@@ -1,19 +1,13 @@
-// Import vue APIs
 import { ref } from 'vue'
 
-// Import validation rules
 import { rules } from '@shared/utils/rules.util'
 
-// Import stores
 import { SnackbarStore, EmployeesStore } from '@stores'
 
-// Import composables
 import { useCrud } from '@shared/composables/crud.composable'
 
-// Import providers
 import { employeeProvider } from '@employee/providers/employee.provider'
 
-// Import types
 import type { IEmployee, ICreateEmployee, IUpdateEmployee } from '@employee/types/IEmployee.types'
 import { EmployeeType, EmployeeTypeLabels } from '@employee/types/EmployeeType.types'
 import { EmployeeLevel, EmployeeLevelLabels } from '@employee/types/EmployeeLevel.types'
@@ -25,7 +19,6 @@ export function useEmployeeCrud() {
   const snackbarStore = SnackbarStore()
   const employeesStore = EmployeesStore()
 
-  // Initialize base CRUD actions
   const base = useCrud<IEmployee, ICreateEmployee, IUpdateEmployee>(
     employeeProvider,
     employeesStore,

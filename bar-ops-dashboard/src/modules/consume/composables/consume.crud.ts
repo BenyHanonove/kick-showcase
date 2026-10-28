@@ -1,26 +1,19 @@
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-// Import axios error type
 import { AxiosError } from 'axios'
 import { StatusCodes } from 'http-status-codes'
 
-// Import validation rules
 import { rules } from '@shared/utils/rules.util'
 
-// Import utilities
 import { extractErrorMessage } from '@shared/utils/extractErrorMessage.util'
 
-// Import stores
 import { SnackbarStore, SessionStore, SaleStore } from '@stores'
 
-// Import composables
 import { useCrud, useBulkUpdate } from '@shared/composables/crud.composable'
 
-// Import providers
 import { consumeProvider } from '@consume/providers/consume.provider'
 
-// Import types
 import type {
   ConsumeQuantityField,
   IConsume,
@@ -40,7 +33,6 @@ export function useConsumeCrud() {
 
   const currentStore = isSaleContext ? saleStore : sessionStore
 
-  // Initialize base CRUD actions
   const base = useCrud<IConsume, ICreateConsume, IUpdateConsume>(
     consumeProvider,
     currentStore.consumes,

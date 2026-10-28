@@ -1,4 +1,3 @@
-// Import provider result type
 import type { IProviderResult } from '@shared/providers/base.provider'
 
 // Interface for CRUD providers

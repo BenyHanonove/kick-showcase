@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { spawn } from 'child_process';
 import { readdir, writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';

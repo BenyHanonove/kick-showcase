@@ -1,4 +1,3 @@
-// Import resource data transfer objects for payload transformation and validation
 import { CashierDto } from '@dtos/cashier/cashier.dto';
 import { ClientDto } from '@dtos/client/client.dto';
 import { ConsumeDto } from '@dtos/consume/consume.dto';

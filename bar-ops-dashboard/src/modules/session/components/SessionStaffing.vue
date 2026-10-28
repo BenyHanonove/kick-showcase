@@ -80,7 +80,6 @@
 import { ref, reactive } from 'vue'
 import { rules } from '@shared/utils/rules.util'
 
-// Import types
 import type { ISession, IUpdateSession } from '@session/types/ISession.types'
 
 const props = defineProps<{

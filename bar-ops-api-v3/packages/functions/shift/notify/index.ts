@@ -1,10 +1,8 @@
 import 'reflect-metadata';
 
-// Import external framework dependencies and status codes from third party packages
 import { type APIGatewayProxyEventV2, type APIGatewayProxyResultV2, type APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 import { StatusCodes } from 'http-status-codes';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { list } from '@aws/dynamo/list.dynamo';
 import { invokeLambda } from '@aws/lambdas/lambda';
 import { RolesGuard } from '@guards/role.guard';
@@ -14,7 +12,6 @@ import { ResourceMessages } from '@utils/messages/resource.util';
 import { WHATSAPP_SERVICE_ENABLED, whatsAppUnavailableResponse } from '@utils/whatsapp/whatsapp.util';
 import { logger } from '@utils/logger/logger.util';
 
-// Import resource data transfer objects for payload transformation and validation
 import { ShiftDto } from '@dtos/shift/shift.dto';
 
 const MESSAGES = new ResourceMessages('משמרת', 'משמרות');

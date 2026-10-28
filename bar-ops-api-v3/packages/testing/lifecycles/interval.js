@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { fileURLToPath } from 'url';
 import process from 'process';
 import { createClient } from '../endpoints/client/create.js';
@@ -65,7 +64,7 @@ async function deleteFixtures({ clientId, sessionId, employeeId, shiftId }) {
   await deleteClient(clientId);
 }
 
-// User must 403 on every interval op configuration setting for
+// User must 403 on every interval op
 async function runUserChecks() {
   console.log('Running interval 403 checks as user...');
   const payload = { shiftId: fakeId(), sessionId: fakeId(), start: '2026-06-01T12:00:00Z', end: '2026-06-01T18:00:00Z' };
@@ -112,7 +111,7 @@ async function runIntervalFlow() {
   }
 }
 
-// Run entire interval lifecycle sequence configuration setting for module execution
+// Run entire interval lifecycle sequence
 export async function runIntervalLifecycle() {
   console.log('=== Starting Interval Lifecycle Flow ===');
 

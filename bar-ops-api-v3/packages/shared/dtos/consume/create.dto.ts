@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { Transform } from "class-transformer";
 import { IsNumber, IsOptional, IsUUID, Min } from "class-validator";
 

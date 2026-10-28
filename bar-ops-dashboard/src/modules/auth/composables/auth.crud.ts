@@ -1,21 +1,15 @@
-// Import vue APIs
 import { ref } from 'vue'
 
-// Import vue-router APIs
 import { useRouter } from 'vue-router'
 
-// Import stores
 import { AuthStore, SnackbarStore } from '@stores'
 
-// Import providers
 import { authProvider } from '../providers/auth.provider'
 
-// Import composables
 import { useTokenManager } from './token.manager'
 import { tokenMemory } from './token.memory'
 import { useFormSubmit } from '@shared/composables/formSubmit.composable'
 
-// Import types
 import type { ILoginRequest, IRegisterRequest } from '@auth/types/IRequests.types'
 
 // Export auth crud composable

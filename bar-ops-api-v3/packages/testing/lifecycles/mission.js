@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { fileURLToPath } from 'url';
 import process from 'process';
 import assert from 'assert';
@@ -43,7 +42,7 @@ async function createFixtures() {
   return { clientId, sessionId };
 }
 
-// User must 403 on every mission op configuration setting for
+// User must 403 on every mission op
 async function runUserChecks() {
   console.log('Running mission 403 checks as user...');
   await assertForbidden(() => createMission(buildMissionPayload(fakeId())), 'mission create as user');
@@ -112,7 +111,7 @@ async function runAdminLifecycle() {
   await deleteClient(fixtures.clientId);
 }
 
-// Run entire mission lifecycle sequence configuration setting for module execution
+// Run entire mission lifecycle sequence
 export async function runMissionLifecycle() {
   console.log('=== Starting Mission Lifecycle Flow ===');
 

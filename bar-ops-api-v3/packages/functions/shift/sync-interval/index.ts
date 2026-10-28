@@ -1,9 +1,7 @@
 import 'reflect-metadata';
 
-// Import external framework dependencies and status codes from third party packages
 import { UpdateCommand } from '@aws-sdk/lib-dynamodb';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { wrapCustomEventHandler } from '@aws/eventbridge/handler.eventbridge';
 import { docClient } from '@aws/dynamo/client.dynamo';
 import { redisClient } from '@aws/redis/client.redis';

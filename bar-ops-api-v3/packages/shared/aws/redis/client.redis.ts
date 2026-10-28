@@ -1,8 +1,6 @@
-// Import external framework dependencies and status codes from third party packages
 import Redis from "ioredis";
 import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { AWS_CONFIG } from '@env/config.env';
 import { logger } from '@utils/logger/logger.util';
 

@@ -198,21 +198,16 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-// Import stores
 import { SessionStore, EmployeesStore } from '@stores'
 
-// Import types
 import { ShiftRole } from '@shift/types/ShiftRole.types'
 import { EmployeeGender, EmployeeGenderLabels } from '@employee/types/EmployeeGender.types'
 
-// Initialize stores
 const sessionStore = SessionStore()
 const employeesStore = EmployeesStore()
 
-// State
 const isOpen = ref(false)
 
-// Computed properties
 const shifts = computed(() => sessionStore.registeredShifts)
 const hasShifts = computed(() => shifts.value.length > 0)
 

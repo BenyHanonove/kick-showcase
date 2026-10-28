@@ -71,13 +71,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-// Import stores
 import { SessionStore } from '@stores'
 
-// Import composables
 import { useVehicleCrud } from '@vehicle/composables/vehicle.crud'
 
-// Import custom components
 import EmptyState from '@shared/components/data/EmptyState.vue'
 import VehicleCard from '@vehicle/components/VehicleCard.vue'
 import VehicleSummary from '@vehicle/components/VehicleSummary.vue'
@@ -85,7 +82,6 @@ import PageHeader from '@shared/components/layout/PageHeader.vue'
 import AuthWrapper from '@auth/components/AuthWrapper.vue'
 import VehicleDialogs from '@vehicle/components/VehicleDialogs.vue'
 
-// Import types
 import { UserRole } from '@auth/types/IUser.types'
 
 const sessionStore = SessionStore()

@@ -1,16 +1,13 @@
 import 'reflect-metadata';
 
-// Import external framework dependencies and status codes from third party packages
 import { QueryCommand } from '@aws-sdk/lib-dynamodb';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { docClient } from '@aws/dynamo/client.dynamo';
 import { wrapDynamoStreamHandler } from '@aws/eventbridge/handler.eventbridge';
 import { cascadeDeleteByField } from '@aws/dynamo/delete.dynamo';
 import { deleteFromS3 } from '@aws/s3/bucket.s3';
 import { logger } from '@utils/logger/logger.util';
 
-// Import resource data transfer objects for payload transformation and validation
 import { SessionDto } from '@dtos/session/session.dto';
 import { DocumentDto } from '@dtos/document/document.dto';
 

@@ -101,7 +101,6 @@ const router = useRouter()
 const productsStore = ProductsStore()
 const { products, loading: isProductsLoading } = storeToRefs(productsStore)
 
-// Search initialization
 const { query, results } = useSearch(products, ['name'])
 
 // Trigger data loading if needed

@@ -1,10 +1,8 @@
 import 'reflect-metadata';
 
-// Import external framework dependencies and status codes from third party packages
 import { type APIGatewayProxyEventV2, type APIGatewayProxyResultV2 } from 'aws-lambda';
 import { StatusCodes } from 'http-status-codes';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { uploadAndSignZReport } from '@aws/s3/handlers.s3';
 import { invokeLambda } from '@aws/lambdas/lambda';
 import { update } from '@aws/dynamo/update.dynamo';
@@ -15,7 +13,6 @@ import { parseZReportCsv, decodeCsvContent } from '@utils/z-report/z-report.util
 import { ResourceMessages } from '@utils/messages/resource.util';
 import { logger } from '@utils/logger/logger.util';
 
-// Import resource data transfer objects for payload transformation and validation
 import { CashierDto } from '@dtos/cashier/cashier.dto';
 import { PresignZReportDto } from '@dtos/cashier/presign-z-report.dto';
 
@@ -32,7 +29,7 @@ export const handler = RolesGuard([UserRole.ADMIN, UserRole.MANAGER], async (eve
         const cashierDto = parseZReportCsv(file, sessionId, location);
         const csvContent = decodeCsvContent(file);
 
-        // Create the cashier (CashierCreate enforces serial uniqueness) configuration setting for
+        // Create the cashier (CashierCreate enforces serial uniqueness)
         const created = await invokeLambda(
             process.env.CASHIER_CREATE_LAMBDA_NAME!,
             { body: JSON.stringify(cashierDto) },

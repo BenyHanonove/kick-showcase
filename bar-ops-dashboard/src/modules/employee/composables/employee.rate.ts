@@ -1,13 +1,9 @@
-// Import vue APIs
 import { ref, computed, watch } from 'vue'
 
-// Import stores
 import { EmployeesStore } from '@stores'
 
-// Import composables
 import { useEmployeeCrud } from '@employee/composables/employee.crud'
 
-// Import types
 import { EmployeeStatus } from '@employee/types/EmployeeStatus.types'
 import type { EmployeeLevel } from '@employee/types/EmployeeLevel.types'
 import type { IEmployee } from '@employee/types/IEmployee.types'

@@ -1,7 +1,5 @@
-// Import external framework dependencies and status codes from third party packages
 import { Jimp, ResizeStrategy } from "jimp";
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { logger } from '@utils/logger/logger.util';
 
 const getImageType = (buffer: Buffer): { match: boolean; ext?: string; mime?: string } => {

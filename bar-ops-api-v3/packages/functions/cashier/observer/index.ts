@@ -1,10 +1,8 @@
 import 'reflect-metadata';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { wrapDynamoStreamHandler } from '@aws/eventbridge/handler.eventbridge';
 import { cascadeDeleteByField } from '@aws/dynamo/delete.dynamo';
 
-// Import resource data transfer objects for payload transformation and validation
 import { SessionDto } from '@dtos/session/session.dto';
 
 // Process cashier stream mutations from DynamoDB to synchronize related entity states

@@ -1,7 +1,5 @@
-// Import test runtime and mount helper
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-// Import vuetify components and app theme config under test
 import * as components from 'vuetify/components'
 import { vuetify } from '../config/theme'
 import { shadow, elevation } from '../config/theme/tokens'

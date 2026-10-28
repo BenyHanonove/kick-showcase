@@ -98,12 +98,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-// Import components
 import AppDialog from '@shared/components/dialogs/AppDialog.vue'
 import GenericForm from '@shared/components/forms/GenericForm.vue'
 import AppInput from '@shared/components/input/AppInput.vue'
 
-// Import types and composables
 import { ProductType } from '@product/types/ProductType.types'
 import type { ICreateProduct, IUpdateProduct } from '@product/types/IProduct.types'
 import { useProductCrud } from '@product/composables/product.crud'

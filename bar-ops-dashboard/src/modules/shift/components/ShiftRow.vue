@@ -157,16 +157,12 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-// Import stores
 import { AuthStore, RoleLevel, EmployeesStore } from '@stores'
 
-// Import formatter
 import { useFormatter } from '@shared/composables/useFormatter.composable'
 
-// Import custom components
 import AuthWrapper from '@auth/components/AuthWrapper.vue'
 
-// Import types
 import type { IShift } from '@shift/types/IShift.types'
 import { UserRole } from '@auth/types/IUser.types'
 

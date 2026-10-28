@@ -1,9 +1,7 @@
 /// <reference path="../.sst/platform/config.d.ts" />
-// Import external framework dependencies and status codes from third party packages
 import * as aws from "@pulumi/aws";
 import { dynamoTable, stageResourceName, lambdaName, region, account, FONTS_PREFIX, HTTP_API_ID, apiPermission } from "./_shared.infrastructure";
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { AWS_CONFIG } from "@env/config.env";
 
 const EMPLOYEE_TABLE = stageResourceName("BarOps-Employee");

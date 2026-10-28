@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import assert from 'assert';
 import { createClient } from '../../endpoints/client/create.js';
 import { deleteClient } from '../../endpoints/client/delete.js';
@@ -26,7 +25,7 @@ function extractId(response) {
   return id;
 }
 
-// Poll and retry assertion for async processes configuration setting for
+// Poll and retry assertion for async processes
 async function assertWithRetry(assertionFn, maxTimeoutMs = 30000, intervalMs = 2000) {
   const startTime = Date.now();
   while (true) {
@@ -42,7 +41,7 @@ async function assertWithRetry(assertionFn, maxTimeoutMs = 30000, intervalMs = 2
   }
 }
 
-// Run the cascade delete test configuration setting for module execution
+// Run the cascade delete test
 export async function runCascadeDeleteTest() {
   await selectUserRoleAndLogin();
   console.log('=== Starting Consume Cascade Delete Verification ===');
@@ -159,7 +158,7 @@ export async function runCascadeDeleteTest() {
     assert.ok(sessionDeleted, 'Session should have been cascade-deleted after client deletion');
   });
 
-  // Verify Consume 1 is deleted (with polling) configuration setting for
+  // Verify Consume 1 is deleted (with polling)
   console.log('Verifying Consume 1 is cascade-deleted (with polling)...');
   await assertWithRetry(async () => {
     let consume1Deleted = false;
@@ -175,7 +174,7 @@ export async function runCascadeDeleteTest() {
     assert.ok(consume1Deleted, 'Consume 1 should have been cascade-deleted after client deletion');
   });
 
-  // Verify Consume 2 is deleted (with polling) configuration setting for
+  // Verify Consume 2 is deleted (with polling)
   console.log('Verifying Consume 2 is cascade-deleted (with polling)...');
   await assertWithRetry(async () => {
     let consume2Deleted = false;
@@ -191,7 +190,7 @@ export async function runCascadeDeleteTest() {
     assert.ok(consume2Deleted, 'Consume 2 should have been cascade-deleted after client deletion');
   });
 
-  // Verify Consume 3 is deleted (with polling) configuration setting for
+  // Verify Consume 3 is deleted (with polling)
   console.log('Verifying Consume 3 is cascade-deleted (with polling)...');
   await assertWithRetry(async () => {
     let consume3Deleted = false;

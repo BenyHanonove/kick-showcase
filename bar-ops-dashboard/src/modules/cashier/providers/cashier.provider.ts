@@ -1,11 +1,8 @@
-// Import repository
 import cashierRepository from '@cashier/repository/cashier.repository'
 
-// Import base provider
 import { BaseReceiptProvider } from '@shared/providers/base.provider'
 import { StatusCodes } from 'http-status-codes'
 
-// Import types
 import type { ICashier, ICreateCashier, IUpdateCashier } from '@cashier/types/ICashier.types'
 import type { ICashierFilters } from '@cashier/types/ICashierRepository.types'
 
@@ -35,5 +32,4 @@ class CashierProvider extends BaseReceiptProvider<
   }
 }
 
-// Extend base provider
 export const cashierProvider = new CashierProvider(cashierRepository)

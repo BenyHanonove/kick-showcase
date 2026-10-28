@@ -1,7 +1,5 @@
-// Import external framework dependencies and status codes from third party packages
 import { IsBoolean, IsDateString, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
 
-// Import resource data transfer objects for payload transformation and validation
 import { CreateShiftDto } from "@dtos/shift/create.dto";
 import { ShiftRegistration } from "@dtos/shift/shift.enum";
 

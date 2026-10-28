@@ -1,11 +1,8 @@
-// Import external framework dependencies and status codes from third party packages
 import { PDFDocument, rgb, PDFFont } from 'pdf-lib';
 import { EnrichedConsume, EventReportData } from './types';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { FONT_SIZES, COLORS, SPACING, loadFonts, LAYOUT, loadBasePdfFromS3, bidi, PdfFonts } from '@utils/file-generation/pdf.util';
 
-// Import resource data transfer objects for payload transformation and validation
 import { ClientDto } from '@dtos/client/client.dto';
 import { SessionDto } from '@dtos/session/session.dto';
 import { ExpenseDto } from '@dtos/expense/expense.dto';
@@ -578,7 +575,7 @@ export async function generateEventPdf(data: EventReportData): Promise<Buffer> {
     // Calculate soda totals and render Soft Drinks table
     const softDrinksTotal = await drawSoftDrinksPage(pdfDoc, soda, fonts, externalDoc);
 
-    // Calculate alcohol totals and render Alcohol table configuration setting for
+    // Calculate alcohol totals and render Alcohol table
     const alcoholTotal = await drawAlcoholPage(pdfDoc, alcohol, fonts, externalDoc);
 
     // Aggregate drink totals into a dynamic 'Food Cost' expense
@@ -597,7 +594,7 @@ export async function generateEventPdf(data: EventReportData): Promise<Buffer> {
     if (!data.expenses) data.expenses = [];
     data.expenses.push(foodCost);
 
-    // Render expenses and calculate final expenditure sum configuration setting for
+    // Render expenses and calculate final expenditure sum
     const totalExpenses = await drawExpensesPage(pdfDoc, data.expenses, fonts, externalDoc);
 
     // Process cashier reports to determine total event income
@@ -606,7 +603,7 @@ export async function generateEventPdf(data: EventReportData): Promise<Buffer> {
     // Generate financial summary comparing total income vs expenses
     await drawSummaryPage(pdfDoc, fonts, externalDoc, totalIncomes, totalExpenses);
 
-    // Append final static closing page from template configuration setting for
+    // Append final static closing page from template
     const [finalPage] = await pdfDoc.copyPages(externalDoc, [8]);
     pdfDoc.addPage(finalPage);
 

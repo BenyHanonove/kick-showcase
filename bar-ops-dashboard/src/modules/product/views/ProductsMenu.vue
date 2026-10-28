@@ -67,20 +67,16 @@
 </template>
 
 <script setup lang="ts">
-// Import vue APIs
 import { computed, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 
-// Import stores and composables
 import { ProductsStore, SuppliersStore } from '@stores'
 import { useProductCrud } from '@product/composables/product.crud'
 
-// Import custom components
 import EmptyState from '@shared/components/data/EmptyState.vue'
 import AppTable from '@shared/components/data/AppTable.vue'
 
-// Import types
 import type { IProduct } from '@product/types/IProduct.types'
 import { ProductType, ProductTypeLabels } from '@product/types/ProductType.types'
 
@@ -91,7 +87,6 @@ const menuTableHeaders = [
   { key: 'isBase', label: 'בתפריט', align: 'center' as const },
 ]
 
-// Define props
 const props = defineProps<{
   allowedTypes: ProductType[]
 }>()

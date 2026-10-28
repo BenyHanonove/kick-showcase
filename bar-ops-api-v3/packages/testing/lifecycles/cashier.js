@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { fileURLToPath } from 'url';
 import process from 'process';
 import { createClient } from '../endpoints/client/create.js';
@@ -40,7 +39,7 @@ async function deleteFixtures({ clientId, sessionId }) {
   await deleteClient(clientId);
 }
 
-// User must 403 on every cashier op configuration setting for
+// User must 403 on every cashier op
 async function runUserChecks() {
   console.log('Running cashier 403 checks as user...');
   const payload = { sessionId: fakeId(), cash: 100, credit: 200, creditTip: 10, location: 'bar' };
@@ -87,7 +86,7 @@ async function runCashierFlow() {
     };
     await updateCashier(cashierId, updatePayload);
 
-    // Presign Z-report CSV (creates a second cashier) configuration setting for
+    // Presign Z-report CSV (creates a second cashier)
     const zNumber = Date.now();
     const csvContent = [
       'מזומן,100',
@@ -120,7 +119,7 @@ async function runCashierFlow() {
   }
 }
 
-// Run entire cashier lifecycle sequence configuration setting for module execution
+// Run entire cashier lifecycle sequence
 export async function runCashierLifecycle() {
   console.log('=== Starting Cashier Lifecycle Flow ===');
 

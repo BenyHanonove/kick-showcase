@@ -94,16 +94,13 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-// Import stores
 import { SessionStore, EmployeesStore } from '@stores'
 
-// Import types and composables
 import { ShiftRoleLabels } from '@shift/types/ShiftRole.types'
 import type { ICreateVehicle, IUpdateVehicle } from '@vehicle/types/IVehicle.types'
 import type { IFormField } from '@shared/types/IForm.types'
 import { useVehicleCrud } from '@vehicle/composables/vehicle.crud'
 
-// Import components
 import AppDialog from '@shared/components/dialogs/AppDialog.vue'
 import GenericForm from '@shared/components/forms/GenericForm.vue'
 import AppListSelect from '@shared/components/input/AppListSelect.vue'

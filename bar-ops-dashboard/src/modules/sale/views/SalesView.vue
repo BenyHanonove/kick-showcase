@@ -180,15 +180,12 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 
-// Import stores
 import { SalesStore, ClientsStore } from '@stores'
 
-// Import composables
 import { useSaleCrud } from '@sale/composables/sale.crud'
 import { useClientCrud } from '@client/composables/client.crud'
 import { useCalendarFilter } from '@shared/composables/useCalendarFilter.composable'
 
-// Import custom components
 import SaleCard from '@sale/components/SaleCard.vue'
 import AppCalendar from '@shared/components/data/AppCalendar.vue'
 import AppFilter from '@shared/components/forms/AppFilter.vue'

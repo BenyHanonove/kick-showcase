@@ -44,21 +44,16 @@
 </template>
 
 <script setup lang="ts">
-// Import vue APIs
 import { computed } from 'vue'
 
-// Import custom components
 import CashierCard from '@cashier/components/CashierCard.vue'
 import CashierGroupCard from './CashierGroupCard.vue'
 
-// Import stores
 import { SessionStore } from '@stores'
 
-// Import types
 import { CashierLocation } from '@cashier/types/CashierLocation.types'
 import type { ICashier } from '@cashier/types/ICashier.types'
 
-// Define emits
 const emit = defineEmits<{
   (e: 'edit', cashier: ICashier): void
   (e: 'delete', cashier: ICashier): void
@@ -66,7 +61,6 @@ const emit = defineEmits<{
   (e: 'select-change', id: string, value: boolean): void
 }>()
 
-// Define props
 const props = defineProps<{
   location: CashierLocation
   tableName: string
@@ -74,10 +68,8 @@ const props = defineProps<{
   selectedIds?: string[]
 }>()
 
-// Initialize stores
 const sessionStore = SessionStore()
 
-// Computed properties
 const cashiers = computed<ICashier[]>(() =>
   (sessionStore.cashiers?.data || []).filter((c) => c.location === props.location),
 )

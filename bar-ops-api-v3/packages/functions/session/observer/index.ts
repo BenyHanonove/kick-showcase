@@ -1,11 +1,9 @@
 import 'reflect-metadata';
 
-// Import external framework dependencies and status codes from third party packages
 import { type EventBridgeEvent, type DynamoDBRecord } from 'aws-lambda';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, QueryCommand, BatchWriteCommand } from '@aws-sdk/lib-dynamodb';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { cascadeDeleteByField } from '@aws/dynamo/delete.dynamo';
 import { logger } from '@utils/logger/logger.util';
 

@@ -1,4 +1,3 @@
-// Import types
 import type { IConsume } from '@consume/types/IConsume.types'
 
 // Fields needed for consumption calculation

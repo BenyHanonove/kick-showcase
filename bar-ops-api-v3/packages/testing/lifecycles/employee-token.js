@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { fileURLToPath } from 'url';
 import process from 'process';
 import assert from 'assert';
@@ -35,7 +34,7 @@ function findEmployee(response, id) {
   return data;
 }
 
-// User: 403 on the admin-only token actions configuration setting for
+// User: 403 on the admin-only token actions
 async function runUserChecks() {
   console.log('Running employee-token 403 checks as user...');
   await assertForbidden(() => linkEmployee(fakeId()), 'employee link as user');
@@ -120,7 +119,7 @@ async function runAdminLifecycle() {
   }
 }
 
-// Run entire employee-token lifecycle sequence configuration setting for module execution
+// Run entire employee-token lifecycle sequence
 export async function runEmployeeTokenLifecycle() {
   console.log('=== Starting Employee Token Lifecycle Flow ===');
 

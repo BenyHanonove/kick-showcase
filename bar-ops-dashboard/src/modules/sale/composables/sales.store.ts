@@ -1,10 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-// Import utilities
 import { createEntityStore } from '../../../config/store/utils/createEntityStore.util'
 
-// Import types
 import type { ISale } from '@sale/types/ISale.types'
 
 export const SalesStore = defineStore('sales', () => {

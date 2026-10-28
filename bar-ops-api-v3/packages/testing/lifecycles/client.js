@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { fileURLToPath } from 'url';
 import process from 'process';
 import assert from 'assert';
@@ -19,7 +18,7 @@ const CLIENT_PAYLOAD = {
   "phone": "0507799799"
 };
 
-// User must 403 on every client op configuration setting for
+// User must 403 on every client op
 async function runUserChecks() {
   console.log('Running client 403 checks as user...');
   await assertForbidden(() => createClient(CLIENT_PAYLOAD), 'client create as user');
@@ -76,7 +75,7 @@ async function runAdminLifecycle() {
   await deleteClient(id);
 }
 
-// Run entire client lifecycle sequence configuration setting for module execution
+// Run entire client lifecycle sequence
 export async function runClientLifecycle() {
   console.log('=== Starting Client Lifecycle Flow ===');
 

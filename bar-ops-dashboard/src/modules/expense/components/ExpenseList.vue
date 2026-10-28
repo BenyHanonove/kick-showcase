@@ -25,25 +25,18 @@
 </template>
 
 <script setup lang="ts">
-// Import vue APIs
 import { computed } from 'vue'
 
-// Import custom components
 import ExpenseCard from '@expense/components/ExpenseCard.vue'
 
-// Import types
 import type { IExpense } from '@expense/types/IExpense.types'
 
-// Import stores
 import { SessionStore } from '@stores'
 
-// Initialize stores
 const sessionStore = SessionStore()
 
-// Computed properties
 const expenses = computed(() => sessionStore.expenses?.data || [])
 
-// Define emits
 const emit = defineEmits<{
   (e: 'edit', expense: IExpense): void
   (e: 'delete', expense: IExpense): void

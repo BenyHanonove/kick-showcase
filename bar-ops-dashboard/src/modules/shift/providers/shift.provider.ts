@@ -1,13 +1,10 @@
 import { StatusCodes } from 'http-status-codes'
 
-// Import repository
 import shiftRepository from '@shift/repository/shift.repository'
 
-// Import base provider
 import { BaseCrudProvider } from '@shared/providers/base.provider'
 import type { IProviderResult } from '@shared/providers/base.provider'
 
-// Import types
 import type { IShift, ICreateShift, IUpdateShift, IShiftNotification } from '@shift/types/IShift.types'
 import type { IShiftFilters, IShiftRepository } from '@shift/types/IShiftRepository.types'
 import type {
@@ -17,7 +14,6 @@ import type {
   IShiftRegistrationResult,
 } from '@shift/types/IShiftRegistration.types'
 
-// Extend base provider
 class ShiftProvider extends BaseCrudProvider<
   IShift,
   ICreateShift,

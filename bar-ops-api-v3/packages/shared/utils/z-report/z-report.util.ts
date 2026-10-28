@@ -1,4 +1,3 @@
-// Import resource data transfer objects for payload transformation and validation
 import { CashierLocation } from '@dtos/cashier/cashier.enum';
 import { CreateCashierDto } from '@dtos/cashier/create.dto';
 

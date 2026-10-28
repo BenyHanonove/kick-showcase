@@ -1,7 +1,5 @@
-// Import external framework dependencies and status codes from third party packages
 import { IsEnum, IsNumber, IsUUID, Min } from "class-validator";
 
-// Import resource data transfer objects for payload transformation and validation
 import { ServiceArea } from "@dtos/tips/tips.enum";
 
 export class CreateTipsDto {

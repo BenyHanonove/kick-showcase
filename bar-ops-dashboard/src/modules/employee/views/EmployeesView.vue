@@ -183,14 +183,11 @@ import { WHATSAPP_SERVICE_ENABLED, WHATSAPP_UNAVAILABLE_MESSAGE } from '@shared/
 import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 
-// Import assets
 import whatsappIcon from '@assets/whatsapp.png'
 import instagramIcon from '@assets/instagram.png'
 
-// Import stores
 import { EmployeesStore, AuthStore } from '@stores'
 
-// Import types
 import { UserRole } from '@auth/types/IUser.types'
 import { EmployeeType, EmployeeTypeLabels } from '@employee/types/EmployeeType.types'
 import { EmployeeStatus } from '@employee/types/EmployeeStatus.types'
@@ -203,22 +200,18 @@ import {
 import type { IEmployee } from '@employee/types/IEmployee.types'
 import type { IListAction } from '@shared/types/IListAction.types'
 
-// Import composables
 import { useEmployeeCrud } from '@employee/composables/employee.crud'
 import { useSearch } from '@shared/composables/useSearch.composable'
 
-// Import utils
 import { formatPhoneNumber, getWhatsAppUrl } from '@shared/utils/formatters.util'
 import { getMissingFields } from '@employee/utils/missingFields.util'
 
-// Import custom components
 import AppTable, { type TableHeader } from '@shared/components/data/AppTable.vue'
 import AppDialog from '@shared/components/dialogs/AppDialog.vue'
 import GenericForm from '@shared/components/forms/GenericForm.vue'
 import PageHeader from '@shared/components/layout/PageHeader.vue'
 import AuthWrapper from '@auth/components/AuthWrapper.vue'
 
-// Initialize stores
 const employeesStore = EmployeesStore()
 const authStore = AuthStore()
 const { employees, loading } = storeToRefs(employeesStore)
@@ -228,7 +221,6 @@ const { isAdmin } = storeToRefs(authStore)
 const router = useRouter()
 const menuStates = ref<Record<string, boolean>>({})
 
-// Table headers config
 const tableHeaders: TableHeader<IEmployee>[] = [
   {
     key: 'name',
@@ -310,7 +302,6 @@ const approvedEmployees = computed(() => {
 // Modular client-side search
 const { query, results } = useSearch(approvedEmployees, ['firstName', 'lastName', 'identityNumber'])
 
-// Initialize CRUD actions
 const EmployeeCrud = useEmployeeCrud()
 
 // Menu actions — destructive actions sit in own group

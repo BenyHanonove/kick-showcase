@@ -3,7 +3,6 @@ import { computed, ref } from 'vue'
 
 import { createEntityStore } from '../../../config/store/utils/createEntityStore.util'
 
-// Import types
 import type { IReservation } from '@reservation/types/IReservation.types'
 import { ReservationStatus } from '@reservation/types/ReservationStatus.types'
 
@@ -23,7 +22,6 @@ export const ReservationsStore = defineStore('reservations', () => {
     reset,
   } = createEntityStore<IReservation>((a, b) => b.timestamp.localeCompare(a.timestamp))
 
-  // Reactive search input query
   const searchQuery = ref('')
 
   // Filtered reservations list logic

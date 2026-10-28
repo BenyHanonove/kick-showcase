@@ -1,10 +1,8 @@
 import 'reflect-metadata';
 
-// Import external framework dependencies and status codes from third party packages
 import { type APIGatewayProxyEventV2, type APIGatewayProxyResultV2 } from 'aws-lambda';
 import { StatusCodes } from 'http-status-codes';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { validateBody } from '@utils/request/request.util';
 import { create } from '@aws/dynamo/create.dynamo';
 import { RolesGuard, getRoleFromEvent } from '@guards/role.guard';
@@ -13,7 +11,6 @@ import { Mapper } from '@utils/mappers/drop.util';
 import { ResourceMessages } from '@utils/messages/resource.util';
 import { logger } from '@utils/logger/logger.util';
 
-// Import resource data transfer objects for payload transformation and validation
 import { CreateShiftDto } from '@dtos/shift/create.dto';
 import { ShiftDto } from '@dtos/shift/shift.dto';
 import { ShiftRegistration } from '@dtos/shift/shift.enum';

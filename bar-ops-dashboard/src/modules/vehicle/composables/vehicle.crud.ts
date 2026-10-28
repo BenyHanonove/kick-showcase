@@ -1,20 +1,15 @@
-// Import validation rules
 import { rules } from '@shared/utils/rules.util'
 
-// Import composables
 import { useCrud } from '@shared/composables/crud.composable'
 
-// Import providers
 import { vehicleProvider } from '@vehicle/providers/vehicle.provider'
 
-// Import types
 import type { ICrudStore } from '@shared/types/ICrud.types'
 import type { IVehicle, ICreateVehicle, IUpdateVehicle } from '@vehicle/types/IVehicle.types'
 import type { IFormField } from '@shared/types/IForm.types'
 
 // Export vehicle crud composable
 export function useVehicleCrud(store: ICrudStore<IVehicle>) {
-  // Initialize base CRUD actions
   const base = useCrud<IVehicle, ICreateVehicle, IUpdateVehicle>(
     vehicleProvider,
     store,

@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { IsBoolean, IsDateString, IsISO8601, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
 
 export class ShiftRegistrationTokenDto {

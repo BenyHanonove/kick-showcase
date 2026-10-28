@@ -1,11 +1,7 @@
-// Import testing libraries
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { mount, VueWrapper } from '@vue/test-utils';
-// Import components
 import AppDialog from '@shared/components/dialogs/AppDialog.vue';
-// Import theme config
 import { vuetify } from '../../../config/theme';
-// Import Vue APIs
 import { nextTick } from 'vue';
 
 describe('AppDialog', () => {

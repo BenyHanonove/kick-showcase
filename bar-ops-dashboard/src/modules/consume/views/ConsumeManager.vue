@@ -84,28 +84,23 @@
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-// Import composables
 import { useConsumeCrud } from '@consume/composables/consume.crud'
 import { useRouteQueryTab } from '@shared/composables/useRouteQueryTab.composable'
 
-// Import custom components
 import ConsumeBulk from '@consume/components/ConsumeBulk.vue'
 import ConsumeList from '@consume/components/ConsumeList.vue'
 import ConsumeSummary from '@consume/components/ConsumeSummary.vue'
 import PageHeader from '@shared/components/layout/PageHeader.vue'
 import ConsumeDialogs from '@consume/components/ConsumeDialogs.vue'
 
-// Import stores
 import { ProductsStore, SessionStore, SaleStore, AuthStore } from '@stores'
 import { storeToRefs } from 'pinia'
 
-// Import types
 import type { ConsumeQuantityField, IConsume } from '@consume/types/IConsume.types'
 import { ProductType, ProductTypeLabels } from '@product/types/ProductType.types'
 import { UserRole } from '@auth/types/IUser.types'
 import type { PageHeaderAction } from '@shared/types/PageHeader.types'
 
-// Define props
 const props = defineProps<{
   loading?: boolean
   types: ProductType[]
@@ -172,7 +167,6 @@ const pageHeaderActions = computed<PageHeaderAction[]>(() => {
   ]
 })
 
-// Computed properties
 const consumes = computed(() => {
   const all = currentStore.value.consumes?.data || []
   return all.filter((c) => {

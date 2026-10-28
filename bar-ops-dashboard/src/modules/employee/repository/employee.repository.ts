@@ -1,7 +1,5 @@
-// Import base repository
 import { BaseRepository } from '@shared/repository/base.repository'
 
-// Import types
 import type {
   IEmployee,
   ICreateEmployee,
@@ -17,7 +15,6 @@ import type { ISummaryReport } from '@shared/types/ISummaryReport.interface'
 import api from '@shared/repository/api'
 import type { IRawResponse } from '@shared/types/IApiResponse.types'
 
-// Extend base repository
 class EmployeeRepository
   extends BaseRepository<IEmployee, ICreateEmployee, IUpdateEmployee>
   implements IEmployeeRepository

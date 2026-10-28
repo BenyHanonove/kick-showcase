@@ -103,18 +103,14 @@
 </template>
 
 <script setup lang="ts">
-// Import vue APIs
 import { computed, ref } from 'vue'
 
-// Import types
 import { CashierLocation, CashierLocationLabels } from '@cashier/types/CashierLocation.types'
 import type { ICashier } from '@cashier/types/ICashier.types'
 import type { IListAction } from '@shared/types/IListAction.types'
 
-// Reactive state
 const menuOpen = ref(false)
 
-// Define emits
 const emit = defineEmits<{
   (e: 'edit', cashier: ICashier): void
   (e: 'delete', cashier: ICashier): void
@@ -122,7 +118,6 @@ const emit = defineEmits<{
   (e: 'select-change', value: boolean): void
 }>()
 
-// Define props
 const props = defineProps<{
   cashier: ICashier
   index: number
@@ -151,7 +146,6 @@ const handleCardClick = (event: MouseEvent) => {
   }
 }
 
-// Computed properties
 const totalAmount = computed(() => {
   return props.cashier.cash + props.cashier.credit - props.cashier.creditTip
 })

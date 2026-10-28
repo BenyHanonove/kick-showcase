@@ -155,23 +155,18 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
-// Import stores
 import { EmployeesStore, SnackbarStore } from '@stores'
 
-// Import providers
 import { shiftProvider } from '@shift/providers/shift.provider'
 
-// Import types
 import { UserRole } from '@auth/types/IUser.types'
 import { EmployeeType, EmployeeTypeLabels } from '@employee/types/EmployeeType.types'
 import { EmployeeStatus, EmployeeStatusLabels } from '@employee/types/EmployeeStatus.types'
 import { ShiftRole, ShiftRoleLabels } from '@shift/types/ShiftRole.types'
 import type { IShift } from '@shift/types/IShift.types'
 
-// Import utils
 import { formatPhoneNumber, formatNumber, formatCurrency, formatDate } from '@shared/utils/formatters.util'
 
-// Import components
 import PageHeader from '@shared/components/layout/PageHeader.vue'
 import ModuleSummaryCard from '@shared/components/layout/ModuleSummaryCard.vue'
 import GlobalLoading from '@shared/components/feedback/GlobalLoading.vue'

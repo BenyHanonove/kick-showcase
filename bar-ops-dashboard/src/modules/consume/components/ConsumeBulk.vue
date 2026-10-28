@@ -49,20 +49,15 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-// Import custom components
 import ConsumeBulkItem from './ConsumeBulkItem.vue'
 
-// Import stores
 import { ProductsStore } from '@stores'
 
-// Import types
 import type { IConsume } from '@consume/types/IConsume.types'
 import { ProductType, ProductTypeLabels } from '@product/types/ProductType.types'
 
-// Define emits
 const emit = defineEmits(['submit'])
 
-// Define props
 const props = defineProps<{
   items: IConsume[]
   targetField:
@@ -102,10 +97,8 @@ const props = defineProps<{
 // Init stores
 const productStore = ProductsStore()
 
-// Reactive state
 const itemRefs = ref<{ getSubmitData: () => IConsume }[]>([])
 
-// Computed properties
 const groupedItems = computed(() => {
   const typesToUse =
     props.types && props.types.length > 0 ? props.types : Object.values(ProductType)

@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import api from '../../shared/api.js';
 
 export async function claimEmployeeLink(token, payload) {

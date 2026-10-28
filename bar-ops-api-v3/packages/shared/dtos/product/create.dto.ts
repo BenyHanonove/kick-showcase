@@ -1,8 +1,6 @@
-// Import external framework dependencies and status codes from third party packages
 import { IsBoolean, IsEnum, IsNumber, IsOptional, IsString, IsUUID, Length, Min } from "class-validator";
 import { Transform, Type } from "class-transformer";
 
-// Import resource data transfer objects for payload transformation and validation
 import { ProductType } from "@dtos/product/product.enum";
 
 export class CreateProductDto {

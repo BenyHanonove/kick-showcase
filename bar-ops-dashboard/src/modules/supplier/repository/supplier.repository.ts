@@ -1,12 +1,9 @@
-// Import base repository
 import { BaseRepository } from '@shared/repository/base.repository'
 
-// Import types
 import type { ISupplierRepository } from '@supplier/types/ISupplierRepository.types'
 import type { ISupplier, ICreateSupplier, IUpdateSupplier } from '@supplier/types/ISupplier.types'
 import type { ISummaryReport } from '@shared/types/ISummaryReport.interface'
 
-// Extend base repository
 class SupplierRepository
   extends BaseRepository<ISupplier, ICreateSupplier, IUpdateSupplier>
   implements ISupplierRepository

@@ -175,25 +175,20 @@
 </template>
 
 <script setup lang="ts">
-// Import vue APIs
 import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 
-// Import stores
 import { ProductsStore, SuppliersStore, AuthStore } from '@stores'
 
-// Import composables
 import { useProductCrud } from '@product/composables/product.crud'
 import { useSearch } from '@shared/composables/useSearch.composable'
 import { useRouteQueryTab } from '@shared/composables/useRouteQueryTab.composable'
 
-// Import custom components
 import AppTable from '@shared/components/data/AppTable.vue'
 import PageHeader from '@shared/components/layout/PageHeader.vue'
 import ProductDialogs from '@product/components/ProductDialogs.vue'
 
-// Import types
 import { ProductType, ProductTypeLabels } from '@product/types/ProductType.types'
 import type { IProduct } from '@product/types/IProduct.types'
 import { UserRole } from '@auth/types/IUser.types'
@@ -205,7 +200,6 @@ import { formatNumber } from '@shared/utils/formatters.util'
 // Initialize routes and router
 const router = useRouter()
 
-// Initialize stores
 const productsStore = ProductsStore()
 const suppliersStore = SuppliersStore()
 const authStore = AuthStore()
@@ -231,10 +225,8 @@ const getProductHeaders = (isSimple: boolean) => {
   return headers
 }
 
-// Search initialization
 const { query, results } = useSearch(products, ['name'])
 
-// Initialize CRUD actions
 const ProductCrud = useProductCrud(productsStore)
 
 // Menu actions — destructive actions sit in own group

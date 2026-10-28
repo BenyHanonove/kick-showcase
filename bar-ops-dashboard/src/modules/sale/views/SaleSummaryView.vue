@@ -98,22 +98,17 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-// Import stores
 import { ClientsStore, SnackbarStore } from '@stores'
 
-// Import providers
 import { saleProvider } from '@sale/providers/sale.provider'
 
-// Import custom components
 import PageHeader from '@shared/components/layout/PageHeader.vue'
 import GlobalLoading from '@shared/components/feedback/GlobalLoading.vue'
 import AppTable from '@shared/components/data/AppTable.vue'
 import type { TableHeader } from '@shared/components/data/AppTable.vue'
 
-// Import utils
 import { formatCurrency, formatDate } from '@shared/utils/formatters.util'
 
-// Import types
 import { UserRole } from '@auth/types/IUser.types'
 import type { ISaleSummary } from '@sale/types/ISale.types'
 

@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { fileURLToPath } from 'url';
 import process from 'process';
 import assert from 'assert';
@@ -29,7 +28,7 @@ function buildProductPayload(supplierId) {
   };
 }
 
-// User must 403 on every product op configuration setting for
+// User must 403 on every product op
 async function runUserChecks() {
   console.log('Running product 403 checks as user...');
   await assertForbidden(() => createProduct(buildProductPayload(fakeId())), 'product create as user');
@@ -40,7 +39,7 @@ async function runUserChecks() {
   console.log('All product 403 checks passed');
 }
 
-// Manager: writes are forbidden, reads drop price configuration setting for
+// Manager: writes are forbidden, reads drop price
 async function runManagerChecks() {
   console.log('Running product manager checks...');
   await assertForbidden(() => createProduct(buildProductPayload(fakeId())), 'product create as manager');
@@ -114,7 +113,7 @@ async function runAdminLifecycle() {
   await deleteSupplier(supplierId);
 }
 
-// Run entire product lifecycle sequence configuration setting for module execution
+// Run entire product lifecycle sequence
 export async function runProductLifecycle() {
   console.log('=== Starting Product Lifecycle Flow ===');
 

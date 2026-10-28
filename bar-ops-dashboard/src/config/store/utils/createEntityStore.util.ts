@@ -1,7 +1,6 @@
 import { ref, type Ref } from 'vue'
 
 export const createEntityStore = <T extends { id: string }>(sort?: (a: T, b: T) => number) => {
-  // Reactive state
   const data = ref<T[] | null>(null) as Ref<T[] | null>
   const loading = ref(false)
   const error = ref<Error | null>(null)

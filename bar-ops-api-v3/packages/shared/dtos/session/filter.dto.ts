@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { IsOptional, IsString, IsUUID, Matches } from "class-validator";
 
 export class FilterSessionDto {

@@ -1,9 +1,7 @@
 /// <reference path="../.sst/platform/config.d.ts" />
-// Import external framework dependencies and status codes from third party packages
 import * as aws from "@pulumi/aws";
 import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, region, account, HTTP_API_ID, apiPermission, subscribeToBus } from "./_shared.infrastructure";
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { AWS_CONFIG } from "@env/config.env";
 
 const CASHIER_TABLE = stageResourceName("BarOps-Cashier");

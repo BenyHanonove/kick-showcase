@@ -22,18 +22,14 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-// Import custom components
 import TipsCard from '@tips/components/TipsCard.vue'
 
-// Import types
 import type { ITips } from '@tips/types/ITips.types'
 
-// Define props
 const props = defineProps<{
   tipsList: ITips[]
 }>()
 
-// Define emits
 const emit = defineEmits<{
   (e: 'edit', tips: ITips): void
 }>()

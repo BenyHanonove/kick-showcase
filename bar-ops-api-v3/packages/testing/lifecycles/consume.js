@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { fileURLToPath } from 'url';
 import process from 'process';
 import assert from 'assert';
@@ -23,7 +22,7 @@ import { managerDrops } from '../shared/role-matrix.js';
 
 const CONSUME_DROPS = managerDrops('consume');
 
-// Build consume payload for a session/product pair configuration setting for
+// Build consume payload for a session/product pair
 function buildConsumePayload(sessionId, productId) {
   return {
     sessionId: sessionId,
@@ -79,7 +78,7 @@ async function deleteFixtures({ clientId, sessionId, supplierId, productId }) {
   await deleteSupplier(supplierId);
 }
 
-// User must 403 on every consume op configuration setting for
+// User must 403 on every consume op
 async function runUserChecks() {
   console.log('Running consume 403 checks as user...');
   const payload = buildConsumePayload(fakeId(), fakeId());
@@ -124,7 +123,7 @@ async function runManagerChecks() {
     });
     assertFieldsDropped(extractData(updateResponse), CONSUME_DROPS, 'consume update response as manager');
 
-    // Admin read-back: chargedPrice unchanged, other fields updated configuration setting for
+    // Admin read-back: chargedPrice unchanged, other fields updated
     await asAdmin(async () => {
       const adminView = extractData(await getConsume(consumeId));
       assert.strictEqual(adminView.chargedPrice, 15, 'chargedPrice should be unchanged after manager update');
@@ -171,7 +170,7 @@ async function runAdminLifecycle() {
   await deleteFixtures(fixtures);
 }
 
-// Run entire consume lifecycle sequence configuration setting for module execution
+// Run entire consume lifecycle sequence
 export async function runConsumeLifecycle() {
   console.log('=== Starting Consume Lifecycle Flow ===');
 

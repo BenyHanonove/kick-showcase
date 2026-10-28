@@ -1,8 +1,6 @@
-// Import external framework dependencies and status codes from third party packages
 import { IsBoolean, IsEnum, IsNumber, IsOptional, IsString, Length, Matches, Min } from "class-validator";
 import { Type } from "class-transformer";
 
-// Import resource data transfer objects for payload transformation and validation
 import { ReservationEventType } from "@dtos/reservation/reservation.enum";
 
 export class CreateReservationDto {

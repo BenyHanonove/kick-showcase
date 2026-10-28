@@ -1,16 +1,11 @@
-// Import stores
 import { SessionStore, SnackbarStore } from '@stores'
 
-// Import providers
 import { documentProvider } from '@document/providers/document.provider'
 
-// Import composables
 import { useCrud } from '@shared/composables/crud.composable'
 
-// Import utils
 import { rules } from '@shared/utils/rules.util'
 
-// Import types
 import type { IDocument, ICreateDocument, IUpdateDocument } from '@document/types/IDocument.types'
 import type { IFormField } from '@shared/types/IForm.types'
 

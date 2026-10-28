@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import { type APIGatewayProxyEventV2, type APIGatewayProxyResultV2 } from "aws-lambda";
 

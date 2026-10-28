@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 
-// Import external framework dependencies and status codes from third party packages
 import { type APIGatewayProxyEventV2, type APIGatewayProxyResultV2 } from 'aws-lambda';
 import { StatusCodes } from 'http-status-codes';
 import {
@@ -43,7 +42,7 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
                 }));
                 return result.AuthenticationResult;
             } catch (err) {
-                // Logs both bad credentials and real misconfiguration configuration setting for
+                // Logs both bad credentials and real misconfiguration
                 logger.error(err);
                 return undefined;
             }

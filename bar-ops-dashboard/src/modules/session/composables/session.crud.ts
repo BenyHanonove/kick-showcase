@@ -1,25 +1,17 @@
-// Import vue APIs
 import { ref, computed } from 'vue'
 
-// Import axios error type
 import { AxiosError } from 'axios'
 
-// Import utilities
 import { extractErrorMessage } from '@shared/utils/extractErrorMessage.util'
 
-// Import validation rules
 import { rules } from '@shared/utils/rules.util'
 
-// Import stores
 import { SnackbarStore, ClientsStore } from '@stores'
 
-// Import composables
 import { useCrud, useSummaryDownloader } from '@shared/composables/crud.composable'
 
-// Import providers
 import { sessionProvider } from '@session/providers/session.provider'
 
-// Import types
 import type { ICrudStore } from '@shared/types/ICrud.types'
 import type { ISession, ICreateSession, IUpdateSession } from '@session/types/ISession.types'
 import type { ISessionFilters } from '@session/types/ISessionRepository.types'
@@ -40,7 +32,6 @@ export function useSessionCrud(store: ISessionCrudStore) {
 
   const clientsStore = ClientsStore()
 
-  // Initialize base CRUD actions
   const base = useCrud<ISession, ICreateSession, IUpdateSession>(sessionProvider, store)
 
   // Initialize summary download actions

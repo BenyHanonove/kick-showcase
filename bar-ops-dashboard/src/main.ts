@@ -1,16 +1,11 @@
-// Import the root App component
 import App from './App.vue'
 
-// Import the createApp function from Vue
 import { createApp } from 'vue'
 
-// Import the router instance
 import router from '@router'
 
-// Import the Pinia store instance
 import { pinia } from '@stores'
 
-// Import app theme
 import { vuetify } from '@plugins'
 
 // Imports the Material Design Icons (MDI) styles and global css
@@ -35,7 +30,6 @@ import MetricCard from '@shared/components/data/MetricCard.vue'
 import AppLayout from '@shared/components/layout/AppLayout.vue'
 import AppSnackbar from '@shared/components/feedback/AppSnackbar.vue'
 
-// Import utilities for global properties
 import { rules } from '@shared/utils/rules.util'
 import {
   formatPhoneNumber,

@@ -125,29 +125,23 @@
 import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 
-// Import stores
 import { SuppliersStore, AuthStore } from '@stores'
 
-// Import types
 import { UserRole } from '@auth/types/IUser.types'
 import type { ISupplier } from '@supplier/types/ISupplier.types'
 import type { IListAction } from '@shared/types/IListAction.types'
 
-// Import composables
 import { useSupplierCrud } from '@supplier/composables/supplier.crud'
 import { useSearch } from '@shared/composables/useSearch.composable'
 
-// Import utils
 import { formatPhoneNumber } from '@shared/utils/formatters.util'
 
-// Import custom components
 import AppTable from '@shared/components/data/AppTable.vue'
 import GenericForm from '@shared/components/forms/GenericForm.vue'
 import PageHeader from '@shared/components/layout/PageHeader.vue'
 import AppDialog from '@shared/components/dialogs/AppDialog.vue'
 import AppInput from '@shared/components/input/AppInput.vue'
 
-// Initialize stores
 const suppliersStore = SuppliersStore()
 const authStore = AuthStore()
 const { suppliers, loading } = storeToRefs(suppliersStore)
@@ -155,7 +149,6 @@ const { isAdmin } = storeToRefs(authStore)
 
 const menuStates = ref<Record<string, boolean>>({})
 
-// Table headers config
 const tableHeaders = computed(() => {
   const headers = [
     { key: 'name', label: 'שם ספק' },
@@ -182,13 +175,11 @@ const pageActions = computed(() => {
   ]
 })
 
-// Search initialization
 const { query, results } = useSearch(suppliers, ['name', 'contactName'])
 
 // MonthYear for summary
 const monthYear = ref(new Date().toISOString().slice(0, 7))
 
-// Initialize CRUD actions
 const SupplierCrud = useSupplierCrud()
 
 // Per-item menu actions — destructive actions sit in their own group

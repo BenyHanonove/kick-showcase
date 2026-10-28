@@ -1,10 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 
-// Import environment config
 import { env } from '@plugins'
 
-// Import stores
 import {
   AuthStore,
   ClientsStore,
@@ -18,11 +16,9 @@ import {
   SaleStore,
 } from '@stores'
 
-// Import composables
 import { useTokenManager } from '@auth/composables/token.manager'
 import { tokenMemory } from '@auth/composables/token.memory'
 
-// Import providers
 import { clientProvider } from '@client/providers/client.provider'
 import { employeeProvider } from '@employee/providers/employee.provider'
 import { productProvider } from '@product/providers/product.provider'

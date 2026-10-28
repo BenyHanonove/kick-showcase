@@ -1,19 +1,13 @@
-// Import vue APIs
 import { ref } from 'vue'
 
-// Import validation rules
 import { rules } from '@shared/utils/rules.util'
 
-// Import stores
 import { SnackbarStore, SuppliersStore } from '@stores'
 
-// Import composables
 import { useCrud } from '@shared/composables/crud.composable'
 
-// Import providers
 import { supplierProvider } from '@supplier/providers/supplier.provider'
 
-// Import types
 import type { ISupplier, ICreateSupplier, IUpdateSupplier } from '@supplier/types/ISupplier.types'
 import type { IFormField } from '@shared/types/IForm.types'
 
@@ -22,7 +16,6 @@ export function useSupplierCrud() {
   const snackbarStore = SnackbarStore()
   const suppliersStore = SuppliersStore()
 
-  // Initialize base CRUD actions
   const base = useCrud<ISupplier, ICreateSupplier, IUpdateSupplier>(
     supplierProvider,
     suppliersStore,

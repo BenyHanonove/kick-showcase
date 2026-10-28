@@ -1,7 +1,5 @@
-// Import external framework dependencies and status codes from third party packages
 import { IsEnum, IsOptional, IsString, Length, Matches } from "class-validator";
 
-// Import resource data transfer objects for payload transformation and validation
 import { EmployeeLevel, EmployeeType } from "@dtos/employee/employee.enum";
 
 // Shared employee fields, gender is set per flow

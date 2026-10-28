@@ -1,10 +1,8 @@
 import 'reflect-metadata';
 
-// Import external framework dependencies and status codes from third party packages
 import { type APIGatewayProxyEventV2, type APIGatewayProxyResultV2 } from 'aws-lambda';
 import { StatusCodes } from 'http-status-codes';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { validateBody } from '@utils/request/request.util';
 import { create } from '@aws/dynamo/create.dynamo';
 import { invokeLambda } from '@aws/lambdas/lambda';
@@ -13,7 +11,6 @@ import { UserRole } from '@guards/user-role.enum';
 import { ResourceMessages } from '@utils/messages/resource.util';
 import { logger } from '@utils/logger/logger.util';
 
-// Import resource data transfer objects for payload transformation and validation
 import { CreateMissionDto } from '@dtos/mission/create.dto';
 import { MissionDto } from '@dtos/mission/mission.dto';
 import { MissionStatus } from '@dtos/mission/mission.enum';
@@ -62,7 +59,7 @@ export const handler = RolesGuard([UserRole.ADMIN], async (event: APIGatewayProx
         const sessionData = JSON.parse(sessionResponseBody);
         const session: SessionDto = sessionData.data;
 
-        // Extract monthYear from session datetime (YYYY-MM format) configuration setting for
+        // Extract monthYear from session datetime (YYYY-MM format)
         const dateObj = new Date(session.datetime);
         const monthYear = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}`;
 

@@ -4,7 +4,6 @@ import { computed, ref } from 'vue'
 import { createEntityStore } from '../../../config/store/utils/createEntityStore.util'
 import { sortByHebrew } from '../../../config/store/utils/sortByHebrew.util'
 
-// Import types
 import type { IClient } from '@client/types/IClient.types'
 
 export const ClientsStore = defineStore('clients', () => {
@@ -23,7 +22,6 @@ export const ClientsStore = defineStore('clients', () => {
     reset,
   } = createEntityStore<IClient>(sortByHebrew((c) => c.name))
 
-  // Reactive search input query
   const searchQuery = ref('')
 
   // Filtered clients list logic

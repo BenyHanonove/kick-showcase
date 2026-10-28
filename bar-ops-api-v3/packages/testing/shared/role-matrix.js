@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { getTestRole } from './auth-guard.js';
 
 const A = ['admin'];

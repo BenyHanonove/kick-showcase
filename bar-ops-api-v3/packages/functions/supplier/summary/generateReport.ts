@@ -1,8 +1,6 @@
-// Import external framework dependencies and status codes from third party packages
 import { PDFDocument, PDFFont, PDFPage, RGB } from 'pdf-lib';
 import { SupplierEventReport, SupplierReportData } from './types';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { FONT_SIZES, COLORS, SPACING, LAYOUT, loadFonts, bidi, PdfFonts } from '@utils/file-generation/pdf.util';
 
 const MONTHS_HE: Record<number, string> = {

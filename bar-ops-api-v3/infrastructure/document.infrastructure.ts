@@ -1,8 +1,6 @@
 /// <reference path="../.sst/platform/config.d.ts" />
-// Import external framework dependencies and status codes from third party packages
 import { dynamoTable, getStreamArnPrefix, stageResourceName, apiPermission, subscribeToBus } from "./_shared.infrastructure";
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { AWS_CONFIG } from "@env/config.env";
 
 const DOCUMENT_TABLE = stageResourceName("BarOps-Document");
@@ -91,7 +89,7 @@ apiPermission("DocumentDelete", new sst.aws.Function("DocumentDelete", {
   ],
 }));
 
-// Automate DocumentObserver wiring via EventBridge subscription: cascade-delete configuration setting for
+// Automate DocumentObserver wiring via EventBridge subscription: cascade-delete
 // a session's documents (DynamoDB rows + S3 files) when the
 subscribeToBus("DocumentObserverRule", {
   handler: "packages/functions/document/observer/index.lambdaHandler",

@@ -166,14 +166,11 @@
 </template>
 
 <script setup lang="ts">
-// Import vue APIs
 import { computed, ref } from 'vue'
 
-// Import stores
 import { SessionStore } from '@stores'
 import { compactCurrency } from '@shared/utils/formatters.util'
 
-// Initialize stores
 const sessionStore = SessionStore()
 
 // Initialize state
@@ -182,7 +179,6 @@ const activeMetric = ref<'cash' | 'credit' | 'netCredit' | 'tip' | 'all' | 'cred
   'all',
 )
 
-// Computed properties
 const cashiers = computed(() => sessionStore.cashiers?.data || [])
 const hasCashiers = computed(() => cashiers.value.length > 0)
 

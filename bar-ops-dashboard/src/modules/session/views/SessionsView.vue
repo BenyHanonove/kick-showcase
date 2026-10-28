@@ -185,15 +185,12 @@
 import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
-// Import stores
 import { SessionsStore, ClientsStore } from '@stores'
 
-// Import composables
 import { useSessionCrud } from '@session/composables/session.crud'
 import { useClientCrud } from '@client/composables/client.crud'
 import { useCalendarFilter } from '@shared/composables/useCalendarFilter.composable'
 
-// Import custom components
 import SessionCard from '@session/components/SessionCard.vue'
 import AppCalendar from '@shared/components/data/AppCalendar.vue'
 import AppFilter from '@shared/components/forms/AppFilter.vue'

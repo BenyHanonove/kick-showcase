@@ -1,19 +1,16 @@
 import 'reflect-metadata';
 
-// Import external framework dependencies and status codes from third party packages
 import { type APIGatewayProxyEventV2, type APIGatewayProxyResultV2 } from 'aws-lambda';
 import { GetCommand } from '@aws-sdk/lib-dynamodb';
 import { StatusCodes } from 'http-status-codes';
 import { plainToInstance } from 'class-transformer';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { docClient } from '@aws/dynamo/client.dynamo';
 import { get } from '@aws/dynamo/get.dynamo';
 import { validateBody } from '@utils/request/request.util';
 import { ResourceMessages } from '@utils/messages/resource.util';
 import { logger } from '@utils/logger/logger.util';
 
-// Import resource data transfer objects for payload transformation and validation
 import { EmployeeDto } from '@dtos/employee/employee.dto';
 import { SelfUpdateEmployeeDto } from '@dtos/employee/self-update.dto';
 import { EmployeeTokenDto } from '@dtos/employee/token.dto';
@@ -27,7 +24,7 @@ const invalidFieldsResponse = (): APIGatewayProxyResultV2 => ({
     body: JSON.stringify({ message: FIELDS_INVALID_MESSAGE }),
 });
 
-// Fields an employee may see/edit about themselves configuration setting for
+// Fields an employee may see/edit about themselves
 const SELF_UPDATE_FIELDS = ['firstName', 'lastName', 'identityNumber', 'phone', 'workExperience', 'instagram', 'address', 'gender'] as const;
 
 // Resolve unauthenticated shift registration token details directly from DynamoDB database table

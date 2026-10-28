@@ -55,19 +55,14 @@
 </template>
 
 <script setup lang="ts">
-// Import vue APIs
 import { computed } from 'vue'
 
-// Import stores
 import { SessionStore } from '@stores'
 
-// Import composables
 import { useDocumentCrud } from '@document/composables/document.crud'
 
-// Import types
 import { UserRole } from '@auth/types/IUser.types'
 
-// Import custom components
 import EmptyState from '@shared/components/data/EmptyState.vue'
 import DocumentList from '@document/components/DocumentList.vue'
 import PageHeader from '@shared/components/layout/PageHeader.vue'

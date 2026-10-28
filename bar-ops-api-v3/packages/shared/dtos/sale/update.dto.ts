@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { IsBoolean, IsDateString, IsISO8601, IsOptional, IsString, IsUUID, Length } from "class-validator";
 import { Type } from "class-transformer";
 

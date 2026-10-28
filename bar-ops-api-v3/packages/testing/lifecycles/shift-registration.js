@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { fileURLToPath } from 'url';
 import process from 'process';
 import assert from 'assert';
@@ -120,7 +119,7 @@ async function runAdminLifecycle() {
   let shiftId = null;
 
   try {
-    // Admin opens registration for this one employee configuration setting for
+    // Admin opens registration for this one employee
     const token = extractToken(await openShiftRegistration(fixtures.sessionId, fixtures.employeeId));
 
     // The employee opens the link: event details only, no ids
@@ -196,7 +195,7 @@ async function runAdminLifecycle() {
   }
 }
 
-// Run entire shift registration lifecycle sequence configuration setting for module
+// Run entire shift registration lifecycle sequence
 export async function runShiftRegistrationLifecycle() {
   console.log('=== Starting Shift Registration Lifecycle Flow ===');
 

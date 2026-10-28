@@ -1,8 +1,6 @@
-// Import external framework dependencies and status codes from third party packages
 import { PDFDocument, rgb, PDFFont } from 'pdf-lib';
 import { EnrichedConsume, SaleReportData } from './types';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { loadFonts, loadBasePdfFromS3, bidi } from '@utils/file-generation/pdf.util';
 
 const Y_OFFSET = 100;

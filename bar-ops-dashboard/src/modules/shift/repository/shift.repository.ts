@@ -1,7 +1,5 @@
-// Import base repository
 import { BaseRepository } from '@shared/repository/base.repository'
 
-// Import types
 import type { IShift, ICreateShift, IUpdateShift, IShiftNotification } from '@shift/types/IShift.types'
 import type { IShiftFilters, IShiftRepository } from '@shift/types/IShiftRepository.types'
 import type {
@@ -14,7 +12,6 @@ import type {
 import api from '@shared/repository/api'
 import type { IRawResponse } from '@shared/types/IApiResponse.types'
 
-// Extend base repository
 class ShiftRepository
   extends BaseRepository<IShift, ICreateShift, IUpdateShift, IShift, IShiftFilters>
   implements IShiftRepository

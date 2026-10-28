@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { fileURLToPath } from 'url';
 import process from 'process';
 import { createClient } from '../endpoints/client/create.js';
@@ -38,7 +37,7 @@ async function deleteFixtures({ clientId, sessionId }) {
   await deleteClient(clientId);
 }
 
-// User must 403 on every vehicle op configuration setting for
+// User must 403 on every vehicle op
 async function runUserChecks() {
   console.log('Running vehicle 403 checks as user...');
   const payload = { sessionId: fakeId(), sum: 100, desc: 'TEST VEHICLE', licensePlate: '11-222-33' };
@@ -86,7 +85,7 @@ async function runVehicleFlow() {
   }
 }
 
-// Run entire vehicle lifecycle sequence configuration setting for module execution
+// Run entire vehicle lifecycle sequence
 export async function runVehicleLifecycle() {
   console.log('=== Starting Vehicle Lifecycle Flow ===');
 

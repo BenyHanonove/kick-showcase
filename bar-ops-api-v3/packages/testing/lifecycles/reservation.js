@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { fileURLToPath } from 'url';
 import process from 'process';
 import assert from 'assert';
@@ -83,7 +82,7 @@ async function runAdminLifecycle() {
   await deleteReservation(id);
 }
 
-// Run entire reservation lifecycle sequence configuration setting for module execution
+// Run entire reservation lifecycle sequence
 export async function runReservationLifecycle() {
   console.log('=== Starting Reservation Lifecycle Flow ===');
 

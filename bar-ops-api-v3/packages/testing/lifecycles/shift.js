@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { fileURLToPath } from 'url';
 import process from 'process';
 import assert from 'assert';
@@ -56,7 +55,7 @@ async function deleteFixtures({ clientId, sessionId, employeeId }) {
   await deleteClient(clientId);
 }
 
-// User must 403 on every shift op configuration setting for
+// User must 403 on every shift op
 async function runUserChecks() {
   console.log('Running shift 403 checks as user...');
   const payload = { sessionId: fakeId(), employeeId: fakeId(), role: 'waiter', timing: '2026-06-01T09:00:00.000Z' };
@@ -111,7 +110,7 @@ async function runManagerChecks() {
     });
     assertFieldsDropped(extractData(updateResponse), SHIFT_DROPS, 'shift update response as manager');
 
-    // Admin read-back: bonus values unchanged from creation configuration setting for
+    // Admin read-back: bonus values unchanged from creation
     await asAdmin(async () => {
       const adminView = extractData(await getShift(shiftId));
       assert.strictEqual(adminView.bonusTravel, 10, 'bonusTravel should be unchanged after manager update');
@@ -166,7 +165,7 @@ async function runAdminLifecycle() {
   await deleteFixtures(fixtures);
 }
 
-// Run entire shift lifecycle sequence configuration setting for module execution
+// Run entire shift lifecycle sequence
 export async function runShiftLifecycle() {
   console.log('=== Starting Shift Lifecycle Flow ===');
 

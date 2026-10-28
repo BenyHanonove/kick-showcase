@@ -1,8 +1,6 @@
-// Import external framework dependencies and status codes from third party packages
 import { IsDateString, IsEnum, IsNumber, IsOptional, IsString, IsUUID, Min } from "class-validator";
 import { Type } from "class-transformer";
 
-// Import resource data transfer objects for payload transformation and validation
 import { CreateSessionDto } from "@dtos/session/create.dto";
 import { SessionStatus } from "@dtos/session/session.enum";
 

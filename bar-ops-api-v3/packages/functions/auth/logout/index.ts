@@ -1,11 +1,9 @@
 import 'reflect-metadata';
 
-// Import external framework dependencies and status codes from third party packages
 import { type APIGatewayProxyEventV2, type APIGatewayProxyResultV2 } from 'aws-lambda';
 import { StatusCodes } from 'http-status-codes';
 import { CognitoIdentityProviderClient, GlobalSignOutCommand, RevokeTokenCommand } from '@aws-sdk/client-cognito-identity-provider';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { clearRefreshCookies, extractRefreshCookies, isAllowedOrigin } from '@utils/auth/cookie.util';
 import { ResourceMessages } from '@utils/messages/resource.util';
 import { logger } from '@utils/logger/logger.util';

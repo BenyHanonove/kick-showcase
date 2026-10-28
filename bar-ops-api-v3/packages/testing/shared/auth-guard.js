@@ -1,10 +1,9 @@
-// Import external framework dependencies and status codes from third party packages
 import { config, validateConfig } from './config.js';
 import api from './api.js';
 
 const ROLES = ['admin', 'manager', 'user'];
 
-// Role currently authenticated on the api singleton configuration setting for
+// Role currently authenticated on the api singleton
 let activeRole = null;
 let roleOverride = null;
 // Per-role { token, groups } cache to avoid repeat Cognito calls
@@ -59,7 +58,7 @@ async function loginAsRole(role) {
   return result;
 }
 
-// Authenticate user credentials against Cognito IDP configuration setting for module
+// Authenticate user credentials against Cognito IDP
 export async function login(email, password) {
   validateConfig();
   const url = config.cognito.idpUrl;
@@ -129,22 +128,22 @@ export async function login(email, password) {
   };
 }
 
-// Log in with admin role credentials configuration setting for module
+// Log in with admin role credentials
 export async function loginAsAdmin() {
   return loginAsRole('admin');
 }
 
-// Log in with manager role credentials configuration setting for module
+// Log in with manager role credentials
 export async function loginAsManager() {
   return loginAsRole('manager');
 }
 
-// Log in with user role credentials configuration setting for module
+// Log in with user role credentials
 export async function loginAsUser() {
   return loginAsRole('user');
 }
 
-// Clear global API authorization state definition for application business logic
+// Clear global API authorization state
 export function logout() {
   api.clearAuth();
   activeRole = null;

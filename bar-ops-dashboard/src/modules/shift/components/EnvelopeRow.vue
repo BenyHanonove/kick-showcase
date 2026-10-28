@@ -37,11 +37,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-// Import stores and roles
 import { AuthStore, RoleLevel } from '@stores'
 import { UserRole } from '@auth/types/IUser.types'
 
-// Import types
 import type { IShift } from '@shift/types/IShift.types'
 
 defineProps<{

@@ -1,11 +1,8 @@
-// Import providers
 import { authProvider } from '../providers/auth.provider'
 
-// Import stores
 import { AuthStore } from './auth.store'
 import { tokenMemory } from './token.memory'
 
-// Import types
 import type { IAuthTokens } from '../types/ICognito.types'
 
 // Scheduled proactive refresh timer

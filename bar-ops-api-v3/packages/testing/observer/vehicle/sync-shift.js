@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import assert from 'assert';
 import { createClient } from '../../endpoints/client/create.js';
 import { deleteClient } from '../../endpoints/client/delete.js';
@@ -61,7 +60,7 @@ async function assertCascadeDeleted(name, fetchFn) {
   });
 }
 
-// Run the vehicle shift bonus sync test configuration setting for
+// Run the vehicle shift bonus sync test
 export async function runSyncTest() {
   await selectUserRoleAndLogin();
   console.log('=== Starting Vehicle Shift Bonus Sync Verification ===');

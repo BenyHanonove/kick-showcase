@@ -1,13 +1,9 @@
-// Import axios response types
 import type { AxiosResponse } from 'axios'
 
-// Import custom api client
 import api from './api'
 
-// Import file parser utilities
 import { parseBlobResponse } from '../utils/parseBlobResponse.util'
 
-// Import global response types
 import type { IApiResponse, IRawResponse } from '@shared/types/IApiResponse.types'
 import type { ISummaryReport } from '@shared/types/ISummaryReport.interface'
 

@@ -1,11 +1,9 @@
 import 'reflect-metadata';
 
-// Import external framework dependencies and status codes from third party packages
 import { type APIGatewayProxyEventV2, type APIGatewayProxyResultV2 } from 'aws-lambda';
 import { StatusCodes } from 'http-status-codes';
 import { plainToInstance } from 'class-transformer';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { cascadeDeleteByField } from '@aws/dynamo/delete.dynamo';
 import { RolesGuard } from '@guards/role.guard';
 import { UserRole } from '@guards/user-role.enum';
@@ -13,7 +11,6 @@ import { extractId } from '@utils/request/request.util';
 import { ResourceMessages } from '@utils/messages/resource.util';
 import { logger } from '@utils/logger/logger.util';
 
-// Import resource data transfer objects for payload transformation and validation
 import { RevokeShiftRegistrationResultDto } from '@dtos/shift/revoke-result.dto';
 
 const MESSAGES = new ResourceMessages('משמרת', 'משמרות');

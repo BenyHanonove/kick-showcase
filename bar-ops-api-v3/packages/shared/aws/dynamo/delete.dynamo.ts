@@ -1,8 +1,6 @@
-// Import external framework dependencies and status codes from third party packages
 import { DeleteCommand, QueryCommand, BatchWriteCommand } from "@aws-sdk/lib-dynamodb";
 import { docClient } from "./client.dynamo";
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { redisClient } from "@aws/redis/client.redis";
 import { logger } from '@utils/logger/logger.util';
 

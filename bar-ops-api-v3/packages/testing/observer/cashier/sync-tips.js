@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import assert from 'assert';
 import { createClient } from '../../endpoints/client/create.js';
 import { deleteClient } from '../../endpoints/client/delete.js';
@@ -43,7 +42,7 @@ async function assertWithRetry(assertionFn, maxTimeoutMs = 30000, intervalMs = 2
   }
 }
 
-// Run the sync propagation test configuration setting for module execution
+// Run the sync propagation test
 export async function runSyncTest() {
   await selectUserRoleAndLogin();
   console.log('=== Starting Cashier Tips Sync Verification ===');
@@ -122,7 +121,7 @@ export async function runSyncTest() {
 
   await deleteCashier(cashierId);
 
-  // Assert Tips creditTip is back to 0 configuration setting for
+  // Assert Tips creditTip is back to 0
   console.log('Asserting Tips creditTip is updated back to 0 (with polling)...');
   await assertWithRetry(async () => {
     const fetchedTips = await getTips(tipsId);

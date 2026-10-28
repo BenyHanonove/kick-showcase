@@ -1,11 +1,9 @@
-// Import external framework dependencies and status codes from third party packages
 import { ScanCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { plainToInstance, type ClassConstructor } from "class-transformer";
 import { validate } from "class-validator";
 import { docClient } from "./client.dynamo";
 import { type DynamoItem, type DateSplitKeys, recombineDatetime } from "./item.dynamo";
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { redisClient, CACHE_TTL_SECONDS, getTableVersion } from "@aws/redis/client.redis";
 import { logger } from '@utils/logger/logger.util';
 
@@ -17,7 +15,7 @@ export interface ListOptions {
     expressionAttributeValues?: Record<string, string | number | boolean | null | undefined>;
 }
 
-// Fetch list of items from DynamoDB table definition for application
+// Fetch list of items from DynamoDB table
 export const list = async <T extends object>(
     tableName: string,
     dto: ClassConstructor<T>,

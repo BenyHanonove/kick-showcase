@@ -1,12 +1,10 @@
 import 'reflect-metadata';
 
-// Import external framework dependencies and status codes from third party packages
 import { type EventBridgeEvent, type DynamoDBRecord } from 'aws-lambda';
 import { v4 as uuidv4 } from 'uuid';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, QueryCommand, BatchWriteCommand } from '@aws-sdk/lib-dynamodb';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { cascadeDeleteByField } from '@aws/dynamo/delete.dynamo';
 import { redisClient } from '@aws/redis/client.redis';
 import { logger } from '@utils/logger/logger.util';
@@ -67,7 +65,7 @@ export const lambdaHandler = async (event: EventBridgeEvent<string, DynamoDBReco
                 }
             }));
 
-            // Invalidate Redis list cache for Tips table configuration setting for
+            // Invalidate Redis list cache for Tips table
             try {
                 await redisClient.incr(`version:${process.env.TABLE!}`);
             } catch (err) {

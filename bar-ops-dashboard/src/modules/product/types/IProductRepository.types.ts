@@ -1,4 +1,3 @@
-// Import types
 import type { IApiResponse } from '@shared/types/IApiResponse.types'
 import type { IProduct, ICreateProduct, IUpdateProduct } from './IProduct.types'
 

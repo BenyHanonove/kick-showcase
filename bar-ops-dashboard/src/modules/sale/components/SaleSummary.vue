@@ -24,14 +24,11 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-// Import stores
 import { SaleStore, ProductsStore } from '@stores'
 
-// Import shared components
 import SummaryPanel from '@shared/components/layout/SummaryPanel.vue'
 import SummaryBreakdown from '@shared/components/data/SummaryBreakdown.vue'
 
-// Import types
 import { ProductType, ProductTypeLabels } from '@product/types/ProductType.types'
 import type { IConsume } from '@consume/types/IConsume.types'
 import type {
@@ -41,14 +38,11 @@ import type {
 } from '@shared/types/ISummaryMetric.types'
 import type { ISegment } from '@shared/types/ISegment.types'
 
-// Import composables
 import { getConsumedQuantity, getConsumedCharge } from '@consume/composables/consume.calc'
 
-// Initialize stores
 const saleStore = SaleStore()
 const productsStore = ProductsStore()
 
-// State
 const isOpen = ref(false)
 
 // All consumes for this sale

@@ -1,5 +1,4 @@
 /// <reference path="../.sst/platform/config.d.ts" />
-// Import external framework dependencies and status codes from third party packages
 import { dynamoTable, createStreamPipe, stageResourceName, apiPermission } from "./_shared.infrastructure";
 
 const RESERVATION_TABLE = stageResourceName("BarOps-Reservation");

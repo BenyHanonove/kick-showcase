@@ -47,28 +47,21 @@
 </template>
 
 <script setup lang="ts">
-// Import vue APIs
 import { computed } from 'vue'
 
-// Import custom components
 import AuthWrapper from '@auth/components/AuthWrapper.vue'
 
-// Import stores
 import { ProductsStore } from '@stores'
 
-// Import composables
 import { getConsumedCharge } from '@consume/composables/consume.calc'
 
-// Import utils
 import { addVat, VAT_PERCENT } from '@shared/utils/vat.util'
 import { formatCurrency } from '@shared/utils/formatters.util'
 
-// Import types
 import type { IConsume } from '@consume/types/IConsume.types'
 import { ProductType, ProductTypeLabels } from '@product/types/ProductType.types'
 import { UserRole } from '@auth/types/IUser.types'
 
-// Define props
 const props = defineProps<{
   consumes: IConsume[]
   types: ProductType[]
@@ -97,7 +90,6 @@ const getTotalByType = (type: ProductType) => {
     .reduce((sum, c) => sum + calcItemTotal(c), 0)
 }
 
-// Computed properties
 const activeSummaries = computed(() => {
   return props.types
     .map((type) => ({

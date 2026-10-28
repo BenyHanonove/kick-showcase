@@ -1,9 +1,7 @@
-// Import external framework dependencies and status codes from third party packages
 import { QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { StatusCodes } from 'http-status-codes';
 import { type APIGatewayProxyResultV2 } from 'aws-lambda';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { docClient } from '@aws/dynamo/client.dynamo';
 import { ResourceMessages } from '@utils/messages/resource.util';
 

@@ -30,25 +30,18 @@
 </template>
 
 <script setup lang="ts">
-// Import vue APIs
 import { computed } from 'vue'
 
-// Import custom components
 import DocumentCard from '@document/components/DocumentCard.vue'
 
-// Import types
 import type { IDocument } from '@document/types/IDocument.types'
 
-// Import stores
 import { SessionStore } from '@stores'
 
-// Initialize stores
 const sessionStore = SessionStore()
 
-// Computed properties
 const documents = computed(() => sessionStore.documents?.data || [])
 
-// Define emits
 const emit = defineEmits<{
   (e: 'edit', document: IDocument): void
   (e: 'delete', document: IDocument): void

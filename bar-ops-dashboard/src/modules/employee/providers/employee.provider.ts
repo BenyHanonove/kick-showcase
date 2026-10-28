@@ -1,12 +1,9 @@
-// Import repository
 import employeeRepository from '@employee/repository/employee.repository'
 
-// Import base provider
 import { BaseCrudProvider } from '@shared/providers/base.provider'
 import type { IProviderResult } from '@shared/providers/base.provider'
 import { StatusCodes } from 'http-status-codes'
 
-// Import types
 import type {
   IEmployee,
   ICreateEmployee,
@@ -19,7 +16,6 @@ import type {
 import type { IEmployeeRepository } from '@employee/types/IEmployeeRepository.types'
 import type { ISummaryReport } from '@shared/types/ISummaryReport.interface'
 
-// Extend base provider
 class EmployeeProvider extends BaseCrudProvider<
   IEmployee,
   ICreateEmployee,

@@ -1,7 +1,5 @@
-// Import base repository
 import { BaseReceiptRepository } from '@shared/repository/base.repository'
 
-// Import types
 import type { IExpense, ICreateExpense, IUpdateExpense } from '@expense/types/IExpense.types'
 import type { IExpenseFilters, IExpenseRepository } from '@expense/types/IExpenseRepository.types'
 

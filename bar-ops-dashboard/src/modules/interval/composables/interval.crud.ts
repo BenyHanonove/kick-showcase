@@ -1,19 +1,13 @@
-// Import vue APIs
 import { ref, onMounted, watch } from 'vue'
 
-// Import stores
 import { SnackbarStore } from '@stores'
 
-// Import providers
 import { intervalProvider } from '@interval/providers/interval.provider'
 
-// Import composables
 import { useCrud } from '@shared/composables/crud.composable'
 
-// Import validation rules
 import { rules } from '@shared/utils/rules.util'
 
-// Import types
 import type { IInterval, ICreateInterval, IUpdateInterval } from '@interval/types/IInterval.types'
 import type { IFormField } from '@shared/types/IForm.types'
 
@@ -45,7 +39,6 @@ export function useIntervalCrud(shiftId: string, sessionId: string) {
     },
   }
 
-  // Initialize base CRUD actions
   const base = useCrud<IInterval, ICreateInterval, IUpdateInterval>(intervalProvider, localStore)
 
   // Set up snapshots when edit mode is activated

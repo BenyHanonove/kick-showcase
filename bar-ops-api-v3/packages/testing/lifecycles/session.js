@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { fileURLToPath } from 'url';
 import process from 'process';
 import assert from 'assert';
@@ -27,7 +26,7 @@ function buildSessionPayload(clientId) {
   };
 }
 
-// User must 403 on every session op configuration setting for
+// User must 403 on every session op
 async function runUserChecks() {
   console.log('Running session 403 checks as user...');
   await assertForbidden(() => createSession(buildSessionPayload(fakeId())), 'session create as user');
@@ -124,7 +123,7 @@ async function runAdminLifecycle() {
   const byClientOnly = extractData(await listSessions({ clientId: clientId }));
   assert.ok(Array.isArray(byClientOnly) && byClientOnly.some(s => s.id === sessionId), 'session list by client only should contain the session');
 
-  // Date-range: day-precision within the session's own month configuration setting for
+  // Date-range: day-precision within the session's own month
   const inRange = extractData(await listSessions({ clientId: clientId, startDate: '2026-06-01', endDate: '2026-06-01' }));
   assert.ok(Array.isArray(inRange) && inRange.some(s => s.id === sessionId), 'session list by date range should contain the session on its exact day');
 
@@ -152,7 +151,7 @@ async function runAdminLifecycle() {
   await deleteClient(clientId);
 }
 
-// Run entire session lifecycle sequence configuration setting for module execution
+// Run entire session lifecycle sequence
 export async function runSessionLifecycle() {
   console.log('=== Starting Session Lifecycle Flow ===');
 

@@ -93,29 +93,23 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-// Import stores
 import { storeToRefs } from 'pinia'
 import { ClientsStore, AuthStore } from '@stores'
 
-// Import composables
 import { useClientCrud } from '@client/composables/client.crud'
 import { useSearch } from '@shared/composables/useSearch.composable'
 
-// Import types
 import { UserRole } from '@auth/types/IUser.types'
 import type { IClient } from '@client/types/IClient.types'
 import type { IListAction } from '@shared/types/IListAction.types'
 
-// Import utils
 import { formatPhoneNumber } from '@shared/utils/formatters.util'
 
-// Import custom components
 import AppTable from '@shared/components/data/AppTable.vue'
 import AppDialog from '@shared/components/dialogs/AppDialog.vue'
 import GenericForm from '@shared/components/forms/GenericForm.vue'
 import PageHeader from '@shared/components/layout/PageHeader.vue'
 
-// Initialize stores
 const clientsStore = ClientsStore()
 const authStore = AuthStore()
 
@@ -136,7 +130,6 @@ const pageActions = computed(() => {
   ]
 })
 
-// Table headers config
 const tableHeaders = [
   { key: 'brand', label: 'מותג' },
   { key: 'name', label: 'שם הלקוח' },

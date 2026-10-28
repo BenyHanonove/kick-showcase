@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-// Import types
 import { type IUser, UserRole } from '@auth/types/IUser.types'
 
 // Tokens never stored in Pinia; kept in memory only
@@ -17,7 +16,6 @@ export const RoleLevel: Record<UserRole, number> = {
 export const AuthStore = defineStore(
   'auth',
   () => {
-    // Reactive state
     const user = ref<IUser | null>(null)
     const role = ref<UserRole | null>(null)
     const loading = ref<boolean>(false)

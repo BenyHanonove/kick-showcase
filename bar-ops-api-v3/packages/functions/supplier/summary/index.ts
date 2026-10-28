@@ -1,18 +1,15 @@
 import 'reflect-metadata';
 
-// Import external framework dependencies and status codes from third party packages
 import { type APIGatewayProxyEventV2, type APIGatewayProxyResultV2, type APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 import { StatusCodes } from 'http-status-codes';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { RolesGuard } from '@guards/role.guard';
 import { UserRole } from '@guards/user-role.enum';
 import { invokeLambda } from '@aws/lambdas/lambda';
 import { ResourceMessages } from '@utils/messages/resource.util';
 
-// Import resource data transfer objects for payload transformation and validation
 import { ConsumeDto } from '@dtos/consume/consume.dto';
 import { ProductDto } from '@dtos/product/product.dto';
 import { SaleDto } from '@dtos/sale/sale.dto';
@@ -79,7 +76,7 @@ export const handler = RolesGuard([UserRole.ADMIN], async (event: APIGatewayProx
             products.filter(p => p.supplierId === supplierId).map(p => [p.id, p]),
         );
 
-        // Fetch consumes in batch for all sessions configuration setting for
+        // Fetch consumes in batch for all sessions
         const sessionIds = sessions.map(s => s.id).join(',');
         const consumesBatchRes = await invokeLambda(
             process.env.CONSUME_BATCH_LAMBDA_NAME!,

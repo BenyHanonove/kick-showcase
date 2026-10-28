@@ -85,7 +85,6 @@
 import { computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 
-// Import types
 import { UserRole } from '@auth/types/IUser.types'
 import {
   EmployeeLevelColors,
@@ -94,10 +93,8 @@ import {
   EmployeeLevelOrder,
 } from '@employee/types/EmployeeLevel.types'
 
-// Import composables
 import { useEmployeeRate } from '@employee/composables/employee.rate'
 
-// Import components
 import PageHeader from '@shared/components/layout/PageHeader.vue'
 import ModuleSummaryCard from '@shared/components/layout/ModuleSummaryCard.vue'
 import AppButton from '@shared/components/layout/AppButton.vue'

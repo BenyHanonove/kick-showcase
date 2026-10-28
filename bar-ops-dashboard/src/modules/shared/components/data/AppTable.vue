@@ -147,7 +147,6 @@ export interface TableHeader<T extends object = object> {
   exportValue?: (item: T) => string | number | boolean | null
 }
 
-// Define props
 const props = withDefaults(
   defineProps<{
     items: T[]

@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import assert from 'assert';
 import { createClient } from '../../endpoints/client/create.js';
 import { deleteClient } from '../../endpoints/client/delete.js';
@@ -22,7 +21,7 @@ function extractId(response) {
   return id;
 }
 
-// Poll and retry assertion for async processes configuration setting for
+// Poll and retry assertion for async processes
 async function assertWithRetry(assertionFn, maxTimeoutMs = 30000, intervalMs = 2000) {
   const startTime = Date.now();
   while (true) {
@@ -38,7 +37,7 @@ async function assertWithRetry(assertionFn, maxTimeoutMs = 30000, intervalMs = 2
   }
 }
 
-// Run the cascade delete test configuration setting for module execution
+// Run the cascade delete test
 export async function runCascadeDeleteTest() {
   await selectUserRoleAndLogin();
   console.log('=== Starting Cashier Cascade Delete Verification ===');
@@ -91,7 +90,7 @@ export async function runCascadeDeleteTest() {
   console.log(`Deleting Session: ${sessionId}...`);
   await deleteSession(sessionId);
 
-  // Verify Cashier 1 is deleted (with polling) configuration setting for
+  // Verify Cashier 1 is deleted (with polling)
   console.log('Verifying Cashier 1 is cascade-deleted (with polling)...');
   await assertWithRetry(async () => {
     let cashier1Deleted = false;
@@ -107,7 +106,7 @@ export async function runCascadeDeleteTest() {
     assert.ok(cashier1Deleted, 'Cashier 1 should have been cascade-deleted after session deletion');
   });
 
-  // Verify Cashier 2 is deleted (with polling) configuration setting for
+  // Verify Cashier 2 is deleted (with polling)
   console.log('Verifying Cashier 2 is cascade-deleted (with polling)...');
   await assertWithRetry(async () => {
     let cashier2Deleted = false;

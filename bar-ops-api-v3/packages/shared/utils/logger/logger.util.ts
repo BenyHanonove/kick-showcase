@@ -12,7 +12,7 @@ const SENSITIVE_VALUE_PATTERNS: RegExp[] = [
     /\bAKIA[0-9A-Z]{16}\b/g,
 ];
 
-// Mask sensitive patterns inside a string value configuration setting for
+// Mask sensitive patterns inside a string value
 const sanitizeString = (value: string): string =>
     SENSITIVE_VALUE_PATTERNS.reduce((acc, pattern) => acc.replace(pattern, REDACTED), value);
 
@@ -25,7 +25,7 @@ export const sanitize = (value: unknown, depth: number = 0, seen: WeakSet<object
     if (seen.has(value)) return '[CIRCULAR]';
     seen.add(value);
 
-    // Preserve Error shape while sanitizing its text configuration setting for
+    // Preserve Error shape while sanitizing its text
     if (value instanceof Error) {
         return {
             name: value.name,
@@ -44,7 +44,7 @@ export const sanitize = (value: unknown, depth: number = 0, seen: WeakSet<object
     return result;
 };
 
-// Sanitize all arguments before delegating to console configuration setting for
+// Sanitize all arguments before delegating to console
 const emit = (method: 'log' | 'warn' | 'error') => (...args: unknown[]): void => {
     console[method](...args.map((arg) => sanitize(arg)));
 };

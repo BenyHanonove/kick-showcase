@@ -1,11 +1,10 @@
-// Import external framework dependencies and status codes from third party packages
 import { CustomMessageTriggerEvent } from 'aws-lambda';
 
 // Process auth message operation request and return JSON HTTP response
 export const handler = async (event: CustomMessageTriggerEvent): Promise<CustomMessageTriggerEvent> => {
     if (event.triggerSource === "CustomMessage_SignUp" || event.triggerSource === "CustomMessage_ResendCode") {
 
-        // Use the link parameter provided by Cognito configuration setting for
+        // Use the link parameter provided by Cognito
         const link = event.request.linkParameter;
 
         event.response.emailSubject = "ברוכים הבאים ל-BarOps! אמת את המייל שלך";

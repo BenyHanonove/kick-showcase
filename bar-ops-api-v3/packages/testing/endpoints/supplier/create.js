@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { ensureAuth } from '../../shared/auth-guard.js';
 import api from '../../shared/api.js';
 

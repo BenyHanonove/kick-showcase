@@ -1,11 +1,9 @@
-// Import external framework dependencies and status codes from third party packages
 import { APIGatewayProxyResultV2 } from 'aws-lambda';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
 import * as crypto from 'crypto';
 import * as https from 'https';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { logger } from '@utils/logger/logger.util';
 
 const ddbClient = new DynamoDBClient({});
@@ -59,7 +57,7 @@ const AUTH_SUBPROTOCOL = 'barops-auth';
 // Rows self-expire via DynamoDB TTL, past the 2h connection max
 const CONNECTION_TTL_SECONDS = 3 * 60 * 60;
 
-// Extract JWT from the Sec-WebSocket-Protocol offer list configuration setting for
+// Extract JWT from the Sec-WebSocket-Protocol offer list
 const tokenFromProtocolHeader = (headers?: Record<string, string | undefined>): string | undefined => {
   const raw = headers?.['Sec-WebSocket-Protocol'] ?? headers?.['sec-websocket-protocol'];
   if (!raw) return undefined;
@@ -134,7 +132,7 @@ const verifyCognitoToken = async (token: string, region: string, userPoolId: str
     throw new Error('Token has expired or is missing an expiration claim');
   }
 
-  // 2. Verify issuer matches Cognito User Pool configuration setting for
+  // 2. Verify issuer matches Cognito User Pool
   const expectedIss = `https://cognito-idp.${region}.amazonaws.com/${userPoolId}`;
   if (payload.iss !== expectedIss) {
     throw new Error('Invalid token issuer');
@@ -210,7 +208,7 @@ export const handler = async (event: WebsocketConnectEvent): Promise<APIGatewayP
         connectionId: connectionId,
         userId: payload.sub,
         connectedAt: new Date().toISOString(),
-        // DynamoDB TTL: reaps rows missed by $disconnect configuration setting for
+        // DynamoDB TTL: reaps rows missed by $disconnect
         expireAt: Math.floor(Date.now() / 1000) + CONNECTION_TTL_SECONDS
       }
     }));

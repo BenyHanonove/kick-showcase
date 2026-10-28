@@ -1,18 +1,13 @@
 import { computed, isRef } from 'vue'
 
-// Import validation rules
 import { rules } from '@shared/utils/rules.util'
 
-// Import stores
 import { SnackbarStore, SaleStore, ClientsStore } from '@stores'
 
-// Import composables
 import { useCrud, useSummaryDownloader } from '@shared/composables/crud.composable'
 
-// Import providers
 import { saleProvider } from '@sale/providers/sale.provider'
 
-// Import types
 import type { ICrudStore } from '@shared/types/ICrud.types'
 import type { ISale, ICreateSale, IUpdateSale } from '@sale/types/ISale.types'
 import type { ISaleFilters } from '@sale/types/ISaleRepository.types'
@@ -31,7 +26,6 @@ export function useSaleCrud(store: ISaleCrudStore) {
   const saleStore = SaleStore()
   const clientsStore = ClientsStore()
 
-  // Initialize base CRUD actions
   const base = useCrud<ISale, ICreateSale, IUpdateSale>(saleProvider, store)
 
   // Initialize summary download actions

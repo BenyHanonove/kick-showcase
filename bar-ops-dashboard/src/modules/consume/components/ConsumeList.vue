@@ -26,23 +26,17 @@
 </template>
 
 <script setup lang="ts">
-// Import vue APIs
 import { computed } from 'vue'
 
-// Import custom components
 import ConsumeRow from '@consume/components/ConsumeRow.vue'
 
-// Import stores
 import { ProductsStore } from '@stores'
 
-// Import types
 import type { IConsume } from '@consume/types/IConsume.types'
 import { ProductType, ProductTypeLabels } from '@product/types/ProductType.types'
 
-// Define emits
 const emit = defineEmits(['edit', 'delete', 'quick-update'])
 
-// Define props
 const props = defineProps<{
   consumes: IConsume[]
   types: ProductType[]
@@ -52,7 +46,6 @@ const props = defineProps<{
 // Active stores
 const productsStore = ProductsStore()
 
-// Computed properties
 const groupedConsumes = computed(() => {
   const groups: Record<string, { label: string; items: IConsume[] }> = {}
 

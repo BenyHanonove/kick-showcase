@@ -1,19 +1,16 @@
 import 'reflect-metadata';
 
-// Import external framework dependencies and status codes from third party packages
 import { type APIGatewayProxyEventV2, type APIGatewayProxyResultV2 } from 'aws-lambda';
 import { GetCommand } from '@aws-sdk/lib-dynamodb';
 import { StatusCodes } from 'http-status-codes';
 import { plainToInstance } from 'class-transformer';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { docClient } from '@aws/dynamo/client.dynamo';
 import { list } from '@aws/dynamo/list.dynamo';
 import { validateBody } from '@utils/request/request.util';
 import { ResourceMessages } from '@utils/messages/resource.util';
 import { logger } from '@utils/logger/logger.util';
 
-// Import resource data transfer objects for payload transformation and validation
 import { ShiftDto } from '@dtos/shift/shift.dto';
 import { ShiftTokenDto } from '@dtos/shift/token.dto';
 import { ResolveShiftRegistrationDto } from '@dtos/shift/resolve.dto';

@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import assert from 'assert';
 import { getTestRole } from './auth-guard.js';
 import { managerDrops } from './role-matrix.js';

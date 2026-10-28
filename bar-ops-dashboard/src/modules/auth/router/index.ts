@@ -1,6 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
 
-// Import route children
 import loginRoute from './src/login.route'
 import registerRoute from './src/register.route'
 import restoreRoute from './src/restore.route'

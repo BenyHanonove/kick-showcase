@@ -1,5 +1,4 @@
 /// <reference path="../.sst/platform/config.d.ts" />
-// Import external framework dependencies and status codes from third party packages
 import * as aws from "@pulumi/aws";
 
 export const region = aws.getRegionOutput().name;
@@ -19,17 +18,17 @@ const PROJECT_BUS_NAME = stageResourceName(`${$app.name}-bus`);
 export const lambdaName = (service: string, action: string) =>
   `${$app.name}-${$app.stage}-${service}-${action}`;
 
-// Asset paths inside the shared global bucket definition for application
+// Asset paths inside the shared global bucket
 export const FONTS_PREFIX = "fonts";
 export const PDF_TEMPLATE_KEY = "pdf/base.pdf";
 
-// Cognito user pool shared by all stages definition for application
+// Cognito user pool shared by all stages
 export const COGNITO_USER_POOL_ID = "eu-west-1_EcYLFbA3Q";
 
 // Cognito app client shared by all stages (dashboard client)
 export const COGNITO_CLIENT_ID = "439ldfj689k03nmphv65aaepev";
 
-// Manually created HTTP API Gateway per stage definition for application
+// Manually created HTTP API Gateway per stage
 export const HTTP_API_ID = $app.stage === "production" ? "dn3xyet6gl" : "pit93c7c4h";
 
 // Manually created WebSocket API management endpoint per stage
@@ -62,7 +61,7 @@ export const dynamoTable = (name: string) => {
   };
 };
 
-// References the existing EventBridge Project Bus. definition for application business
+// References the existing EventBridge Project Bus.
 export const projectBus = sst.aws.Bus.get("ProjectBus", PROJECT_BUS_NAME);
 
 // Helper to create a Pipe forwarding DynamoDB streams to the bus
@@ -70,10 +69,10 @@ export const createStreamPipe = (name: string, table: ReturnType<typeof dynamoTa
   // Use a reliable reference to the table's stream ARN
   const streamArn = table.table.streamArn;
 
-  // Physical name follows the v3 convention: bar-ops-api-v3-<stage>-<service>-pipe configuration setting for
+  // Physical name follows the v3 convention: bar-ops-api-v3-<stage>-<service>-pipe
   const pipeName = lambdaName(name.toLowerCase(), "pipe");
 
-  // Create an IAM Role for the Pipe configuration setting for
+  // Create an IAM Role for the Pipe
   const role = new aws.iam.Role(`${name}PipeRole`, {
     name: `${pipeName}-role`,
     assumeRolePolicy: JSON.stringify({
@@ -111,7 +110,7 @@ export const createStreamPipe = (name: string, table: ReturnType<typeof dynamoTa
     }`,
   });
 
-  // Wait out IAM propagation to avoid CREATE_FAILED configuration setting for
+  // Wait out IAM propagation to avoid CREATE_FAILED
   const roleArnReady = $resolve([role.arn, policy.id]).apply(async ([roleArn]) => {
     await new Promise((resolve) => setTimeout(resolve, 15000));
     return roleArn;
@@ -132,7 +131,7 @@ export const createStreamPipe = (name: string, table: ReturnType<typeof dynamoTa
   }, { dependsOn: [policy] });
 };
 
-// Shared wrapper to guarantee Lambda invocation permissions definition for application
+// Shared wrapper to guarantee Lambda invocation permissions
 export const subscribeToBus = (
   name: string,
   subscriberArgs: Parameters<typeof projectBus.subscribe>[1],

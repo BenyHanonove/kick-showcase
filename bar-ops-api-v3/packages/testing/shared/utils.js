@@ -27,7 +27,7 @@ export function extractData(response) {
   return null;
 }
 
-// Extract entity ID from response payload definition for application business
+// Extract entity ID from response payload
 export function extractId(response) {
   const data = extractData(response);
   if (data && data.id) return data.id;

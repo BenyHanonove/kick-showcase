@@ -19,28 +19,22 @@
 </template>
 
 <script setup lang="ts">
-// Import vue APIs
 import { computed, ref } from 'vue'
 
-// Import global components
 import AppList from '@shared/components/layout/AppList.vue'
 
-// Import types
 import type { IDocument } from '@document/types/IDocument.types'
 import type { IListAction } from '@shared/types/IListAction.types'
 
 // Maximum characters shown before the name is truncated with an ellipsis
 const MAX_NAME_LENGTH = 18
 
-// Reactive state
 const menuOpen = ref(false)
 
-// Define props
 const props = defineProps<{
   document: IDocument
 }>()
 
-// Define emits
 const emit = defineEmits<{
   (e: 'edit', document: IDocument): void
   (e: 'delete', document: IDocument): void

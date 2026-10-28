@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { type APIGatewayProxyEventV2, type APIGatewayProxyResultV2, type APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 import { StatusCodes } from 'http-status-codes';
 import { validate } from 'class-validator';
@@ -21,7 +20,7 @@ export const extractId = (
     return val;
 };
 
-// Extract string from query parameters definition for application business logic
+// Extract string from query parameters
 export const extractQueryParam = (
     event: APIGatewayProxyEventV2,
     paramName: string,
@@ -39,7 +38,7 @@ export const extractQueryParam = (
     return val;
 };
 
-// Parse and validate request body definition for application business logic
+// Parse and validate request body
 export const validateBody = async <T extends object>(
     event: APIGatewayProxyEventV2,
     dtoClass: ClassConstructor<T>,

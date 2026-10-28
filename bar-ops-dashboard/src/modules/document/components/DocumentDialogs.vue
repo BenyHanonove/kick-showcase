@@ -60,15 +60,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-// Import components
 import AppDialog from '@shared/components/dialogs/AppDialog.vue'
 import GenericForm from '@shared/components/forms/GenericForm.vue'
 import AppInput from '@shared/components/input/AppInput.vue'
 
-// Import stores
 import { SnackbarStore } from '@stores'
 
-// Import types and composables
 import { useDocumentCrud } from '@document/composables/document.crud'
 import type { IUpdateDocument } from '@document/types/IDocument.types'
 

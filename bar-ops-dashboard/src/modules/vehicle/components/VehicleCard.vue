@@ -170,10 +170,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-// Import stores
 import { SessionStore, EmployeesStore, AuthStore } from '@stores'
 
-// Import types
 import type { IVehicle } from '@vehicle/types/IVehicle.types'
 import { ShiftRoleLabels } from '@shift/types/ShiftRole.types'
 import { EmployeeTypeLabels } from '@employee/types/EmployeeType.types'

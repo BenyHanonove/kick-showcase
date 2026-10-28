@@ -1,10 +1,8 @@
-// Import external framework dependencies and status codes from third party packages
 import { DynamoDBStreamEvent } from 'aws-lambda';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, ScanCommand, DeleteCommand } from '@aws-sdk/lib-dynamodb';
 import { ApiGatewayManagementApiClient, PostToConnectionCommand } from '@aws-sdk/client-apigatewaymanagementapi';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { logger } from '@utils/logger/logger.util';
 
 const docClient = DynamoDBDocumentClient.from(new DynamoDBClient({}));
@@ -75,7 +73,7 @@ export const handler = async (event: DynamoDBStreamEvent): Promise<void> => {
       continue;
     }
 
-    // REMOVE only carries OldImage; INSERT/MODIFY carry NewImage configuration setting for
+    // REMOVE only carries OldImage; INSERT/MODIFY carry NewImage
     const image = record.eventName === 'REMOVE' ? record.dynamodb?.OldImage : record.dynamodb?.NewImage;
     const editor = (image?.lastEditor as { S?: string } | undefined)?.S;
     // Entities with sessionId are room-scoped (sale reuses field)

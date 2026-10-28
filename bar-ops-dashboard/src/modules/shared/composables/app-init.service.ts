@@ -12,7 +12,6 @@ import {
   SnackbarStore,
 } from '@stores'
 
-// Import providers
 import { clientProvider } from '@client/providers/client.provider'
 import { employeeProvider } from '@employee/providers/employee.provider'
 import { productProvider } from '@product/providers/product.provider'

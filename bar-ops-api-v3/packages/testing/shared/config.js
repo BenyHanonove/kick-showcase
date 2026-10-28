@@ -22,7 +22,7 @@ const requiredEnvVars = [
   'TEST_USER_PASSWORD'
 ];
 
-// Validate environment variables lazily definition for application business logic execution
+// Validate environment variables lazily
 export function validateConfig() {
   if (!STAGE_CONFIG[STAGE]) {
     throw new Error(`❌ Unknown STAGE "${STAGE}" - expected one of: ${Object.keys(STAGE_CONFIG).join(', ')}`);
@@ -36,7 +36,7 @@ export function validateConfig() {
   }
 }
 
-// Export dynamic config getters definition for application business logic execution
+// Export dynamic config getters
 export const config = {
   get cognito() {
     return {

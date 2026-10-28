@@ -89,7 +89,7 @@ export default $config({
       const functionName = `${$app.name}-${$app.stage}-${cleanName}`;
       args.name ??= functionName;
 
-      // Register shareable test events if events.json exists configuration setting for
+      // Register shareable test events if events.json exists
       if (typeof args.handler === "string") {
         const handlerDir = path.dirname(args.handler);
         const eventsPath = path.join(handlerDir, "events.json");
@@ -143,7 +143,7 @@ export default $config({
     await import("./infrastructure/vehicle.infrastructure");
     await import("./infrastructure/websocket.infrastructure");
 
-    // Bootstrap bucket lifecycle rule owned by production configuration setting for
+    // Bootstrap bucket lifecycle rule owned by production
     if ($app.stage === "production") {
       const bootstrapParam = await aws.ssm.getParameter({
         name: "/sst/bootstrap",

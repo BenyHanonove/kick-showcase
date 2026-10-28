@@ -23,7 +23,7 @@ export class ResourceMessages<
         readonly CONCURRENCY_CONFLICT: string;
     } & E;
 
-    // Initialize with singular and plural Hebrew nouns. configuration setting for
+    // Initialize with singular and plural Hebrew nouns.
     constructor(
         single: string,
         many: string,

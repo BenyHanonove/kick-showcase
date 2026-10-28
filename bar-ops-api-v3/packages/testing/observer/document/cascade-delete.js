@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import assert from 'assert';
 import { createClient } from '../../endpoints/client/create.js';
 import { deleteClient } from '../../endpoints/client/delete.js';
@@ -42,7 +41,7 @@ async function assertCascadeDeleted(name, fetchFn) {
   });
 }
 
-// Run the cascade delete test configuration setting for module execution
+// Run the cascade delete test
 export async function runCascadeDeleteTest() {
   await selectUserRoleAndLogin();
   console.log('=== Starting Document Cascade Delete Verification ===');

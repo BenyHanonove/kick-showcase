@@ -79,7 +79,6 @@ import { SessionStore } from '@stores'
 import { useSessionLoader } from '@session/composables/useSessionLoader'
 import GlobalLoading from '@shared/components/feedback/GlobalLoading.vue'
 
-// Import Refactored Cards from their respective modules
 import SessionExecutiveSummaryCard from '@session/components/SessionExecutiveSummaryCard.vue'
 import SessionFinancialCard from '@session/components/SessionFinancialCard.vue'
 import ShiftSmartLaborCard from '@shift/components/ShiftSmartLaborCard.vue'

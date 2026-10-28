@@ -1,16 +1,11 @@
-// Import validation rules
 import { rules } from '@shared/utils/rules.util'
 
-// Import stores
 import { SessionStore } from '@stores'
 
-// Import providers
 import { missionsProvider } from '@missions/providers/missions.provider'
 
-// Import composables
 import { useCrud } from '@shared/composables/crud.composable'
 
-// Import types
 import type { IMission, ICreateMission, IUpdateMission } from '@missions/types/IMission.types'
 import type { IFormField } from '@shared/types/IForm.types'
 import { missionStatusOptions } from '@missions/types/status.types'

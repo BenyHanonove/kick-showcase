@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { IsDateString, IsOptional, IsUUID, ValidateIf } from "class-validator";
 
 export class CreateIntervalDto {

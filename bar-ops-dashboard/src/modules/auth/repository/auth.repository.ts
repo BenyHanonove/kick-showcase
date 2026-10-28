@@ -1,13 +1,9 @@
-// Import libraries
 import axios from 'axios'
 
-// Import shared api instance (auth headers, credentials)
 import api from '@shared/repository/api'
 
-// Import config
 import { env } from '@plugins'
 
-// Import types
 import type { IAuthRepository } from '@auth/types/IAuthRepository.types'
 import type { ILoginRequest, IRegisterRequest } from '@auth/types/IRequests.types'
 import type { IUser } from '@auth/types/IUser.types'

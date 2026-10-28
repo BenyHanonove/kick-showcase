@@ -277,20 +277,17 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 
-// Import stores, providers and composables
 import { SessionStore, SnackbarStore } from '@stores'
 import { cashierProvider } from '@cashier/providers/cashier.provider'
 import { useCashierCrud } from '@cashier/composables/cashier.crud'
 import type { IUpdateCashier } from '@cashier/types/ICashier.types'
 import { CashierLocation } from '@cashier/types/CashierLocation.types'
 
-// Import components
 import FileDragDrop, { type UploadFileItem } from '@shared/components/input/FileDragDrop.vue'
 import GenericForm from '@shared/components/forms/GenericForm.vue'
 import AppDialog from '@shared/components/dialogs/AppDialog.vue'
 import ReceiptDialog from '@shared/components/dialogs/ReceiptDialog.vue'
 import AppInput from '@shared/components/input/AppInput.vue'
-// Import utils
 import { rules } from '@shared/utils/rules.util'
 
 // Props definition using ReturnType to avoid 'any'

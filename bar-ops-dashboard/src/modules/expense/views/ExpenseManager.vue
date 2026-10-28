@@ -62,19 +62,14 @@
 </template>
 
 <script setup lang="ts">
-// Import vue APIs
 import { computed } from 'vue'
 
-// Import stores
 import { SessionStore } from '@stores'
 
-// Import composables
 import { useExpenseCrud } from '@expense/composables/expense.crud'
 
-// Import types
 import { UserRole } from '@auth/types/IUser.types'
 
-// Import custom components
 import EmptyState from '@shared/components/data/EmptyState.vue'
 import ExpenseSummary from '@expense/components/ExpenseSummary.vue'
 import ExpenseList from '@expense/components/ExpenseList.vue'

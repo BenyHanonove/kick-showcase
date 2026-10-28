@@ -1,8 +1,6 @@
-// Import external framework dependencies and status codes from third party packages
 import { PostConfirmationTriggerEvent } from 'aws-lambda';
 import { CognitoIdentityProviderClient, AdminAddUserToGroupCommand } from "@aws-sdk/client-cognito-identity-provider";
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { logger } from '@utils/logger/logger.util';
 
 const client = new CognitoIdentityProviderClient({});

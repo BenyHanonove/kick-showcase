@@ -112,21 +112,16 @@
 </template>
 
 <script setup lang="ts">
-// Import vue APIs
 import { ref, computed } from 'vue'
 
-// Import stores
 import { SessionStore, EmployeesStore } from '@stores'
 
-// Import composables
 import { useIntervalCrud } from '@interval/composables/interval.crud'
 import { useFormatter } from '@shared/composables/useFormatter.composable'
 
-// Import custom components
 import GenericForm from '@shared/components/forms/GenericForm.vue'
 import AppTable from '@shared/components/data/AppTable.vue'
 
-// Define props
 const props = defineProps<{
   sessionId: string
   shiftId: string
@@ -138,7 +133,6 @@ type IntervalFormData = { start: string; end: string }
 // Initialize formatter composable
 const { formatShiftTiming, calculateDiffInHours } = useFormatter()
 
-// Table headers config
 const intervalTableHeaders = [
   { key: 'start', label: 'עליה', align: 'right' as const },
   { key: 'end', label: 'ירידה', align: 'right' as const },

@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import assert from 'assert';
 import { createClient } from '../../endpoints/client/create.js';
 import { deleteClient } from '../../endpoints/client/delete.js';
@@ -22,7 +21,7 @@ function extractId(response) {
   return id;
 }
 
-// Poll and retry assertion for async processes configuration setting for
+// Poll and retry assertion for async processes
 async function assertWithRetry(assertionFn, maxTimeoutMs = 30000, intervalMs = 2000) {
   const startTime = Date.now();
   while (true) {
@@ -97,7 +96,7 @@ export async function runCascadeDeleteTest() {
   });
   console.log(`Found seeded Tips - bar: ${barTips.id}, tables: ${tablesTips.id}`);
 
-  // Verify session can be fetched before deletion configuration setting for
+  // Verify session can be fetched before deletion
   await getSession(sessionId);
 
   console.log(`Deleting Client: ${clientId}...`);

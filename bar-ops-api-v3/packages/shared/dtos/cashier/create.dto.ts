@@ -1,8 +1,6 @@
-// Import external framework dependencies and status codes from third party packages
 import { IsEnum, IsNumber, IsOptional, IsString, IsUUID, Min } from "class-validator";
 import { Type } from "class-transformer";
 
-// Import resource data transfer objects for payload transformation and validation
 import { CashierLocation } from "@dtos/cashier/cashier.enum";
 
 export class CreateCashierDto {

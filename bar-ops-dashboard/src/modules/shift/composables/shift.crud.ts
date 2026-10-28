@@ -1,20 +1,14 @@
-// Import vue APIs
 import { computed } from 'vue'
 
-// Import validation rules
 import { rules } from '@shared/utils/rules.util'
 
-// Import stores
 import { AuthStore, EmployeesStore, SnackbarStore } from '@stores'
 
-// Import composables
 import { useCrud, useBulkUpdate, useSummaryDownloader } from '@shared/composables/crud.composable'
 
-// Import providers
 import { shiftProvider } from '@shift/providers/shift.provider'
 import { employeeProvider } from '@employee/providers/employee.provider'
 
-// Import types
 import type { ICrudStore } from '@shared/types/ICrud.types'
 import type { IShift, ICreateShift, IUpdateShift } from '@shift/types/IShift.types'
 import { ShiftRole, ShiftRoleLabels } from '@shift/types/ShiftRole.types'
@@ -25,7 +19,6 @@ import type { IFormField } from '@shared/types/IForm.types'
 export function useShiftCrud(store: ICrudStore<IShift>) {
   const authStore = AuthStore()
 
-  // Initialize base CRUD actions
   const base = useCrud<IShift, ICreateShift, IUpdateShift>(
     shiftProvider,
     store,

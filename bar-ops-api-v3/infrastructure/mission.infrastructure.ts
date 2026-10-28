@@ -1,5 +1,4 @@
 /// <reference path="../.sst/platform/config.d.ts" />
-// Import external framework dependencies and status codes from third party packages
 import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, lambdaName, apiPermission, subscribeToBus } from "./_shared.infrastructure";
 
 const MISSION_TABLE = stageResourceName("BarOps-Mission");

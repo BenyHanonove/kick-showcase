@@ -1,16 +1,11 @@
-// Import validation rules
 import { rules } from '@shared/utils/rules.util'
 
-// Import stores
 import { SessionStore, SnackbarStore } from '@stores'
 
-// Import providers
 import { cashierProvider } from '@cashier/providers/cashier.provider'
 
-// Import composables
 import { useCrud, useReceipt } from '@shared/composables/crud.composable'
 
-// Import types
 import { CashierLocation, CashierLocationLabels } from '@cashier/types/CashierLocation.types'
 import type { ICashier, ICreateCashier, IUpdateCashier } from '@cashier/types/ICashier.types'
 import type { IFormField, ISelectItem } from '@shared/types/IForm.types'

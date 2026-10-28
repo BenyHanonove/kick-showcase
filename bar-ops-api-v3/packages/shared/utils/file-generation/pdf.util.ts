@@ -1,9 +1,7 @@
-// Import external framework dependencies and status codes from third party packages
 import { rgb, PDFDocument, PDFFont } from 'pdf-lib';
 import { GetObjectCommand } from '@aws-sdk/client-s3';
 import fontkit from '@pdf-lib/fontkit';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { s3Client } from '@aws/s3/client.s3';
 
 export const COLORS = {

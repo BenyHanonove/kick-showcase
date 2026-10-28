@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { AsyncLocalStorage } from 'async_hooks';
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import { UserRole } from './user-role.enum';
@@ -9,7 +8,7 @@ type LambdaHandler = (event: APIGatewayProxyEventV2) => Promise<APIGatewayProxyR
 // Global storage for the request context (holds editor Cognito sub)
 export const contextStorage = new AsyncLocalStorage<{ editorId?: string }>();
 
-// Normalize cognito:groups claim into a string array definition for application
+// Normalize cognito:groups claim into a string array
 export const normalizeGroups = (claim: unknown): string[] => {
     if (Array.isArray(claim)) return claim.filter((g): g is string => typeof g === 'string');
     if (typeof claim !== 'string' || claim.length === 0) return [];
@@ -25,7 +24,7 @@ export const getHighestRole = (groups: string[] = []): UserRole => {
     return UserRole.NONE;
 };
 
-// Helper to extract role from event definition for application business
+// Helper to extract role from event
 export const getRoleFromEvent = (event: APIGatewayProxyEventV2): UserRole => {
     const context = event.requestContext as APIGatewayProxyEventV2['requestContext'] & {
         authorizer?: {
@@ -44,7 +43,7 @@ export const getRoleFromEvent = (event: APIGatewayProxyEventV2): UserRole => {
 // Protect routes by verifying Cognito JWT claims against allowed roles
 export const RolesGuard = (allowedRoles: UserRole[], handler: LambdaHandler): LambdaHandler => {
     return async (event) => {
-        // Extract authorization metadata from the request context configuration setting for
+        // Extract authorization metadata from the request context
         const context = event.requestContext as APIGatewayProxyEventV2['requestContext'] & {
             authorizer?: {
                 jwt?: {
@@ -67,7 +66,7 @@ export const RolesGuard = (allowedRoles: UserRole[], handler: LambdaHandler): La
             };
         }
 
-        // Run handler with Cognito sub in context configuration setting for
+        // Run handler with Cognito sub in context
         const editorId = claims?.sub;
         return contextStorage.run({ editorId }, () => handler(event));
     };

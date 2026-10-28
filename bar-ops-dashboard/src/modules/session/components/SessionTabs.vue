@@ -107,10 +107,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-// Import stores
 import { AuthStore, RoleLevel } from '@stores'
 
-// Import custom views
 import ShiftManager from '@shift/views/ShiftManager.vue'
 import EnvelopesView from '@shift/views/EnvelopesView.vue'
 import CashierManager from '@cashier/views/CashierManager.vue'
@@ -121,7 +119,6 @@ import MissionsManager from '@missions/views/MissionsManager.vue'
 import VehicleManager from '@vehicle/views/VehicleManager.vue'
 import DocumentManager from '@document/views/DocumentManager.vue'
 
-// Import types
 import type { ISessionTab } from '@session/types/ISessionTab.types'
 import { UserRole } from '@auth/types/IUser.types'
 import { ProductType } from '@product/types/ProductType.types'

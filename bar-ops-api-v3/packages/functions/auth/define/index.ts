@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { DefineAuthChallengeTriggerEvent } from 'aws-lambda';
 
 // Process auth define operation request and return JSON HTTP response

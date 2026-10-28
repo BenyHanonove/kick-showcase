@@ -1,19 +1,13 @@
-// Import vue APIs
 import { computed } from 'vue'
 
-// Import validation rules
 import { rules } from '@shared/utils/rules.util'
 
-// Import stores
 import { ProductsStore } from '@stores'
 
-// Import composables
 import { useCrud, useBulkUpdate } from '@shared/composables/crud.composable'
 
-// Import providers
 import { productProvider } from '@product/providers/product.provider'
 
-// Import types
 import type { ICrudStore } from '@shared/types/ICrud.types'
 import { ProductType, ProductTypeLabels } from '@product/types/ProductType.types'
 import type { IProduct, ICreateProduct, IUpdateProduct } from '@product/types/IProduct.types'
@@ -23,7 +17,6 @@ import type { IFormField, ISelectItem } from '@shared/types/IForm.types'
 export function useProductCrud(store: ICrudStore<IProduct>) {
   const productsStore = ProductsStore()
 
-  // Initialize base CRUD actions
   const base = useCrud<IProduct, ICreateProduct, IUpdateProduct>(productProvider, store)
 
   // Initialize bulk update actions

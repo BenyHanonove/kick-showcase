@@ -72,26 +72,20 @@
 import { computed, ref, watch, onMounted } from 'vue'
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 
-// Import composables
 import { useConsumeCrud } from '@consume/composables/consume.crud'
 import { useSessionLoader } from '@session/composables/useSessionLoader'
 import { useSaleLoader } from '@sale/composables/useSaleLoader'
 
-// Import custom components
 import ConsumeBulk from '@consume/components/ConsumeBulk.vue'
 import GlobalLoading from '@shared/components/feedback/GlobalLoading.vue'
 
-// Import stores
 import { SessionStore, SaleStore, SnackbarStore } from '@stores'
 
-// Import providers
 import { consumeProvider } from '@consume/providers/consume.provider'
 
-// Import types
 import type { IConsume } from '@consume/types/IConsume.types'
 import { ProductType, ProductTypeLabels } from '@product/types/ProductType.types'
 
-// Define props
 const props = defineProps<{
   initialTypes: ProductType[]
 }>()
@@ -108,7 +102,6 @@ const saleStore = SaleStore()
 
 const currentStore = computed(() => (isSaleContext.value ? saleStore : sessionStore))
 
-// Computed properties
 const consumes = computed(() => currentStore.value.consumes?.data || [])
 
 // Use composables

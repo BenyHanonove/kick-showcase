@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { config, validateConfig } from './config.js';
 
 let authToken = null;

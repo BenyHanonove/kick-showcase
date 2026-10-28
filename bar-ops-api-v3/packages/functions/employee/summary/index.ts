@@ -1,19 +1,16 @@
 import 'reflect-metadata';
 
-// Import external framework dependencies and status codes from third party packages
 import { type APIGatewayProxyResultV2, type APIGatewayProxyEventV2, type APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, BatchGetCommand } from "@aws-sdk/lib-dynamodb";
 import ExcelJS from 'exceljs';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { RolesGuard } from '@guards/role.guard';
 import { UserRole } from '@guards/user-role.enum';
 import { invokeLambda } from '@aws/lambdas/lambda';
 import { ResourceMessages } from '@utils/messages/resource.util';
 import { logger } from '@utils/logger/logger.util';
 
-// Import resource data transfer objects for payload transformation and validation
 import { EmployeeDto } from '@dtos/employee/employee.dto';
 import { SessionDto } from '@dtos/session/session.dto';
 import { ShiftDto } from '@dtos/shift/shift.dto';
@@ -80,7 +77,7 @@ export const handler = RolesGuard([UserRole.ADMIN], async (event: APIGatewayProx
         ws.getColumn(2).width = 15;
         ws.getColumn(3).width = 15;
 
-        // Write workbook to a buffer (xlsx format) configuration setting for
+        // Write workbook to a buffer (xlsx format)
         const excelBuffer = await wb.xlsx.writeBuffer();
 
         const fileName = `${session.name || 'דוח'}_רשימת_עובדים.xlsx`.replace(/\s+/g, '_');

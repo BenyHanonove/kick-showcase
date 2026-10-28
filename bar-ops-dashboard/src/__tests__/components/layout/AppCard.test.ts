@@ -1,7 +1,5 @@
-// Import test runtime and mount helper
 import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
-// Import component under test and its Vuetify dependencies
 import AppCard from '@shared/components/layout/AppCard.vue';
 import { VCard, VIcon } from 'vuetify/components';
 

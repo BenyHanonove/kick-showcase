@@ -1,17 +1,14 @@
 import 'reflect-metadata';
 
-// Import external framework dependencies and status codes from third party packages
 import { type APIGatewayProxyEventV2, type APIGatewayProxyResultV2 } from 'aws-lambda';
 import { StatusCodes } from 'http-status-codes';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { validateBody } from '@utils/request/request.util';
 import { employeeCredentialsExist } from '@validation/employee.validation';
 import { create } from '@aws/dynamo/create.dynamo';
 import { ResourceMessages } from '@utils/messages/resource.util';
 import { logger } from '@utils/logger/logger.util';
 
-// Import resource data transfer objects for payload transformation and validation
 import { RegisterEmployeeDto } from '@dtos/employee/register.dto';
 import { EmployeeDto } from '@dtos/employee/employee.dto';
 import { EmployeeStatus } from '@dtos/employee/employee.enum';
@@ -24,7 +21,7 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
         const { data: body, error } = await validateBody(event, RegisterEmployeeDto, MESSAGES.ERROR.VALIDATION_FAILED);
         if (error) return error;
 
-        // Uniform response prevents enumeration; duplicates skip silently configuration setting for
+        // Uniform response prevents enumeration; duplicates skip silently
         if (!(await employeeCredentialsExist(body))) {
             try {
                 await create(

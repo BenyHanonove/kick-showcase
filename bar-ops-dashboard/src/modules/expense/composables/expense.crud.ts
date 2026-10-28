@@ -1,16 +1,11 @@
-// Import validation rules
 import { rules } from '@shared/utils/rules.util'
 
-// Import stores
 import { SessionStore } from '@stores'
 
-// Import providers
 import { expenseProvider } from '@expense/providers/expense.provider'
 
-// Import composables
 import { useCrud, useReceipt } from '@shared/composables/crud.composable'
 
-// Import types
 import { ExpensePaidBy, ExpensePaidByLabels } from '@expense/types/PaidBy.types'
 import type { IExpense, ICreateExpense, IUpdateExpense } from '@expense/types/IExpense.types'
 import type { IFormField } from '@shared/types/IForm.types'

@@ -83,14 +83,12 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-// Import stores and utilities
 import { SessionStore, EmployeesStore } from '@stores'
 import { useFormatter } from '@shared/composables/useFormatter.composable'
 import type { IEmployee } from '@employee/types/IEmployee.types'
 import type { IShift, ICreateShift, IUpdateShift } from '@shift/types/IShift.types'
 import { useShiftCrud } from '@shift/composables/shift.crud'
 
-// Import components
 import AppDialog from '@shared/components/dialogs/AppDialog.vue'
 import GenericForm from '@shared/components/forms/GenericForm.vue'
 import ShiftBonusInputs from '@shift/components/ShiftBonusInputs.vue'

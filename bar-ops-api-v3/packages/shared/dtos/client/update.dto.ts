@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { IsDateString, IsEmail, IsOptional, IsString, Length } from "class-validator";
 import { Transform } from "class-transformer";
 

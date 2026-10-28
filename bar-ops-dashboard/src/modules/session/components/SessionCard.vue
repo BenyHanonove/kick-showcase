@@ -66,14 +66,11 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTheme } from 'vuetify'
 
-// Import stores
 import { ClientsStore } from '@stores'
 
-// Import custom components
 import AuthWrapper from '@auth/components/AuthWrapper.vue'
 import StatusChip from '@shared/components/data/StatusChip.vue'
 
-// Import types
 import { UserRole } from '@auth/types/IUser.types'
 import type { ISession } from '@session/types/ISession.types'
 import { getSessionStatusMeta } from '@session/types/status.types'

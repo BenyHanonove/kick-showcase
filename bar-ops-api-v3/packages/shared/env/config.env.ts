@@ -11,7 +11,7 @@ export enum AwsConfigKey {
   WHATSAPP_COUNTRY_CODE = "WHATSAPP_COUNTRY_CODE",
 }
 
-// AWS configuration loaded directly from environment variables. definition for application
+// AWS configuration loaded directly from environment variables.
 export const AWS_CONFIG = {
   region: process.env.AWS_REGION,
   s3: {

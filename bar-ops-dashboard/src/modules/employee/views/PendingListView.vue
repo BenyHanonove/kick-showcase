@@ -99,23 +99,18 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 
-// Import custom components
 import PageHeader from '@shared/components/layout/PageHeader.vue'
 import AppDialog from '@shared/components/dialogs/AppDialog.vue'
 import GenericForm from '@shared/components/forms/GenericForm.vue'
 import PendingEmployeeCard from '../components/PendingEmployeeCard.vue'
 
-// Import composables
 import { useSearch } from '@shared/composables/useSearch.composable'
 import { useEmployeeCrud } from '@employee/composables/employee.crud'
 
-// Import stores
 import { EmployeesStore, SnackbarStore } from '@stores'
 
-// Import providers
 import { employeeProvider } from '@employee/providers/employee.provider'
 
-// Import types
 import { UserRole } from '@auth/types/IUser.types'
 import { EmployeeStatus } from '@employee/types/EmployeeStatus.types'
 import type { IEmployee, IUpdateEmployee } from '@employee/types/IEmployee.types'

@@ -69,16 +69,12 @@
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-// Import stores
 import { ClientsStore, AuthStore, SnackbarStore } from '@stores'
 
-// Import composables
 import { useSummaryDownloader } from '@shared/composables/crud.composable'
 
-// Import providers
 import { saleProvider } from '@sale/providers/sale.provider'
 
-// Import types
 import type { ISale } from '@sale/types/ISale.types'
 import type { IListAction } from '@shared/types/IListAction.types'
 

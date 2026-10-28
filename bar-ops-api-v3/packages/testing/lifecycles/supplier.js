@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { fileURLToPath } from 'url';
 import process from 'process';
 import assert from 'assert';
@@ -21,7 +20,7 @@ const SUPPLIER_PAYLOAD = {
   "notes": "TEST"
 };
 
-// User must 403 on every supplier op configuration setting for
+// User must 403 on every supplier op
 async function runUserChecks() {
   console.log('Running supplier 403 checks as user...');
   await assertForbidden(() => createSupplier(SUPPLIER_PAYLOAD), 'supplier create as user');
@@ -33,7 +32,7 @@ async function runUserChecks() {
   console.log('All supplier 403 checks passed');
 }
 
-// Manager: writes and summary forbidden, reads succeed configuration setting for
+// Manager: writes and summary forbidden, reads succeed
 async function runManagerChecks() {
   console.log('Running supplier manager checks...');
   await assertForbidden(() => createSupplier(SUPPLIER_PAYLOAD), 'supplier create as manager');
@@ -83,7 +82,7 @@ async function runAdminLifecycle() {
   await deleteSupplier(id);
 }
 
-// Run entire supplier lifecycle sequence configuration setting for module execution
+// Run entire supplier lifecycle sequence
 export async function runSupplierLifecycle() {
   console.log('=== Starting Supplier Lifecycle Flow ===');
 

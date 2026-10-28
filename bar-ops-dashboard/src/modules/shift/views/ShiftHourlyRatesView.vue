@@ -153,14 +153,11 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
-// Import stores and services
 import { SessionStore, EmployeesStore } from '@stores'
 import { useShiftCrud } from '@shift/composables/shift.crud'
 
-// Import custom components
 import AppTable from '@shared/components/data/AppTable.vue'
 
-// Import types
 import { ShiftRole, ShiftRoleLabels } from '@shift/types/ShiftRole.types'
 import { type IShift } from '@shift/types/IShift.types'
 
@@ -169,7 +166,6 @@ const route = useRoute()
 const sessionStore = SessionStore()
 const employeesStore = EmployeesStore()
 
-// State
 const isLoading = ref(false)
 const isSubmitting = ref(false)
 const bulkRate = ref<number | null>(null)

@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { IsDateString, IsNumber, IsOptional, Min } from "class-validator";
 
 export class UpdateConsumeDto {

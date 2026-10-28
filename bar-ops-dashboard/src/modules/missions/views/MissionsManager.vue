@@ -121,17 +121,14 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-// Import stores and composables
 import { SessionStore, SnackbarStore } from '@stores'
 import { useMissionsCrud } from '@missions/composables/missions.crud'
 import { missionsProvider } from '@missions/providers/missions.provider'
 
-// Import types
 import { UserRole } from '@auth/types/IUser.types'
 import type { IMission, IUpdateMission } from '@missions/types/IMission.types'
 import { MissionStatus } from '@missions/types/status.types'
 
-// Import custom components
 import AuthWrapper from '@auth/components/AuthWrapper.vue'
 import EmptyState from '@shared/components/data/EmptyState.vue'
 import AppDialog from '@shared/components/dialogs/AppDialog.vue'

@@ -1,9 +1,7 @@
-// Import external framework dependencies and status codes from third party packages
 import { CreateAuthChallengeTriggerEvent } from 'aws-lambda';
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 import * as crypto from 'crypto';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { logger } from '@utils/logger/logger.util';
 
 const ses = new SESClient({});
@@ -12,7 +10,7 @@ const ses = new SESClient({});
 export const handler = async (event: CreateAuthChallengeTriggerEvent): Promise<CreateAuthChallengeTriggerEvent> => {
   let secretLoginCode: string;
 
-  // Generate new code if no active session configuration setting for
+  // Generate new code if no active session
   if (!event.request.session || event.request.session.length === 0) {
     secretLoginCode = crypto.randomInt(100000, 999999).toString();
   }

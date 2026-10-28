@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { fileURLToPath } from 'url';
 import process from 'process';
 import { createClient } from '../endpoints/client/create.js';
@@ -84,7 +83,7 @@ async function runAdminLifecycle() {
   await deleteClient(clientId);
 }
 
-// Run entire tips lifecycle sequence configuration setting for module execution
+// Run entire tips lifecycle sequence
 export async function runTipsLifecycle() {
   console.log('=== Starting Tips Lifecycle Flow ===');
 

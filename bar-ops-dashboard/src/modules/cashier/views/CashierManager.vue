@@ -209,21 +209,16 @@
 </template>
 
 <script setup lang="ts">
-// Import vue APIs
 import { computed, ref } from 'vue'
 
-// Import stores
 import { SessionStore } from '@stores'
 
-// Import composables
 import { useCashierCrud } from '@cashier/composables/cashier.crud'
 
-// Import types
 import { CashierLocation } from '@cashier/types/CashierLocation.types'
 import { UserRole } from '@auth/types/IUser.types'
 import type { ICashier } from '@cashier/types/ICashier.types'
 
-// Import custom components
 import AuthWrapper from '@auth/components/AuthWrapper.vue'
 import EmptyState from '@shared/components/data/EmptyState.vue'
 import CashierSummary from '@cashier/components/CashierSummary.vue'

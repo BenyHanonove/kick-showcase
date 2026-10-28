@@ -1,10 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-// Import utilities
 import { createEntityStore } from '../../../config/store/utils/createEntityStore.util'
 
-// Import types
 import type { ISession } from '@session/types/ISession.types'
 
 export const SessionsStore = defineStore('sessions', () => {

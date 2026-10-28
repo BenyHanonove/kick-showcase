@@ -1,4 +1,3 @@
-// Import Vue Router dependency and types
 import {
   createRouter,
   createWebHistory,
@@ -8,11 +7,9 @@ import {
   type Router,
 } from 'vue-router'
 
-// Import application stores and initialization services
 import { AuthStore, RoleLevel, WebSocketStore } from '@stores'
 import { useAppInitialization } from '@shared/composables/app-init.service'
 
-// Import types
 import { UserRole } from '@auth/types/IUser.types'
 
 // Route meta contract consumed by the navigation guard below

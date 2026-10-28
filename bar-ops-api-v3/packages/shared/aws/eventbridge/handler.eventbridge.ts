@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { type EventBridgeEvent, type DynamoDBRecord } from "aws-lambda";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { type AttributeValue } from "@aws-sdk/client-dynamodb";
@@ -11,7 +10,7 @@ export interface ParsedDynamoRecord<T> {
     eventSourceARN?: string;
 }
 
-// Wrapper for stream events definition for application business logic execution
+// Wrapper for stream events
 export const wrapDynamoStreamHandler = <T>(
     handler: (record: ParsedDynamoRecord<T>) => Promise<void>,
     tableArnSubstring?: string
@@ -49,7 +48,7 @@ export const wrapDynamoStreamHandler = <T>(
     };
 };
 
-// Wrapper for custom EventBridge events definition for application business logic
+// Wrapper for custom EventBridge events
 export const wrapCustomEventHandler = <T>(
     handler: (detail: T, source: string, detailType: string) => Promise<void>
 ) => {

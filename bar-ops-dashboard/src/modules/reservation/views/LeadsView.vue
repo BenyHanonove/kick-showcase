@@ -128,24 +128,19 @@
 </template>
 
 <script setup lang="ts">
-// Import vue APIs
 import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
-// Import stores
 import { ReservationsStore, AuthStore } from '@stores'
 
-// Import composables
 import { useReservationCrud } from '@reservation/composables/reservation.crud'
 import { useSearch } from '@shared/composables/useSearch.composable'
 
-// Import custom components
 import AppTable from '@shared/components/data/AppTable.vue'
 import AppDialog from '@shared/components/dialogs/AppDialog.vue'
 import GenericForm from '@shared/components/forms/GenericForm.vue'
 import PageHeader from '@shared/components/layout/PageHeader.vue'
 
-// Import types
 import type { IReservation } from '@reservation/types/IReservation.types'
 import {
   ReservationEventType,
@@ -160,10 +155,8 @@ import { UserRole } from '@auth/types/IUser.types'
 import type { PageHeaderAction } from '@shared/types/PageHeader.types'
 import type { IListAction } from '@shared/types/IListAction.types'
 
-// Import utils
 import { formatPhoneNumber } from '@shared/utils/formatters.util'
 
-// Initialize stores
 const reservationsStore = ReservationsStore()
 const authStore = AuthStore()
 
@@ -179,7 +172,6 @@ const pageDesc = computed(() => 'פניות שהתקבלו מדף ההזמנות
 
 const pageBreadcrumbs = computed(() => ['בית', pageTitle.value])
 
-// Table headers config
 const tableHeaders = [
   { key: 'fullName', label: 'שם מלא' },
   { key: 'phone', label: 'טלפון' },
@@ -196,7 +188,6 @@ const tableHeaders = [
 // Modular client-side search
 const { query, results } = useSearch(reservations, ['fullName', 'phone'])
 
-// Initialize CRUD actions
 const ReservationCrud = useReservationCrud()
 
 // Page action buttons config

@@ -1,7 +1,5 @@
-// Import external framework dependencies and status codes from third party packages
 import { IsDateString, IsEnum, IsOptional, IsString, Length } from "class-validator";
 
-// Import resource data transfer objects for payload transformation and validation
 import { MissionStatus } from "@dtos/mission/mission.enum";
 
 export class UpdateMissionDto {

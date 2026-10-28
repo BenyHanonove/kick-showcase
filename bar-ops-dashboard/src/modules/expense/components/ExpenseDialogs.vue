@@ -126,13 +126,11 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 
-// Import components
 import AppDialog from '@shared/components/dialogs/AppDialog.vue'
 import GenericForm from '@shared/components/forms/GenericForm.vue'
 import ReceiptDialog from '@shared/components/dialogs/ReceiptDialog.vue'
 import AppInput from '@shared/components/input/AppInput.vue'
 
-// Import types and composables
 import { useExpenseCrud } from '@expense/composables/expense.crud'
 import type { ICreateExpense, IUpdateExpense } from '@expense/types/IExpense.types'
 import type { FormValue } from '@shared/types/IForm.types'

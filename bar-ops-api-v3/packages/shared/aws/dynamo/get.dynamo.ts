@@ -1,11 +1,9 @@
-// Import external framework dependencies and status codes from third party packages
 import { GetCommand } from "@aws-sdk/lib-dynamodb";
 import { plainToInstance, type ClassConstructor } from "class-transformer";
 import { validate } from "class-validator";
 import { docClient } from "./client.dynamo";
 import { type DynamoItem, type DateSplitKeys, recombineDatetime } from "./item.dynamo";
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { redisClient, CACHE_TTL_SECONDS, getTableVersion } from "@aws/redis/client.redis";
 import { logger } from '@utils/logger/logger.util';
 

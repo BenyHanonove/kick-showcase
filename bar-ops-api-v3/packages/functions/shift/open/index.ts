@@ -1,13 +1,11 @@
 import 'reflect-metadata';
 
-// Import external framework dependencies and status codes from third party packages
 import { type APIGatewayProxyEventV2, type APIGatewayProxyResultV2, type APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 import { PutCommand, QueryCommand, DeleteCommand } from '@aws-sdk/lib-dynamodb';
 import { StatusCodes } from 'http-status-codes';
 import { v4 as uuidv4 } from 'uuid';
 import { plainToInstance } from 'class-transformer';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { docClient } from '@aws/dynamo/client.dynamo';
 import { list } from '@aws/dynamo/list.dynamo';
 import { invokeLambda } from '@aws/lambdas/lambda';
@@ -19,7 +17,6 @@ import { sendWhatsAppTemplate, formatWhatsAppPhone, WHATSAPP_SERVICE_ENABLED, wh
 import { ResourceMessages } from '@utils/messages/resource.util';
 import { logger } from '@utils/logger/logger.util';
 
-// Import resource data transfer objects for payload transformation and validation
 import { OpenShiftRegistrationDto } from '@dtos/shift/open.dto';
 import { OpenShiftRegistrationResultDto } from '@dtos/shift/open-result.dto';
 import { ShiftRegistrationTokenDto } from '@dtos/shift/registration-token.dto';
@@ -82,7 +79,7 @@ export const handler = RolesGuard([UserRole.ADMIN], async (event: APIGatewayProx
         const sessionId = extractId(event, 'sessionId', MESSAGES.ERROR.MISSING_ID);
         if (typeof sessionId !== 'string') return sessionId;
 
-        // Body names the single employee being invited configuration setting for
+        // Body names the single employee being invited
         const { data: body, error } = await validateBody(event, OpenShiftRegistrationDto, MESSAGES.ERROR.VALIDATION_FAILED);
         if (error) return error;
 

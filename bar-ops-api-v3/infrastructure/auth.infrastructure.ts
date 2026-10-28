@@ -1,8 +1,6 @@
 /// <reference path="../.sst/platform/config.d.ts" />
-// Import external framework dependencies and status codes from third party packages
 import { region, account, COGNITO_USER_POOL_ID, COGNITO_CLIENT_ID, apiPermission } from "./_shared.infrastructure";
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { AWS_CONFIG } from "@env/config.env";
 
 const userPoolArn = $interpolate`arn:aws:cognito-idp:${region}:${account}:userpool/${COGNITO_USER_POOL_ID}`;
@@ -66,7 +64,7 @@ apiPermission("AuthRefresh", new sst.aws.Function("AuthRefresh", {
   environment: {
     COGNITO_CLIENT_ID,
   },
-  // Public InitiateAuth needs no Cognito IAM permission configuration setting for
+  // Public InitiateAuth needs no Cognito IAM permission
 }));
 
 apiPermission("AuthLogout", new sst.aws.Function("AuthLogout", {
@@ -74,5 +72,5 @@ apiPermission("AuthLogout", new sst.aws.Function("AuthLogout", {
   environment: {
     COGNITO_CLIENT_ID,
   },
-  // RevokeToken / GlobalSignOut needs no Cognito IAM permission either configuration setting for
+  // RevokeToken / GlobalSignOut needs no Cognito IAM permission either
 }));

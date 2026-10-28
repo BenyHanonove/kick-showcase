@@ -118,22 +118,17 @@
 </template>
 
 <script setup lang="ts">
-// Import vue APIs
 import { computed, ref } from 'vue'
 
-// Import stores
 import { SessionStore } from '@stores'
 
-// Import types
 import { ExpensePaidBy } from '@expense/types/PaidBy.types'
 
-// Initialize stores
 const sessionStore = SessionStore()
 
 // Initialize state
 const isOpen = ref(false)
 
-// Computed properties
 const expenses = computed(() => sessionStore.expenses?.data || [])
 const hasExpenses = computed(() => expenses.value.length > 0)
 

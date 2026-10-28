@@ -1,14 +1,11 @@
-// Import external framework dependencies and status codes from third party packages
 import { type APIGatewayProxyEventV2, type APIGatewayProxyResultV2 } from 'aws-lambda';
 import { StatusCodes } from 'http-status-codes';
 import { QueryCommand } from '@aws-sdk/lib-dynamodb';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { docClient } from '@aws/dynamo/client.dynamo';
 import { ResourceMessages } from '@utils/messages/resource.util';
 import { validateBody } from '@utils/request/request.util';
 
-// Import resource data transfer objects for payload transformation and validation
 import { CreateEmployeeDto } from '@dtos/employee/create.dto';
 
 export const validateEmployeeBody = async <

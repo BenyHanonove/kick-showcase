@@ -1,11 +1,9 @@
-// Import external framework dependencies and status codes from third party packages
 import { GetCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { plainToInstance, type ClassConstructor } from "class-transformer";
 import { validate } from "class-validator";
 import { docClient } from "./client.dynamo";
 import { type DynamoItem, type DateSplitKeys, splitDatetime, recombineDatetime } from "./item.dynamo";
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { redisClient, CACHE_TTL_SECONDS } from "@aws/redis/client.redis";
 import { contextStorage } from '@guards/role.guard';
 
@@ -16,7 +14,7 @@ export class ConcurrencyConflictError extends Error {
     }
 }
 
-// Update item in DynamoDB table definition for application business logic
+// Update item in DynamoDB table
 export const update = async <T extends object, U extends object = Partial<T>>(
     tableName: string,
     id: string,
@@ -44,7 +42,7 @@ export const update = async <T extends object, U extends object = Partial<T>>(
     const updatedTimestamp = new Date().toISOString();
     filteredBody.timestamp = updatedTimestamp;
 
-    // Retrieve active request editor identity (Cognito sub) configuration setting for
+    // Retrieve active request editor identity (Cognito sub)
     const editorId = contextStorage.getStore()?.editorId;
     if (editorId) {
         filteredBody.lastEditor = editorId;

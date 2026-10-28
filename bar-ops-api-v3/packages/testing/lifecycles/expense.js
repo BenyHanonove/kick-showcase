@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { fileURLToPath } from 'url';
 import process from 'process';
 import { createClient } from '../endpoints/client/create.js';
@@ -99,7 +98,7 @@ async function runAdminLifecycle() {
   await deleteClient(clientId);
 }
 
-// Run entire expense lifecycle sequence configuration setting for module execution
+// Run entire expense lifecycle sequence
 export async function runExpenseLifecycle() {
   console.log('=== Starting Expense Lifecycle Flow ===');
 

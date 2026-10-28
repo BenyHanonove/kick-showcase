@@ -1,18 +1,15 @@
 import 'reflect-metadata';
 
-// Import external framework dependencies and status codes from third party packages
 import { type APIGatewayProxyEventV2, type APIGatewayProxyResultV2 } from 'aws-lambda';
 import { UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { StatusCodes } from 'http-status-codes';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { docClient } from '@aws/dynamo/client.dynamo';
 import { update, ConcurrencyConflictError } from '@aws/dynamo/update.dynamo';
 import { validateBody } from '@utils/request/request.util';
 import { ResourceMessages } from '@utils/messages/resource.util';
 import { logger } from '@utils/logger/logger.util';
 
-// Import resource data transfer objects for payload transformation and validation
 import { ClaimEmployeeDto } from '@dtos/employee/claim.dto';
 import { EmployeeDto } from '@dtos/employee/employee.dto';
 
@@ -59,7 +56,7 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
             throw err;
         }
 
-        // Apply the update to the employee record configuration setting for
+        // Apply the update to the employee record
         let employeeInstance: EmployeeDto | null;
         try {
             employeeInstance = await update(process.env.TABLE!, employeeId, updateFields, EmployeeDto);

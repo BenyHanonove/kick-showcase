@@ -94,11 +94,8 @@
 </template>
 
 <script setup lang="ts">
-// Import Vue APIs
 import { computed, ref, watch } from 'vue';
-// Import Vuetify components
 import { VDialog, VSpacer, VProgressCircular, VIcon } from 'vuetify/components';
-// Import shared widgets
 import AppCard from '../layout/AppCard.vue';
 type DialogType = 'info' | 'confirm' | 'form' | 'delete' | 'raw';
 type DialogSize = 'sm' | 'md' | 'lg';

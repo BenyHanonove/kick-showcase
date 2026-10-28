@@ -1,16 +1,12 @@
-// Import api client
 import api from '@shared/repository/api'
 
-// Import base repository
 import { BaseRepository } from '@shared/repository/base.repository'
 
-// Import types
 import type { ISale, ICreateSale, IUpdateSale, ISaleSummary } from '@sale/types/ISale.types'
 import type { ISaleFilters, ISaleRepository } from '@sale/types/ISaleRepository.types'
 import type { ISummaryReport } from '@shared/types/ISummaryReport.interface'
 import type { IApiResponse, IRawResponse } from '@shared/types/IApiResponse.types'
 
-// Extend base repository
 class SaleRepository
   extends BaseRepository<ISale, ICreateSale, IUpdateSale, ISale, ISaleFilters>
   implements ISaleRepository

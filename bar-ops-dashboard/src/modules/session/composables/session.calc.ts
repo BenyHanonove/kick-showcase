@@ -1,9 +1,7 @@
-// Import types
 import type { ICashier } from '@cashier/types/ICashier.types'
 import type { IExpense } from '@expense/types/IExpense.types'
 import type { IConsume } from '@consume/types/IConsume.types'
 import type { IShift } from '@shift/types/IShift.types'
-// Import shared consume calculation
 import { getConsumedCharge } from '@consume/composables/consume.calc'
 import { ExpensePaidBy } from '@expense/types/PaidBy.types'
 import { VAT_RATE } from '@shared/utils/vat.util'

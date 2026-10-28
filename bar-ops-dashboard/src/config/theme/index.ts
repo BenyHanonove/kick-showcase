@@ -1,8 +1,6 @@
-// Import vuetify
 import { createVuetify } from 'vuetify'
 import type { ThemeDefinition } from 'vuetify'
 
-// Import theme config
 import darkColors from './dark-colors'
 import lightColors from './light-colors'
 import Typography from './typography'

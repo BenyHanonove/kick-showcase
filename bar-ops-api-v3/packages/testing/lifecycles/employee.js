@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { fileURLToPath } from 'url';
 import process from 'process';
 import assert from 'assert';
@@ -126,7 +125,7 @@ async function runAdminLifecycle() {
   await deleteEmployee(registeredId);
 }
 
-// Run entire employee lifecycle sequence configuration setting for module execution
+// Run entire employee lifecycle sequence
 export async function runEmployeeLifecycle() {
   console.log('=== Starting Employee Lifecycle Flow ===');
 

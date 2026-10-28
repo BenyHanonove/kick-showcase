@@ -1,16 +1,11 @@
-// Import validation rules
 import { rules } from '@shared/utils/rules.util'
 
-// Import stores
 import { ReservationsStore } from '@stores'
 
-// Import providers
 import { reservationProvider } from '@reservation/providers/reservation.provider'
 
-// Import composables
 import { useCrud } from '@shared/composables/crud.composable'
 
-// Import types
 import type { ICreateReservation } from '@reservation/types/IReservation.types'
 import {
   ReservationEventType,

@@ -41,16 +41,13 @@
 </template>
 
 <script setup lang="ts">
-// Import types
 import type { ITips } from '@tips/types/ITips.types'
 import { ServiceArea } from '@tips/types/ServiceArea.types'
 
-// Define props
 const props = defineProps<{
   tips: ITips
 }>()
 
-// Define emits
 const emit = defineEmits<{
   (e: 'edit', tips: ITips): void
 }>()

@@ -64,17 +64,14 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-// Import stores and composables
 import { SessionStore, EmployeesStore } from '@stores'
 import { useShiftCrud } from '@shift/composables/shift.crud'
 
-// Import types
 import { UserRole } from '@auth/types/IUser.types'
 import { ShiftRole } from '@shift/types/ShiftRole.types'
 import { ServiceArea } from '@tips/types/ServiceArea.types'
 import type { IShift } from '@shift/types/IShift.types'
 
-// Import custom components
 import EnvelopesSummary from '@shift/components/EnvelopesSummary.vue'
 import EnvelopeRow from '@shift/components/EnvelopeRow.vue'
 import EmptyState from '@shared/components/data/EmptyState.vue'
@@ -91,7 +88,6 @@ const emit = defineEmits<{
 const sessionStore = SessionStore()
 const employStore = EmployeesStore()
 
-// State
 const searchQuery = ref('')
 const activeStatus = ref<'all' | 'received' | 'pending'>('all')
 const togglingIds = ref(new Set<string>())

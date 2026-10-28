@@ -121,22 +121,17 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 
-// Import custom components
 import AuthWrapper from '@auth/components/AuthWrapper.vue'
 import InitialsAvatar from '@shared/components/layout/InitialsAvatar.vue'
 
-// Import stores
 import { SuppliersStore } from '@stores'
 
-// Import utils
 import { addVat } from '@shared/utils/vat.util'
 
-// Import types
 import type { IProduct } from '@product/types/IProduct.types'
 import { ProductType } from '@product/types/ProductType.types'
 import { UserRole } from '@auth/types/IUser.types'
 
-// Define props
 const props = withDefaults(
   defineProps<{
     sessionId: string
@@ -188,7 +183,6 @@ const props = withDefaults(
 // Init stores
 const suppliersStore = SuppliersStore()
 
-// Reactive state
 const quantity = ref(props.initialValue || 0)
 const secondaryQuantity = ref(props.secondaryInitialValue || 0)
 
@@ -208,7 +202,6 @@ watch(
   },
 )
 
-// Computed properties
 const showPricesAndOrder = computed(() => {
   const type = props.product.type
   return type !== ProductType.EQUIPMENT

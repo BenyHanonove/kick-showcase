@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { type APIGatewayProxyEventV2 } from 'aws-lambda';
 
 const COOKIE_NAME = 'refreshToken';

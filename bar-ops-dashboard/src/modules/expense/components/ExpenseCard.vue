@@ -83,33 +83,27 @@
 </template>
 
 <script setup lang="ts">
-// Import vue APIs
 import { computed, ref } from 'vue'
 
-// Import types
 import { ExpensePaidBy, ExpensePaidByLabels } from '@expense/types/PaidBy.types'
 import type { IExpense } from '@expense/types/IExpense.types'
 import type { IListAction } from '@shared/types/IListAction.types'
 
 import { addVat } from '@shared/utils/vat.util'
 
-// Reactive state
 const menuOpen = ref(false)
 
-// Define emits
 const emit = defineEmits<{
   (e: 'edit', expense: IExpense): void
   (e: 'delete', expense: IExpense): void
   (e: 'receipt', expense: IExpense): void
 }>()
 
-// Define props
 const props = defineProps<{
   expense: IExpense
   index: number
 }>()
 
-// Computed properties
 const expense = computed(() => props.expense)
 
 // Menu actions — destructive actions sit in their own group

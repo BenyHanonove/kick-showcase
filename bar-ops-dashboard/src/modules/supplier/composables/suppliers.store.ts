@@ -4,7 +4,6 @@ import { computed, ref } from 'vue'
 import { createEntityStore } from '../../../config/store/utils/createEntityStore.util'
 import { sortByHebrew } from '../../../config/store/utils/sortByHebrew.util'
 
-// Import types
 import type { ISupplier } from '@supplier/types/ISupplier.types'
 
 export const SuppliersStore = defineStore('suppliers', () => {
@@ -23,7 +22,6 @@ export const SuppliersStore = defineStore('suppliers', () => {
     reset,
   } = createEntityStore<ISupplier>(sortByHebrew((s) => s.name))
 
-  // Reactive search input query
   const searchQuery = ref('')
 
   // Filtered suppliers list logic

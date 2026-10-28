@@ -39,7 +39,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-// Import stores
 import {
   AuthStore,
   SessionsStore,

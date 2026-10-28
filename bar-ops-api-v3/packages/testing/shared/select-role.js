@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import readline from 'readline/promises';
 import { stdin as input, stdout as output } from 'process';
 import { ensureAuth, getTestRole } from './auth-guard.js';

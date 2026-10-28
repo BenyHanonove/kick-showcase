@@ -35,15 +35,12 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
-// Import stores
 import { AuthStore } from '@stores'
 import { UserRole } from '@auth/types/IUser.types'
 import { useAuthCrud } from '@auth/composables/auth.crud'
 
-// Import types
 import type { IListAction } from '@shared/types/IListAction.types'
 
-// Import custom components
 import AppLogo from '@shared/components/layout/AppLogo.vue'
 import AppList from '@shared/components/layout/AppList.vue'
 

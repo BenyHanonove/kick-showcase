@@ -1,10 +1,8 @@
 import 'reflect-metadata';
 
-// Import external framework dependencies and status codes from third party packages
 import { type APIGatewayProxyResultV2, type APIGatewayProxyEventV2, type APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 import { StatusCodes } from 'http-status-codes';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { RolesGuard } from '@guards/role.guard';
 import { UserRole } from '@guards/user-role.enum';
 import { invokeLambda } from '@aws/lambdas/lambda';
@@ -12,7 +10,6 @@ import { extractQueryParam } from '@utils/request/request.util';
 import { ResourceMessages } from '@utils/messages/resource.util';
 import { logger } from '@utils/logger/logger.util';
 
-// Import resource data transfer objects for payload transformation and validation
 import { SaleDto } from '@dtos/sale/sale.dto';
 import { SaleSummaryDto } from '@dtos/sale/summary.dto';
 import { ConsumeDto } from '@dtos/consume/consume.dto';

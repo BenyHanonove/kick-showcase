@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import assert from 'assert';
 import { createClient } from '../../endpoints/client/create.js';
 import { deleteClient } from '../../endpoints/client/delete.js';
@@ -27,7 +26,7 @@ function extractId(response) {
   return id;
 }
 
-// Poll and retry assertion for async processes configuration setting for
+// Poll and retry assertion for async processes
 async function assertWithRetry(assertionFn, maxTimeoutMs = 30000, intervalMs = 2000) {
   const startTime = Date.now();
   while (true) {
@@ -61,7 +60,7 @@ async function assertCascadeDeleted(name, fetchFn) {
   });
 }
 
-// Run the cascade delete test configuration setting for module execution
+// Run the cascade delete test
 export async function runCascadeDeleteTest() {
   await selectUserRoleAndLogin();
   console.log('=== Starting Interval Cascade Delete Verification ===');

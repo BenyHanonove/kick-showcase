@@ -127,12 +127,10 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
-// Import stores and composables
 import { SessionStore, EmployeesStore } from '@stores'
 import { useTipsCrud } from '@tips/composables/tips.crud'
 import { addVat } from '@shared/utils/vat.util'
 
-// Import custom components
 import TipsCard from '@tips/components/TipsCard.vue'
 import TipsSurplusCard from '@tips/components/TipsSurplusCard.vue'
 import GenericForm from '@shared/components/forms/GenericForm.vue'
@@ -141,7 +139,6 @@ import AppDialog from '@shared/components/dialogs/AppDialog.vue'
 import PageHeader from '@shared/components/layout/PageHeader.vue'
 import AuthWrapper from '@auth/components/AuthWrapper.vue'
 
-// Import types
 import { ServiceArea } from '@tips/types/ServiceArea.types'
 import { ShiftRole, ShiftRoleLabels } from '@shift/types/ShiftRole.types'
 import { ExpensePaidBy } from '@expense/types/PaidBy.types'

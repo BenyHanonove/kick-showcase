@@ -13,7 +13,6 @@
 </template>
 
 <script setup lang="ts">
-// Import composable
 import { useAuthCrud } from '@auth/composables/auth.crud'
 
 // Initialize hooks

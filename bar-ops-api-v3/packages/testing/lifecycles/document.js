@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { fileURLToPath } from 'url';
 import process from 'process';
 import { createClient } from '../endpoints/client/create.js';
@@ -77,7 +76,7 @@ async function runAdminLifecycle() {
     documentTimestamp = fetchedDocument.data.data.timestamp;
   }
 
-  // Update document — rename and change description configuration setting for
+  // Update document — rename and change description
   await updateDocument(documentId, {
     name: 'renamed-test.txt',
     desc: 'UPDATE TEST',
@@ -89,7 +88,7 @@ async function runAdminLifecycle() {
   await deleteFixtures(fixtures);
 }
 
-// Run entire document lifecycle sequence configuration setting for module execution
+// Run entire document lifecycle sequence
 export async function runDocumentLifecycle() {
   console.log('=== Starting Document Lifecycle Flow ===');
 

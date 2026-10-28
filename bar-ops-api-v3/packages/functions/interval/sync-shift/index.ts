@@ -1,10 +1,8 @@
 import 'reflect-metadata';
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { wrapDynamoStreamHandler } from '@aws/eventbridge/handler.eventbridge';
 import { publishEvent } from '@aws/eventbridge/publish.eventbridge';
 
-// Import resource data transfer objects for payload transformation and validation
 import { IntervalDto } from '@dtos/interval/interval.dto';
 
 const getDiff = (image: IntervalDto | null): number => {

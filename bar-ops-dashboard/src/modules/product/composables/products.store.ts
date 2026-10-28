@@ -3,7 +3,6 @@ import { defineStore } from 'pinia'
 import { createEntityStore } from '../../../config/store/utils/createEntityStore.util'
 import { sortByHebrew } from '../../../config/store/utils/sortByHebrew.util'
 
-// Import types
 import type { IProduct } from '@product/types/IProduct.types'
 
 export const ProductsStore = defineStore(

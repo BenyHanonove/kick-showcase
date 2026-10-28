@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { fileURLToPath } from 'url';
 import process from 'process';
 import assert from 'assert';
@@ -58,7 +57,7 @@ async function runAdminLifecycle() {
   const byClientOnly = extractData(await listSales({ clientId: clientId }));
   assert.ok(Array.isArray(byClientOnly) && byClientOnly.some(s => s.id === saleId), 'sale list by client only should contain the sale');
 
-  // Date-range: day-precision within the sale's own month configuration setting for
+  // Date-range: day-precision within the sale's own month
   const inRange = extractData(await listSales({ clientId: clientId, startDate: '2026-06-01', endDate: '2026-06-01' }));
   assert.ok(Array.isArray(inRange) && inRange.some(s => s.id === saleId), 'sale list by date range should contain the sale on its exact day');
 
@@ -86,7 +85,7 @@ async function runAdminLifecycle() {
   await deleteClient(clientId);
 }
 
-// Run entire sale lifecycle sequence configuration setting for module execution
+// Run entire sale lifecycle sequence
 export async function runSaleLifecycle() {
   console.log('=== Starting Sale Lifecycle Flow ===');
 

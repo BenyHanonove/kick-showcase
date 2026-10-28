@@ -1,4 +1,3 @@
-// Import external framework dependencies and status codes from third party packages
 import { type APIGatewayProxyEventV2, type APIGatewayProxyResultV2 } from "aws-lambda";
 import { StatusCodes } from "http-status-codes";
 import { plainToInstance, type ClassConstructor } from "class-transformer";
@@ -9,7 +8,6 @@ import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { s3Client } from "./client.s3";
 
-// Import shared AWS services, guard security middleware, and utility helpers
 import { docClient } from '@aws/dynamo/client.dynamo';
 import { compressImage } from '@utils/image/image.util';
 import { logger } from '@utils/logger/logger.util';
@@ -25,7 +23,7 @@ export interface PresignOptions<T> {
     internalErrorMessage: string;
 }
 
-// Handle upload and presign generation definition for application business logic
+// Handle upload and presign generation
 export const handlePresignAttachment = async <T extends { receiptKey?: string; receiptUrl?: string; timestamp?: string }>(
     event: APIGatewayProxyEventV2,
     options: PresignOptions<T>
@@ -74,7 +72,7 @@ export const handlePresignAttachment = async <T extends { receiptKey?: string; r
             fileBuffer = Buffer.from(file);
         }
 
-        // Allowlist extension instead of trusting client filename configuration setting for
+        // Allowlist extension instead of trusting client filename
         const allowedExts = [".jpg", ".jpeg", ".png", ".webp"];
         const rawExt = filename && filename.includes(".")
             ? filename.substring(filename.lastIndexOf(".")).toLowerCase()
@@ -142,7 +140,7 @@ export interface UnsignOptions<T> {
     internalErrorMessage: string;
 }
 
-// Handle object removal and unsigning definition for application business logic
+// Handle object removal and unsigning
 export const handleUnsignAttachment = async <T extends { receiptKey?: string; receiptUrl?: string; timestamp?: string }>(
     event: APIGatewayProxyEventV2,
     options: UnsignOptions<T>
@@ -224,7 +222,7 @@ export const handleUnsignAttachment = async <T extends { receiptKey?: string; re
     }
 };
 
-// Generate presigned GET URL definition for application business logic execution
+// Generate presigned GET URL
 export const getPresignedUrl = async (
     key: string | undefined | null,
     expiresIn: number = PRESIGN_EXPIRY_SECONDS

@@ -129,10 +129,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
-// Import stores
 import { SessionStore, EmployeesStore } from '@stores'
 
-// Import types
 import { ShiftRoleLabels } from '@shift/types/ShiftRole.types'
 
 const sessionStore = SessionStore()

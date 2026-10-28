@@ -1,15 +1,11 @@
-// Import repository
 import SaleRepository from '@sale/repository/sale.repository'
 
-// Import base provider
 import { BaseCrudProvider, type IProviderResult } from '@shared/providers/base.provider'
 
-// Import types
 import type { ISale, ICreateSale, IUpdateSale, ISaleSummary } from '@sale/types/ISale.types'
 import type { ISaleFilters, ISaleRepository } from '@sale/types/ISaleRepository.types'
 import type { ISummaryReport } from '@shared/types/ISummaryReport.interface'
 
-// Extend base provider
 class SaleProvider extends BaseCrudProvider<
   ISale,
   ICreateSale,

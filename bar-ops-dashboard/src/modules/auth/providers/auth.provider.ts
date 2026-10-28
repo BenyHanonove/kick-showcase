@@ -1,19 +1,14 @@
-// Import libraries
 import { AxiosError } from 'axios'
 
-// Import repository
 import authRepository from '../repository/auth.repository'
 
-// Import base provider
 import { BaseProvider, type IProviderResult } from '@shared/providers/base.provider'
 import { extractErrorMessage } from '@shared/utils/extractErrorMessage.util'
 
-// Import types
 import type { IAuthRepository } from '@auth/types/IAuthRepository.types'
 import type { IUser } from '@auth/types/IUser.types'
 import type { ILoginRequest, IRegisterRequest } from '@auth/types/IRequests.types'
 
-// Extend base provider
 export class AuthProvider extends BaseProvider {
   constructor(private readonly repository: IAuthRepository) {
     super()

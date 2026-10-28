@@ -1,16 +1,11 @@
-// Import validation rules
 import { rules } from '@shared/utils/rules.util'
 
-// Import stores
 import { SessionStore } from '@stores'
 
-// Import composables
 import { useCrud } from '@shared/composables/crud.composable'
 
-// Import providers
 import { tipsProvider } from '@tips/providers/tips.provider'
 
-// Import types
 import type { ITips, ICreateTips, IUpdateTips } from '@tips/types/ITips.types'
 import type { IFormField } from '@shared/types/IForm.types'
 
