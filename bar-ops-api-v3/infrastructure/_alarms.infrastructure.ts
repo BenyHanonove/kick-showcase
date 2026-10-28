@@ -52,3 +52,14 @@ export const createDlq = (name: string) => {
 
   return queue;
 };
+
+// Function names collected by the global $transform in sst.config.ts
+const functionsByModule = new Map<string, $util.Input<string>[]>();
+
+export const registerFunction = (module: string, functionName: $util.Input<string>) => {
+  const list = functionsByModule.get(module) ?? [];
+  list.push(functionName);
+  functionsByModule.set(module, list);
+};
+
+export const registeredFunctions = () => functionsByModule;
