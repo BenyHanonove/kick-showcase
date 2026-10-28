@@ -12,6 +12,7 @@ dist/
 # Local environment secrets
 .env
 .env.*
+!.env.example
 
 # Claude Code / Agent Templates
 .claude/
