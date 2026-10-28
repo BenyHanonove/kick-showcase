@@ -142,7 +142,7 @@ const emit = defineEmits<{
 const submitting = ref(false)
 const errorMessage = ref('')
 
-// formData.phone always holds raw digits only (e.g. 0507799799); the input displays it formatted
+// formData.phone always holds raw digits only (e.g. 0501234567); the input displays it formatted
 const formData = reactive({
   firstName: props.initialData?.firstName ?? '',
   lastName: props.initialData?.lastName ?? '',
@@ -159,7 +159,7 @@ const genderItems = Object.entries(EmployeeGenderLabels).map(([value, title]) =>
   value: value as EmployeeGender,
 }))
 
-// Display phone as 050-7799799 while storing raw digits for the server
+// Display phone as 050-1234567 while storing raw digits for the server
 const phoneDisplay = computed({
   get: () => formData.phone.replace(/(\d{3})(\d+)/, '$1-$2'),
   set: (value: string) => {

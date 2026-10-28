@@ -4,7 +4,7 @@
     "content": {
       "detail": {
         "eventName": "INSERT",
-        "eventSourceARN": "arn:aws:dynamodb:eu-west-1:791954932774:table/BarOps-Cashier",
+        "eventSourceARN": "arn:aws:dynamodb:eu-west-1:123456789012:table/BarOps-Cashier",
         "dynamodb": {
           "NewImage": {
             "id": { "S": "cashier-123" },

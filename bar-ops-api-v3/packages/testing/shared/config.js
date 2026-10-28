@@ -1,18 +1,7 @@
-const STAGE = process.env.STAGE || 'dev';
-const STAGE_CONFIG = {
-  dev: {
-    region: 'eu-west-1',
-    idpUrl: 'https://cognito-idp.eu-west-1.amazonaws.com/',
-    awsUrl: 'https://pit93c7c4h.execute-api.eu-west-1.amazonaws.com'
-  },
-  production: {
-    region: 'eu-west-1',
-    idpUrl: 'https://cognito-idp.eu-west-1.amazonaws.com/',
-    awsUrl: 'https://dn3xyet6gl.execute-api.eu-west-1.amazonaws.com'
-  }
-};
+const REGION = process.env.AWS_REGION || 'eu-west-1';
 
 const requiredEnvVars = [
+  'API_BASE_URL',
   'VITE_COGNITO_CLIENT_ID',
   'TEST_ADMIN_EMAIL',
   'TEST_ADMIN_PASSWORD',
@@ -24,9 +13,6 @@ const requiredEnvVars = [
 
 // Validate environment variables lazily
 export function validateConfig() {
-  if (!STAGE_CONFIG[STAGE]) {
-    throw new Error(`❌ Unknown STAGE "${STAGE}" - expected one of: ${Object.keys(STAGE_CONFIG).join(', ')}`);
-  }
   const missing = requiredEnvVars.filter(key => !process.env[key]);
   if (missing.length > 0) {
     throw new Error(
@@ -41,13 +27,14 @@ export const config = {
   get cognito() {
     return {
       clientId: process.env.VITE_COGNITO_CLIENT_ID,
-      region: STAGE_CONFIG[STAGE].region,
-      idpUrl: STAGE_CONFIG[STAGE].idpUrl
+      region: REGION,
+      idpUrl: `https://cognito-idp.${REGION}.amazonaws.com/`
     };
   },
   get aws() {
     return {
-      url: STAGE_CONFIG[STAGE].awsUrl
+      // HTTP API base URL of the stage under test, e.g. https://<api-id>.execute-api.<region>.amazonaws.com
+      url: process.env.API_BASE_URL
     };
   },
   get auth() {

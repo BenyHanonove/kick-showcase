@@ -57,7 +57,7 @@ describe('AppFooter Component', () => {
     expect(instagram.attributes('rel')).toContain('noopener')
 
     expect(whatsapp.exists()).toBe(true)
-    expect(whatsapp.attributes('href')).toBe('https://wa.me/972532753040')
+    expect(whatsapp.attributes('href')).toBe('https://wa.me/972500000000')
     expect(whatsapp.attributes('target')).toBe('_blank')
     expect(whatsapp.attributes('rel')).toContain('noopener')
   })

@@ -50,7 +50,7 @@ function findSession(response, id) {
 
 // Admin creates the client/session/employee the registration flow needs
 async function createFixtures() {
-  const clientId = extractId(await createClient({ name: 'TEST', brand: 'TEST', email: null, phone: '0507799799' }));
+  const clientId = extractId(await createClient({ name: 'TEST', brand: 'TEST', email: null, phone: '0501234567' }));
 
   const sessionId = extractId(await createSession({
     clientId,

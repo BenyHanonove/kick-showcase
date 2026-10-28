@@ -1,8 +1,16 @@
-# KICK 🍸 — Start-of-chat prompt for any AI coding agent
+# KICK — AI workflow
 
-> **How to use:** paste this whole file (or `@architecture/AI-AGENT-PROMPT.md`) as the
-> first message of a new chat — Claude Code, Antigravity, Codex, Cursor, Copilot, any of
-> them. In Claude Code you can just run `/kick`.
+How AI agents are used on this codebase: they are a pair of hands, not an author.
+Every agent session starts by reading the architecture contract in this folder
+(the layering rules, naming, the per-module docs) before it touches code, and it works
+inside those rules. Every change an agent produces is reviewed by me before it is
+committed: diffs are read, type-checks, lint and tests are run, and anything that
+needs a console step is handed back as a checklist rather than claimed as done.
+
+The rest of this file is the start-of-chat prompt every agent gets.
+
+> **How to use:** paste this whole file (or `@architecture/AI-WORKFLOW.md`) as the
+> first message of a new chat with any coding agent (Claude Code, Codex, Cursor, Copilot...).
 
 ---
 
@@ -131,7 +139,7 @@ Never claim a manual/console step is done — list it for me to do.
 
 ## Environment facts you will otherwise get wrong
 
-- Two stages: **dev** (`pit93c7c4h`) and **production** (`dn3xyet6gl` = `api.kicks.ltd`).
+- Two stages: **dev** and **production** (`api.kicks.ltd`), each with its own HTTP API (`<HTTP_API_ID>` in `.env.<stage>`).
 - **Local `npm run dev` must point at the dev gateway.** The production API's CORS
   allowlist contains `https://kicks.ltd` only, so localhost preflights fail against it.
 - DynamoDB tables, GSIs, API Gateway routes, CORS, throttling, the WebSocket API and

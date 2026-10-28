@@ -11,7 +11,8 @@
 </template>
 
 <script setup lang="ts">
-// Public link pages: shown for a missing, expired, spent or revoked token - never says which
+// Public link pages: one screen for a missing, expired, spent or revoked token, so the
+// page never tells a stranger which of those states a guessed link is in
 import { INVALID_LINK_MESSAGE } from '@shared/utils/publicLink.util'
 
 withDefaults(defineProps<{ message?: string; note?: string }>(), {

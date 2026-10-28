@@ -13,8 +13,8 @@ const REGION = 'eu-west-1';
 const DEV_PREFIX = 'dev-BarOps-';
 const BATCH_SIZE = 25;
 
-// No [default] in ~/.aws/credentials, so the named profile must be passed explicitly
-const client = new DynamoDBClient({ region: REGION, profile: process.env.AWS_PROFILE || 'benjamin' });
+// Credentials come from the standard chain (AWS_PROFILE, env keys, SSO...)
+const client = new DynamoDBClient({ region: REGION });
 
 const isDevTable = (name) => name.startsWith(DEV_PREFIX);
 

@@ -268,12 +268,13 @@
 </template>
 
 <script setup lang="ts">
+import { env } from '@plugins'
 import { VThemeProvider } from 'vuetify/components'
 import LandingNav from '@landing/components/LandingNav.vue'
 import AppFooter from '@shared/components/layout/AppFooter.vue'
 
 const lastUpdated = '6 בספטמבר 2026'
-const contactEmail = 'kickbarops@gmail.com'
+const contactEmail = env.contact.email
 
 const sections = [
   { id: 'intro', title: 'מי אנחנו' },

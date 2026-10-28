@@ -11,7 +11,8 @@ import { logger } from '@utils/logger/logger.util';
 const MESSAGES = new ResourceMessages('התנתקות', 'התנתקויות');
 
 const client = new CognitoIdentityProviderClient({});
-const CLIENT_ID = process.env.COGNITO_CLIENT_ID || '439ldfj689k03nmphv65aaepev';
+const CLIENT_ID = process.env.COGNITO_CLIENT_ID;
+if (!CLIENT_ID) throw new Error('CRITICAL: COGNITO_CLIENT_ID env variable is missing');
 
 // Cognito verifies the access token itself, no admin IAM needed
 const extractAccessToken = (event: APIGatewayProxyEventV2): string | undefined => {

@@ -25,7 +25,7 @@ function buildMissionPayload(sessionId) {
 
 // Admin creates the client/session fixtures missions depend on
 async function createFixtures() {
-  const clientResponse = await createClient({ name: 'TEST', brand: 'TEST', email: null, phone: '0507799799' });
+  const clientResponse = await createClient({ name: 'TEST', brand: 'TEST', email: null, phone: '0501234567' });
   const clientId = extractId(clientResponse);
 
   const sessionResponse = await createSession({

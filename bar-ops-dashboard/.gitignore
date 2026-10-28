@@ -42,6 +42,7 @@ playwright-report/
 # Environment variables
 .env
 .env.*
+!.env.example
 env.d.ts
 
 # Visual brainstorm companion

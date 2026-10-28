@@ -15,7 +15,7 @@
       </RouterLink>
 
       <a
-        href="https://wa.me/972532753040"
+        :href="`https://wa.me/${env.contact.whatsappNumber}`"
         target="_blank"
         rel="noopener noreferrer"
         class="cta-btn cta-btn--whatsapp"
@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-// Final CTA section
+import { env } from '@plugins'
 </script>
 
 <style scoped>

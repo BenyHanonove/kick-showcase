@@ -1,16 +1,20 @@
-// Maps each public hostname to its API Gateway endpoint.
-const ROUTES = {
-  'api.kicks.ltd': { origin: 'https://dn3xyet6gl.execute-api.eu-west-1.amazonaws.com', prefix: '' },
-  'ws.kicks.ltd': { origin: 'https://q5tfo2tmuk.execute-api.eu-west-1.amazonaws.com', prefix: '/production' },
+// Fronts the API Gateway endpoints with the product's own hostnames.
+// Origins are Worker vars (see wrangler.example.toml), so no gateway id lives in code.
+// An origin may carry a base path, e.g. a WebSocket API's stage: https://<id>.execute-api.<region>.amazonaws.com/production
+const resolveOrigin = (hostname, env) => {
+  if (hostname.startsWith('api.')) return env.API_ORIGIN
+  if (hostname.startsWith('ws.')) return env.WS_ORIGIN
+  return undefined
 }
 
 export default {
-  async fetch(request) {
+  async fetch(request, env) {
     const url = new URL(request.url)
-    const route = ROUTES[url.hostname]
-    if (!route) return new Response('Not found', { status: 404 })
+    const origin = resolveOrigin(url.hostname, env)
+    if (!origin) return new Response('Not found', { status: 404 })
 
-    const target = new URL(route.prefix + url.pathname + url.search, route.origin)
+    const base = new URL(origin)
+    const target = new URL(base.pathname.replace(/\/$/, '') + url.pathname + url.search, base.origin)
     const headers = new Headers(request.headers)
     headers.delete('host')
 

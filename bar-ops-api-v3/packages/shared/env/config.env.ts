@@ -5,7 +5,7 @@ export enum AwsConfigKey {
   REDIS_PORT = "REDIS_PORT",
   REDIS_PASSWORD = "REDIS_PASSWORD",
   REDIS_PASSWORD_PARAM = "REDIS_PASSWORD_PARAM",
-  WHATSAPP_ACCESS_TOKEN = "WHATSAPP_ACCESS_TOKEN",
+  WHATSAPP_TOKEN_PARAM = "WHATSAPP_TOKEN_PARAM",
   WHATSAPP_PHONE_NUMBER_ID = "WHATSAPP_PHONE_NUMBER_ID",
   WHATSAPP_BUSINESS_ACCOUNT_ID = "WHATSAPP_BUSINESS_ACCOUNT_ID",
   WHATSAPP_COUNTRY_CODE = "WHATSAPP_COUNTRY_CODE",
@@ -25,7 +25,8 @@ export const AWS_CONFIG = {
     passwordParam: process.env.REDIS_PASSWORD_PARAM,
   },
   whatsapp: {
-    accessToken: process.env.WHATSAPP_ACCESS_TOKEN,
+    // SSM SecureString name (convention: /kick/<stage>/whatsapp-token); the token itself never sits in env
+    tokenParam: process.env.WHATSAPP_TOKEN_PARAM,
     phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID,
     countryCode: process.env.WHATSAPP_COUNTRY_CODE ?? "+972",
   },

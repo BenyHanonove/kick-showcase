@@ -15,7 +15,7 @@ const CLIENT_PAYLOAD = {
   "name": "TEST",
   "brand": "TEST",
   "email": null,
-  "phone": "0507799799"
+  "phone": "0501234567"
 };
 
 // User must 403 on every client op
@@ -67,7 +67,7 @@ async function runAdminLifecycle() {
   const updatePayload = {
     name: 'Updated TEST',
     brand: 'UPDATE TEST',
-    phone: '0507799799',
+    phone: '0501234567',
     timestamp: clientTimestamp
   };
   await updateClient(id, updatePayload);
