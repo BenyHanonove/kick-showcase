@@ -1,6 +1,6 @@
 /// <reference path="../.sst/platform/config.d.ts" />
 import * as aws from "@pulumi/aws";
-import { adoptOpts, importExisting, region, account, stageResourceName } from "./_config.infrastructure";
+import { adoptOpts, importExisting, region, account, optionalEnv, stageResourceName } from "./_config.infrastructure";
 import { dynamoTable, type ManagedTable } from "./_tables.infrastructure";
 
 export { region, account, stageResourceName, dynamoTable };
@@ -120,3 +120,23 @@ export const subscribeToBus = (
 
   return subscriber;
 };
+
+// WhatsApp Cloud API access for the functions that send messages. The access
+// token is a SecureString in SSM, read by the function at cold start; only
+// its parameter name travels in the environment. The default aws/ssm KMS key
+// already lets account principals decrypt through SSM, so no kms:Decrypt grant.
+export const WHATSAPP_TOKEN_PARAM = `/kick/${$app.stage}/whatsapp-token`;
+
+const phoneNumberId = optionalEnv("WHATSAPP_PHONE_NUMBER_ID");
+
+export const whatsappAccess = () => ({
+  environment: {
+    WHATSAPP_TOKEN_PARAM,
+    // Optional while the WhatsApp service is switched off in code
+    ...(phoneNumberId ? { WHATSAPP_PHONE_NUMBER_ID: phoneNumberId } : {}),
+  },
+  permission: {
+    actions: ["ssm:GetParameter"],
+    resources: [$interpolate`arn:aws:ssm:${region}:${account}:parameter${WHATSAPP_TOKEN_PARAM}`],
+  },
+});
