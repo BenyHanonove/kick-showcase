@@ -2,6 +2,7 @@
 import * as aws from "@pulumi/aws";
 import { adoptOpts, importExisting, region, account, optionalEnv, stageResourceName } from "./_config.infrastructure";
 import { dynamoTable, type ManagedTable } from "./_tables.infrastructure";
+import { createDlq } from "./_alarms.infrastructure";
 
 export { region, account, stageResourceName, dynamoTable };
 export { apiPermission } from "./_http-api.infrastructure";
@@ -43,6 +44,9 @@ export const createStreamPipe = (name: string, table: ManagedTable) => {
   // Physical name follows the v3 convention: bar-ops-api-v3-<stage>-<service>-pipe
   const pipeName = lambdaName(name.toLowerCase(), "pipe");
 
+  // Records the pipe cannot deliver after its retries land here
+  const dlq = createDlq(`${name}Pipe`);
+
   // Create an IAM Role for the Pipe
   const role = new aws.iam.Role(`${name}PipeRole`, {
     name: `${pipeName}-role`,
@@ -76,6 +80,11 @@ export const createStreamPipe = (name: string, table: ManagedTable) => {
           "Effect": "Allow",
           "Action": ["events:PutEvents"],
           "Resource": "${projectBus.nodes.bus.arn}"
+        },
+        {
+          "Effect": "Allow",
+          "Action": ["sqs:SendMessage"],
+          "Resource": "${dlq.arn}"
         }
       ]
     }`,
@@ -97,18 +106,70 @@ export const createStreamPipe = (name: string, table: ManagedTable) => {
       dynamodbStreamParameters: {
         startingPosition: "LATEST",
         batchSize: 1,
+        maximumRetryAttempts: 10,
+        maximumRecordAgeInSeconds: 24 * 60 * 60,
+        deadLetterConfig: { arn: dlq.arn },
       },
     },
   }, { dependsOn: [policy] });
 };
 
-// Shared wrapper to guarantee Lambda invocation permissions
+// Subscribes an observer Lambda to the bus, with failure handling:
+// - EventBridge → Lambda delivery: retried for up to 1h, then the event goes
+//   to the subscriber's DLQ (target deadLetterConfig);
+// - the Lambda itself fails: async invoke retries twice, then the event goes
+//   to the same DLQ (on-failure destination).
 export const subscribeToBus = (
   name: string,
-  subscriberArgs: Parameters<typeof projectBus.subscribe>[1],
-  patternArgs: Parameters<typeof projectBus.subscribe>[2]
+  subscriberArgs: sst.aws.FunctionArgs,
+  patternArgs: sst.aws.BusSubscriberArgs,
 ) => {
-  const subscriber = projectBus.subscribe(name, subscriberArgs, patternArgs);
+  const dlq = createDlq(name);
+
+  const subscriber = projectBus.subscribe(
+    name,
+    {
+      ...subscriberArgs,
+      retries: 2,
+      permissions: $resolve([subscriberArgs.permissions ?? []]).apply(([permissions]) => [
+        ...permissions,
+        { actions: ["sqs:SendMessage"], resources: [dlq.arn] },
+      ]),
+      transform: {
+        ...subscriberArgs.transform,
+        eventInvokeConfig: (args) => {
+          args.destinationConfig = { onFailure: { destination: dlq.arn } };
+        },
+      },
+    },
+    {
+      ...patternArgs,
+      transform: {
+        ...patternArgs.transform,
+        target: (args) => {
+          args.deadLetterConfig = { arn: dlq.arn };
+          args.retryPolicy = { maximumRetryAttempts: 20, maximumEventAgeInSeconds: 3600 };
+        },
+      },
+    },
+  );
+
+  // EventBridge itself writes undeliverable events to the DLQ
+  new aws.sqs.QueuePolicy(`${name}DlqPolicy`, {
+    queueUrl: dlq.url,
+    policy: $jsonStringify({
+      Version: "2012-10-17",
+      Statement: [
+        {
+          Effect: "Allow",
+          Principal: { Service: "events.amazonaws.com" },
+          Action: "sqs:SendMessage",
+          Resource: dlq.arn,
+          Condition: { ArnEquals: { "aws:SourceArn": subscriber.nodes.rule.arn } },
+        },
+      ],
+    }),
+  });
 
   new aws.lambda.Permission(`${name}InvokePermission`, {
     statementId: `allow-eb-invoke-${name.toLowerCase()}`,

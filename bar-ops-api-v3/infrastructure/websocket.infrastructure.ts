@@ -3,6 +3,7 @@ import * as aws from "@pulumi/aws";
 import { adoptOpts, flagEnv, importExisting, importIdFromEnv, importIds, optionalEnv } from "./_config.infrastructure";
 import { cognito } from "./_cognito.infrastructure";
 import { dynamoTable, streamTables } from "./_tables.infrastructure";
+import { createDlq } from "./_alarms.infrastructure";
 
 // WebSocket API: $connect / $disconnect / $default routes plus the broadcaster
 // that fans table changes out to connected dashboards. Production adopts the
@@ -119,6 +120,10 @@ wsRoute("SocketsDefault", "$default", defaultFn);
 // Broadcaster: reads every streamed table directly (event source mappings)
 const broadcastTables = streamTables().map((baseName) => ({ baseName, table: dynamoTable(baseName) }));
 
+// Batches that keep failing are bisected to isolate the bad record, then the
+// record metadata goes to this DLQ instead of blocking the shard
+const broadcasterDlq = createDlq("SocketsBroadcaster");
+
 const broadcaster = new sst.aws.Function("SocketsBroadcaster", {
   handler: "packages/functions/sockets/broadcaster/index.handler",
   environment: {
@@ -143,6 +148,7 @@ const broadcaster = new sst.aws.Function("SocketsBroadcaster", {
       actions: ["execute-api:ManageConnections"],
       resources: [$interpolate`${websocketApi.executionArn}/${stageName}/POST/@connections/*`],
     },
+    { actions: ["sqs:SendMessage"], resources: [broadcasterDlq.arn] },
   ],
 });
 
@@ -155,6 +161,10 @@ for (const { baseName, table } of broadcastTables) {
       eventSourceArn: table.streamArn,
       startingPosition: "LATEST",
       batchSize: 100,
+      maximumRetryAttempts: 3,
+      maximumRecordAgeInSeconds: 60 * 60,
+      bisectBatchOnFunctionError: true,
+      destinationConfig: { onFailure: { destinationArn: broadcasterDlq.arn } },
     },
     {
       // Console-created mappings are adopted when their UUID is listed in

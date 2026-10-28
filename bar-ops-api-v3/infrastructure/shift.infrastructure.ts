@@ -2,7 +2,6 @@
 import * as aws from "@pulumi/aws";
 import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, lambdaName, region, account, apiPermission, subscribeToBus, lambdaArn, whatsappAccess } from "./_shared.infrastructure";
 
-
 const SHIFT_TABLE = stageResourceName("BarOps-Shift");
 const SESSION_TABLE = stageResourceName("BarOps-Session");
 const SHIFT_TOKEN_TABLE = stageResourceName("BarOps-ShiftRegistrationToken");
