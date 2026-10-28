@@ -1,49 +1,11 @@
 /// <reference path="../.sst/platform/config.d.ts" />
-import { region, account, apiPermission } from "./_shared.infrastructure";
+import { apiPermission } from "./_shared.infrastructure";
 import { cognito } from "./_cognito.infrastructure";
-
-import { AWS_CONFIG } from "@env/config.env";
 
 const userPoolArn = cognito.userPoolArn;
 
-// ARN of the verified SES identity for the From address
-const sesIdentityArn = $interpolate`arn:aws:ses:${region}:${account}:identity/${AWS_CONFIG.sesFromAddress}`;
-
-// CustomMessage only rewrites the email body, no AWS permissions needed
-new sst.aws.Function("AuthMessage", {
-  handler: "packages/functions/auth/message/index.handler",
-});
-
-new sst.aws.Function("AuthDefine", {
-  handler: "packages/functions/auth/define/index.handler",
-});
-
-new sst.aws.Function("AuthCreate", {
-  handler: "packages/functions/auth/create/index.handler",
-  environment: {
-    SES_FROM_ADDRESS: AWS_CONFIG.sesFromAddress!,
-  },
-  permissions: [
-    {
-      actions: ["ses:SendEmail", "ses:SendRawEmail"],
-      resources: [sesIdentityArn],
-    },
-  ],
-});
-
-new sst.aws.Function("AuthVerify", {
-  handler: "packages/functions/auth/verify/index.handler",
-});
-
-new sst.aws.Function("AuthPostConfirmation", {
-  handler: "packages/functions/auth/post-confirmation/index.handler",
-  permissions: [
-    {
-      actions: ["cognito-idp:AdminAddUserToGroup"],
-      resources: [userPoolArn],
-    },
-  ],
-});
+// Cognito trigger functions (message/define/create/verify/post-confirmation)
+// live next to the pool in _cognito.infrastructure.ts
 
 // Public HTTP routes (no JWT authorizer, see ROUTES)
 apiPermission("AuthLogin", new sst.aws.Function("AuthLogin", {

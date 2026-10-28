@@ -53,6 +53,25 @@ replacing a table. Where the console holds settings the code does not own
 timeouts), the adopting resources use `ignoreChanges`, so the existing values are
 kept.
 
+## Cognito: one pool per non-production stage
+
+`_cognito.infrastructure.ts` decides which pool is active:
+
+- `COGNITO_USER_POOL_ID` + `COGNITO_CLIENT_ID` set: that existing pool is used as is.
+  **Required in production** (the deploy throws without it). The production pool is
+  referenced, not imported: its triggers, groups and app client stay as configured
+  in the console.
+- Unset (dev, PR stages): the stage creates `sst.aws.CognitoUserPool` with the e-mail
+  OTP triggers (`auth/message`, `define`, `create`, `verify`, `post-confirmation`),
+  an app client allowing `ADMIN_USER_PASSWORD_AUTH`, `CUSTOM_AUTH` and
+  `REFRESH_TOKEN_AUTH` (no hosted UI), and the groups `Admin`, `Manager`, `Users`
+  (the names `RolesGuard` checks, `packages/shared/guards/user-role.enum.ts`).
+
+The HTTP API's JWT authorizer (issuer + audience), the auth Lambdas and the
+WebSocket `$connect` function are all wired to the active pool, so a dev token is
+rejected by production and vice versa. To keep `dev` on the old shared pool during a
+transition, set the two variables in `.env.dev`.
+
 ## One-time production import procedure
 
 1. **Collect the ids (read-only AWS calls).**
