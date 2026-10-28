@@ -157,3 +157,46 @@ deleted and recreated from scratch by deploying with `IMPORT_EXISTING=false`.
   will not match until the code strips any `<stage>-` prefix.
 - The S3 global bucket, the SES identity and Redis are still shared, pre-existing
   resources passed in by config (`GLOBAL_BUCKET`, `SES_FROM_ADDRESS`, `REDIS_*`).
+
+## Configuration reference (`.env.<stage>`)
+
+| Variable | Required | Meaning |
+| --- | --- | --- |
+| `REDIS_HOST`, `REDIS_PORT` | yes | Redis endpoint; the password is in SSM `/bar-ops-api-v3/<stage>/redis-password` |
+| `GLOBAL_BUCKET`, `SES_FROM_ADDRESS` | yes | Shared assets bucket, verified SES sender |
+| `COGNITO_USER_POOL_ID`, `COGNITO_CLIENT_ID` | production | Existing pool + app client; unset elsewhere = stage-owned pool |
+| `IMPORT_EXISTING` | no (`false`) | `true` adopts console-created resources instead of creating them |
+| `HTTP_API_ID`, `HTTP_API_AUTHORIZER_ID` | with `IMPORT_EXISTING` | HTTP API and its JWT authorizer to adopt |
+| `HTTP_API_STAGE_NAME` | no (`$default`) | HTTP API stage name |
+| `WEBSOCKET_API_ID` | with `IMPORT_EXISTING` | WebSocket API to adopt |
+| `WEBSOCKET_STAGE_NAME` | no (stage name) | WebSocket stage (`production`, `dev`) |
+| `IMPORT_IDS_FILE` | no | JSON with route/integration/event-source-mapping ids to adopt |
+| `MANAGE_API_ROUTES` | no (`true`) | `false` leaves routes/integrations in the console (permissions only) |
+| `CORS_ALLOW_ORIGINS` | no | Comma-separated dashboard origins for the HTTP API CORS config |
+| `WHATSAPP_PHONE_NUMBER_ID` | no | Meta sender id; the token itself lives in SSM `/kick/<stage>/whatsapp-token` |
+| `ALARM_EMAIL` | no | Subscribes an e-mail to the stage alarm SNS topic |
+| `ALARMS_ENABLED` | no (production only) | Lambda error/throttle and API 5xx/p95 alarms |
+| `POWERTOOLS_LOG_LEVEL` | no (`INFO` prod, `DEBUG` else) | Log level passed to every function |
+
+## Reliability and observability wired by the IaC
+
+- **Dead-letter queues.** Every bus subscriber (`subscribeToBus`) has an SQS DLQ used
+  twice: as the EventBridge target DLQ (delivery retried for up to 1 hour) and as the
+  Lambda on-failure destination (2 async retries). Each stream pipe has a DLQ with 10
+  retries / 24 h max record age. The broadcaster's stream mappings retry 3 times,
+  bisect failing batches and then send the record metadata to its DLQ. Each DLQ has a
+  CloudWatch alarm on `ApproximateNumberOfMessagesVisible > 0`.
+- **Tracing and logs.** All functions run with active X-Ray tracing and get
+  `POWERTOOLS_SERVICE_NAME` (the domain module, e.g. `shift`) and
+  `POWERTOOLS_LOG_LEVEL`.
+- **Alarms** (SNS topic `<app>-<stage>-alarms`): Lambda errors per module, account-wide
+  Lambda throttles (the 40-concurrency account limit is shared by all stages), HTTP API
+  5xx (>= 5 in 5 min) and p95 latency (> 3 s for 15 min).
+
+## Manual steps still required in production
+
+1. Run the import procedure above (`sst diff`, then `sst deploy --stage production`).
+2. Create the WhatsApp token parameter before re-enabling the service:
+   `aws ssm put-parameter --name /kick/production/whatsapp-token --type SecureString --value ...`
+   (same for each stage that sends WhatsApp messages).
+3. Set `ALARM_EMAIL` and confirm the SNS subscription e-mail after the first deploy.
