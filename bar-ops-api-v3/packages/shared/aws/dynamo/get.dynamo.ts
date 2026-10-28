@@ -2,7 +2,7 @@ import { GetCommand } from "@aws-sdk/lib-dynamodb";
 import { plainToInstance, type ClassConstructor } from "class-transformer";
 import { validate } from "class-validator";
 import { docClient } from "./client.dynamo";
-import { type DynamoItem, type DateSplitKeys, recombineDatetime } from "./item.dynamo";
+import { type DynamoItem, type DateSplitKeys, recombineDatetime, stripStorageOnlyFields } from "./item.dynamo";
 
 import { redisClient, CACHE_TTL_SECONDS, getTableVersion } from "@aws/redis/client.redis";
 import { logger } from '@utils/logger/logger.util';
@@ -20,7 +20,8 @@ export const get = async <T extends object>(
         throw new Error("ID is required");
     }
 
-    // Read version before DynamoDB read to avoid stale cache writes
+    // Read the version BEFORE DynamoDB: if a write lands while we read, it bumps the
+    // version and whatever we cache below is filed under the old, now-orphaned key
     const version = await getTableVersion(tableName);
     const cacheKey = `get:${tableName}:${version}:${id}`;
 
@@ -46,7 +47,7 @@ export const get = async <T extends object>(
         return null;
     }
 
-    const itemData = recombineDatetime(response.Item as DynamoItem, dateSplitKeys);
+    const itemData = stripStorageOnlyFields(recombineDatetime(response.Item as DynamoItem, dateSplitKeys));
 
     const instance = plainToInstance(dto, itemData, {
         enableImplicitConversion: true,

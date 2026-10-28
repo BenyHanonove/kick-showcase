@@ -35,7 +35,7 @@ export const getRoleFromEvent = (event: APIGatewayProxyEventV2): UserRole => {
             };
         };
     };
-    const claims = context.authorizer?.jwt?.claims;
+    const claims = context?.authorizer?.jwt?.claims;
     const groups = normalizeGroups(claims?.['cognito:groups']);
     return getHighestRole(groups);
 };
@@ -54,7 +54,7 @@ export const RolesGuard = (allowedRoles: UserRole[], handler: LambdaHandler): La
                 };
             };
         };
-        const claims = context.authorizer?.jwt?.claims;
+        const claims = context?.authorizer?.jwt?.claims;
         const groups = normalizeGroups(claims?.['cognito:groups']);
         const role = getHighestRole(groups);
 

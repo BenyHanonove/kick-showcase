@@ -1,7 +1,7 @@
 import { plainToInstance, type ClassConstructor } from "class-transformer";
 import { validate } from "class-validator";
 import { queryAll, scanAll } from "./paginate.dynamo";
-import { type DynamoItem, type DateSplitKeys, recombineDatetime } from "./item.dynamo";
+import { type DynamoItem, type DateSplitKeys, recombineDatetime, stripStorageOnlyFields } from "./item.dynamo";
 
 import { redisClient, CACHE_TTL_SECONDS, getTableVersion } from "@aws/redis/client.redis";
 import { logger } from '@utils/logger/logger.util';
@@ -68,7 +68,7 @@ export const list = async <T extends object>(
             }),
         });
 
-    const processedItems = items.map((item) => recombineDatetime(item, dateSplitKeys));
+    const processedItems = items.map((item) => stripStorageOnlyFields(recombineDatetime(item, dateSplitKeys)));
 
     const instances = plainToInstance(dto, processedItems, {
         enableImplicitConversion: true,

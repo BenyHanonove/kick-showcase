@@ -1,3 +1,5 @@
+import { ValidationError } from "class-validator";
+
 export type DynamoAttributeValue = string | number | boolean | object | null | undefined;
 
 // A raw DynamoDB item: attribute name -> attribute value
@@ -45,8 +47,31 @@ export const splitDatetime = (item: DynamoItem, keys: DateSplitKeys = {}): Dynam
     const datetime = item[datetimeKey];
     if (typeof datetime !== 'string') return item;
 
+    // The partition key is the calendar date exactly as written (no timezone shift).
+    // @IsISO8601 also accepts forms like "2026-03", "20260305" or "2026-W10-1", which
+    // slicing would turn into a garbage monthYear or day 0, so require YYYY-MM-DD up front.
+    const match = DATE_PREFIX.exec(datetime);
+    if (!match) {
+        const error = new ValidationError();
+        error.property = datetimeKey;
+        error.value = datetime;
+        error.constraints = { isCalendarDate: `${datetimeKey} must start with a YYYY-MM-DD calendar date` };
+        throw [error];
+    }
+
     const rest = { ...item };
     delete rest[datetimeKey];
 
-    return { ...rest, [monthYearKey]: datetime.slice(0, 7), [dayKey]: Number(datetime.slice(8, 10)) };
+    return { ...rest, [monthYearKey]: match[1], [dayKey]: Number(match[2]) };
+};
+
+const DATE_PREFIX = /^(\d{4}-(?:0[1-9]|1[0-2]))-(0[1-9]|[12]\d|3[01])(?:$|T)/;
+
+// Audit-only attributes that live in the table but must never reach an API response
+const STORAGE_ONLY_FIELDS = ['lastEditor'] as const;
+
+export const stripStorageOnlyFields = (item: DynamoItem): DynamoItem => {
+    const rest = { ...item };
+    for (const field of STORAGE_ONLY_FIELDS) delete rest[field];
+    return rest;
 };

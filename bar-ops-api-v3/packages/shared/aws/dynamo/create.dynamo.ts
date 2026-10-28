@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { docClient } from "./client.dynamo";
 import { type DynamoItem, type DateSplitKeys, splitDatetime } from "./item.dynamo";
 
-import { redisClient, CACHE_TTL_SECONDS } from "@aws/redis/client.redis";
+import { redisClient } from "@aws/redis/client.redis";
 import { contextStorage } from '@guards/role.guard';
 
 export const create = async <T extends object, U extends object = Partial<T>>(
@@ -52,13 +52,13 @@ export const create = async <T extends object, U extends object = Partial<T>>(
         Item: finalItem,
     }));
 
-    // Bump table version first, then cache the new item
+    // Writers only invalidate, they never prime: the order of two INCRs says nothing
+    // about the order of the DynamoDB writes behind them, so priming could pin an older
+    // copy under the newest version. Readers repopulate on the next get/list.
     try {
-        const version = await redisClient.incr(`version:${tableName}`);
-        const cacheKey = `get:${tableName}:${version}:${id}`;
-        await redisClient.set(cacheKey, JSON.stringify(instance), "EX", CACHE_TTL_SECONDS); // hard TTL
+        await redisClient.incr(`version:${tableName}`);
     } catch {
-        // Cache priming is best-effort; readers fall back to DynamoDB
+        // Invalidation is best-effort; versioned cache keys expire via TTL
     }
 
     return instance;

@@ -4,7 +4,7 @@ import { validate } from "class-validator";
 import { docClient } from "./client.dynamo";
 import { type DynamoItem, type DateSplitKeys, splitDatetime, recombineDatetime } from "./item.dynamo";
 
-import { redisClient, CACHE_TTL_SECONDS } from "@aws/redis/client.redis";
+import { redisClient } from "@aws/redis/client.redis";
 import { contextStorage } from '@guards/role.guard';
 
 export class ConcurrencyConflictError extends Error {
@@ -118,13 +118,12 @@ export const update = async <T extends object, U extends object = Partial<T>>(
         throw errors;
     }
 
-    // Bump table version first, then cache the updated item
+    // Invalidate only (see create.dynamo): priming here could cache this write's
+    // result after a newer concurrent write has already bumped the version
     try {
-        const version = await redisClient.incr(`version:${tableName}`);
-        const cacheKey = `get:${tableName}:${version}:${id}`;
-        await redisClient.set(cacheKey, JSON.stringify(instance), "EX", CACHE_TTL_SECONDS); // hard TTL
+        await redisClient.incr(`version:${tableName}`);
     } catch {
-        // Cache priming is best-effort; readers fall back to DynamoDB
+        // Invalidation is best-effort; versioned cache keys expire via TTL
     }
 
     // Ensure lastEditor is not returned to the API response
