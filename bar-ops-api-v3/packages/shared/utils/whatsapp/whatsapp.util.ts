@@ -1,5 +1,6 @@
 import { type APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 import { StatusCodes } from 'http-status-codes';
+import { SSMClient, GetParameterCommand } from '@aws-sdk/client-ssm';
 import { logger } from '@utils/logger/logger.util';
 import { AWS_CONFIG } from '@env/config.env';
 
@@ -120,6 +121,26 @@ export function sanitizeButtonUrlParam(param: string): string {
     return param.replace(/[\r\n\t\s]+/g, '').trim();
 }
 
+// Token lives in SSM Parameter Store, fetched once per container and reused across invocations
+let accessTokenPromise: Promise<string | undefined> | null = null;
+
+const getAccessToken = (): Promise<string | undefined> => {
+    const paramName = AWS_CONFIG.whatsapp.tokenParam;
+    if (!paramName) return Promise.resolve(undefined);
+
+    if (!accessTokenPromise) {
+        accessTokenPromise = new SSMClient({})
+            .send(new GetParameterCommand({ Name: paramName, WithDecryption: true }))
+            .then((result) => result.Parameter?.Value)
+            .catch((error: unknown) => {
+                // Drop the cached rejection so the next invocation can retry
+                accessTokenPromise = null;
+                throw error;
+            });
+    }
+    return accessTokenPromise;
+};
+
 const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
@@ -149,7 +170,14 @@ const isTransientStatus = (status: number): boolean => {
  * @returns A promise resolving to the send result.
  */
 async function postMessage(payload: Record<string, unknown>, phone: string): Promise<WhatsAppSendResult> {
-    const { accessToken, phoneNumberId } = AWS_CONFIG.whatsapp;
+    const { phoneNumberId } = AWS_CONFIG.whatsapp;
+    let accessToken: string | undefined;
+    try {
+        accessToken = await getAccessToken();
+    } catch (error) {
+        logger.error('Failed to read WhatsApp token from SSM', error);
+        return { success: false, error: 'WhatsApp credentials are unavailable', retryCount: 0 };
+    }
     if (!accessToken || !phoneNumberId) {
         logger.warn('WhatsApp credentials are missing. Skipping message send.');
         return { success: false, error: 'WhatsApp credentials are missing', retryCount: 0 };
