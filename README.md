@@ -19,8 +19,9 @@
 ## Highlights
 
 - **Event-driven Change Data Capture (CDC)** — DynamoDB Streams feed 9 **EventBridge Pipes** into a central event bus; 18 observer Lambdas handle cascading deletes, cross-entity status sync, and side effects outside the request path, backed by per-subscriber SQS dead-letter queues and CloudWatch alarms.
+- **Zero-account staff management via WhatsApp bot & ephemeral single-use tokens** — Field staff (bartenders, waiters, runners) never create user accounts or passwords. An automated WhatsApp Cloud API bot dispatches short-lived, cryptographically random single-use tokens (`TOKEN_TTL_HOURS = 24`, DynamoDB TTL) pointing to isolated public routes (`/shift/resolve`, `/shift/register`, `/employee/claim`) for onboarding, shift self-registration, and arrival/schedule notifications — consumed atomically via `TransactWriteCommand` so a link can never be replayed or double-spent.
 - **Real-time fan-out without data leaks** — WebSocket broadcasts push only `{ action, id }` invalidation signals scoped to the active session room; clients refetch through role-guarded REST endpoints so authorization and field-level redaction stay in one place.
-- **Concurrency & idempotency** — Optimistic locking (`timestamp` condition on every `UpdateCommand`, returning `409 Conflict` with automatic client diff/refetch), atomic `TransactWrite` for shift self-registration and single-use invitation links, deterministic composite IDs in stream observers, and race-free versioned Redis caching (`version:<table>`).
+- **Concurrency & idempotency** — Optimistic locking (`timestamp` condition on every `UpdateCommand`, returning `409 Conflict` with automatic client diff/refetch), deterministic composite IDs (`deterministicId('shift-registration', sessionId, employeeId)`) preventing duplicate shift creation across concurrent tabs, and race-free versioned Redis caching (`version:<table>`).
 - **Defense-in-depth security** — Short-lived access JWT kept in memory only + `HttpOnly; Secure; SameSite=None` refresh cookie, Cognito JWT verification on both HTTP API Gateway and WebSocket `$connect`, fail-closed `RolesGuard([Admin, Manager, Users])`, field-level financial redaction for non-admin roles, per-Lambda least-privilege IAM, and PII-redacting structured logs (AWS Lambda Powertools + X-Ray active tracing).
 - **Verified across roles** — 307 frontend unit tests and 108 backend unit tests run on every push in GitHub Actions; black-box lifecycle suites execute against the `dev` stage as `Admin`, `Manager`, and `User` before any production deployment (`pipeline/deploy.js`).
 
@@ -66,7 +67,7 @@ flowchart LR
 ```
 
 <details>
-<summary><strong>High-resolution diagram & sequence flows (Optimistic Concurrency 409 · Notify-then-Refetch WebSocket)</strong></summary>
+<summary><strong>High-resolution diagram & sequence flows (Optimistic Concurrency 409 · Notify-then-Refetch WebSocket · Ephemeral Token Bot Flow)</strong></summary>
 
 <p align="center">
   <img src="docs/architecture.png" alt="KICK Architecture Diagram" width="100%" />
@@ -120,6 +121,32 @@ sequenceDiagram
   API-->>B: 200 OK (role-filtered entity)
 ```
 
+### Sequence 3: Accountless staff management via WhatsApp bot & single-use public token
+
+```mermaid
+sequenceDiagram
+  autonumber
+  participant M as Manager (SPA)
+  participant OPEN as ShiftOpen / Notify Lambda
+  participant DDB as DynamoDB (Token + Shift)
+  participant WA as WhatsApp Cloud API Bot
+  participant E as Employee (Mobile Browser)
+  participant REG as Public Register Lambda
+
+  M->>OPEN: POST /shift/open/{sessionId} { employeeId }
+  OPEN->>DDB: PutItem BarOps-ShiftToken (token, expiresAt = +24h, used = false,<br/>snapshotted event name/datetime/location)
+  OPEN->>WA: Send template "shift_availability_request" with button URL ?token=...
+  WA-->>E: WhatsApp message with one-tap registration link
+  E->>REG: POST /shift/resolve { token } (unauthenticated public route)
+  REG->>DDB: GetItem BarOps-ShiftToken (ConsistentRead)
+  REG-->>E: 200 OK (snapshotted display fields only — no DB fan-out)
+  E->>REG: POST /shift/register { token, role, notes }
+  REG->>DDB: TransactWrite: [Delete token IF used=false & expiresAt>now,<br/>Put Shift(deterministicId) IF attribute_not_exists(id)]
+  DDB-->>REG: Committed atomically (token burned, shift created)
+  REG-->>E: 201 Created { id, role }
+  Note over M,WA: Once manager sets exact arrival hour, POST /shift/notify dispatches<br/>personalized arrival-time reminders to all staffed workers via WhatsApp
+```
+
 </details>
 
 ### A request, end to end
@@ -163,6 +190,7 @@ useCrud                            409 → refetch + warning snackbar
 
 | Decision | Why | Cost / Trade-off |
 | --- | --- | --- |
+| **Ephemeral single-use tokens over employee accounts** | Event staff rotate constantly across outdoor productions; forcing 100+ casual bartenders to manage Cognito credentials kills adoption. Automated WhatsApp bot links (`/shift/register`, `/employee/claim`) with short TTLs and `TransactWrite` burn-on-use give zero-friction UX and zero persistent attack surface | Requires dedicated token tables (`BarOps-ShiftToken`, `BarOps-EmployeeToken`), snapshotting display metadata onto the token row so public `resolve` routes cannot enumerate core tables, and strict `TransactWrite` conditions against double-submit |
 | **DynamoDB over PostgreSQL** | Known access patterns (by `id`, `sessionId`, `monthYear`), native Change Data Capture via Streams, near-zero idle cost on pay-per-request | Ad-hoc cross-table analytics require export or in-memory aggregation; `list()` paginates via `LastEvaluatedKey` |
 | **One Lambda per action** | Strict per-function IAM least privilege, isolated cold-start blast radius, independent CloudWatch metrics per endpoint | ~130 functions to manage in IaC (solved with declarative factory helpers in `infrastructure/`) |
 | **Notify-then-refetch WebSockets** | WebSocket frame carries only `{ store, action, id }`; authorization and manager field redaction remain in the HTTP handlers | $N$ connected clients in the room issue a `GET /<resource>/:id` (served from the versioned Redis cache after the first read) |
