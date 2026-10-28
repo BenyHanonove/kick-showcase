@@ -73,48 +73,44 @@ historical `BarOps-*` prefix (tables, app name, protocol names) — never rename
 Every write request across all 19 domain modules flows through this exact pipeline — with uniform guards, validation, optimistic locking, cache invalidation, and error handling at every boundary:
 
 ```mermaid
-flowchart TD
-  subgraph FE["1 · Frontend Layer (Vue 3 SPA)"]
-    V["1. ⟨Entity⟩View.vue<br/>User submits GenericForm / triggers action"]
-    C["2. useCrud⟨T⟩() Composable<br/>Diffs form vs. snapshot · attaches id + timestamp"]
-    P["3. BaseProvider⟨T⟩<br/>safeCall() wrapper → normalized response envelope"]
-    R["4. BaseRepository⟨T⟩ → api.ts<br/>REST request with in-memory Bearer JWT (401 → silent refresh & retry)"]
-    V --> C --> P --> R
+flowchart LR
+  subgraph FE["1. Frontend (Vue 3)"]
+    direction TB
+    V["EntityView.vue"] --> C["useCrud()"] --> P["BaseProvider"] --> R["BaseRepository<br/>+ api.ts"]
   end
 
-  subgraph BE["2 · Backend Layer (AWS Serverless)"]
-    GW["5. HTTP API Gateway<br/>Cognito JWT Authorizer (401 Unauthorized if invalid)"]
-    GUARD["6. ⟨Resource⟩⟨Action⟩ Lambda · RolesGuard(allowedRoles)<br/>Fail-closed RBAC check"]
-    DTO["7. validateBody(Dto)<br/>class-validator schema & type enforcement"]
-    DDB["8. Shared DB Helper (create / update / delete)<br/>DynamoDB write with optimistic concurrency check on timestamp"]
-    GW --> GUARD --> DTO --> DDB
+  subgraph BE["2. Backend (Lambda)"]
+    direction TB
+    GW["API Gateway<br/>JWT Auth"] --> G["RolesGuard"] --> DTO["validateBody<br/>(DTO)"] --> DB["DB Helper<br/>(OCC write)"]
   end
 
-  subgraph OUT["3 · Outcomes, Cache & Async CDC"]
-    ERR403["403 Forbidden<br/>Insufficient role"]
-    ERR400["400 Bad Request<br/>Field validation errors"]
-    ERR409["409 Conflict<br/>ConcurrencyConflictError (stale timestamp)"]
-    CACHE["9. Versioned Redis Cache<br/>INCR version:BarOps-⟨Table⟩ + prime item"]
-    CDC["10. DynamoDB Stream → EventBridge Pipe → Bus<br/>18 Observer Lambdas + WebSocket notify (store, action, id)"]
+  subgraph DATA["3. State & Fan-out"]
+    direction TB
+    REDIS[("Redis Cache<br/>INCR version")]
+    CDC["DynamoDB Stream<br/>Pipe -> Bus -> WS"]
+    ERR["401 / 403 / 400<br/>409 Conflict"]
   end
 
-  subgraph RES["4 · Client Resolution (useCrud)"]
-    UIERR["Error snackbar (localized Hebrew message from ResourceMessages)"]
-    UI409["Auto-refetch latest entity + conflict warning snackbar"]
-    UI200["Pinia store sync (create / update / remove) + success snackbar"]
-  end
-
-  R -- "HTTPS" --> GW
-  GUARD -- "Role rejected" --> ERR403
-  DTO -- "Invalid payload" --> ERR400
-  DDB -- "Condition failed" --> ERR409
-  DDB -- "Write succeeded" --> CACHE
-  DDB -. "Async Stream" .-> CDC
-
-  ERR403 & ERR400 --> UIERR
-  ERR409 --> UI409
-  CACHE -- "200 / 201 OK" --> UI200
+  R -- "HTTPS + JWT" --> GW
+  DB -- "200 / 201 OK" --> REDIS
+  DB -. "Async CDC" .-> CDC
+  GW & G & DTO & DB -. "Reject" .-> ERR
+  REDIS -- "Update Store" --> C
+  ERR -- "Refetch / Alert" --> C
 ```
+
+| Step | Layer | Component | Responsibility & Status Handling |
+| :---: | :--- | :--- | :--- |
+| **1** | **Frontend** | `<Entity>View.vue` | Renders `GenericForm` / table; dispatches user action |
+| **2** | **Frontend** | `useCrud<T>()` | Diffs form vs. snapshot, attaches `id` + `timestamp`, updates Pinia store & snackbars |
+| **3** | **Frontend** | `BaseProvider<T>` | Wraps calls in `safeCall()` → normalized `{ success, message, data, statusCode }` |
+| **4** | **Frontend** | `BaseRepository<T>` + `api.ts` | Sends REST request with in-memory Bearer JWT; on **`401`** silently refreshes token & retries |
+| **5** | **Backend** | **HTTP API Gateway** | Validates Cognito JWT signature & expiry (**`401 Unauthorized`** if invalid) |
+| **6** | **Backend** | `RolesGuard(allowedRoles)` | Fail-closed RBAC check against Cognito groups (**`403 Forbidden`** if role is too low) |
+| **7** | **Backend** | `validateBody(Dto)` | `class-validator` schema & type check (**`400 Bad Request`** on invalid payload) |
+| **8** | **Backend** | `create / update / delete` | DynamoDB conditional write on `timestamp` (**`409 Conflict`** on `ConcurrencyConflictError` → client auto-refetches) |
+| **9** | **Cache** | **Versioned Redis** | On **`200 / 201`**, runs `INCR version:BarOps-<Table>` and primes the updated item |
+| **10** | **Async CDC** | **Stream → Pipe → Bus** | Triggers 18 observer Lambdas (cascades/sync) + broadcasts `{ store, action, id }` over WebSocket |
 
 ## 4. The invariants that make new features fast
 
