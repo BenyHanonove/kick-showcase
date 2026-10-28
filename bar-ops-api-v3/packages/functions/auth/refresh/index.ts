@@ -2,7 +2,11 @@ import 'reflect-metadata';
 
 import { type APIGatewayProxyEventV2, type APIGatewayProxyResultV2 } from 'aws-lambda';
 import { StatusCodes } from 'http-status-codes';
-import { CognitoIdentityProviderClient, InitiateAuthCommand } from '@aws-sdk/client-cognito-identity-provider';
+import {
+    CognitoIdentityProviderClient,
+    InitiateAuthCommand,
+    type InitiateAuthCommandOutput,
+} from '@aws-sdk/client-cognito-identity-provider';
 
 import { buildUserFromIdToken } from '@utils/auth/token.util';
 import {
@@ -40,7 +44,7 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
         }
 
         let workingAuthResult: {
-            authResult: NonNullable<Awaited<ReturnType<typeof client.send>>['AuthenticationResult']>;
+            authResult: NonNullable<InitiateAuthCommandOutput['AuthenticationResult']>;
             activeRefreshToken: string;
         } | undefined;
 
