@@ -11,7 +11,8 @@ describe('sanitize', () => {
 
     it('masks secrets embedded in free text', () => {
         const jwt = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIn0.c2lnbmF0dXJl';
-        expect(sanitize(`login dana@example.com with Bearer abc.def and ${jwt} key ${["AKIA", "ABCDEFGHIJKLMNOP"].join("")}`))
+        const fakeAwsKey = ['AKIA', 'ABCDEFGHIJKLMNOP'].join('');
+        expect(sanitize(`login dana@example.com with Bearer abc.def and ${jwt} key ${fakeAwsKey}`))
             .toBe('login [REDACTED] with [REDACTED] and [REDACTED] key [REDACTED]');
     });
 
