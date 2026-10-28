@@ -2,9 +2,9 @@ import { GetCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { plainToInstance, type ClassConstructor } from "class-transformer";
 import { validate } from "class-validator";
 import { docClient } from "./client.dynamo";
-import { type DynamoItem, type DateSplitKeys, splitDatetime, recombineDatetime } from "./item.dynamo";
+import { type DynamoItem, type DateSplitKeys, splitDatetime, recombineDatetime, stripStorageOnlyFields } from "./item.dynamo";
+import { invalidateTable } from "./create.dynamo";
 
-import { redisClient } from "@aws/redis/client.redis";
 import { contextStorage } from '@guards/role.guard';
 
 export class ConcurrencyConflictError extends Error {
@@ -13,6 +13,104 @@ export class ConcurrencyConflictError extends Error {
         this.name = "ConcurrencyConflictError";
     }
 }
+
+export interface UpdateInput {
+    TableName: string;
+    Key: { id: string };
+    UpdateExpression: string;
+    ConditionExpression: string;
+    ExpressionAttributeNames: Record<string, string>;
+    ExpressionAttributeValues: DynamoItem;
+}
+
+// Build the conditional SET for a partial update. Strips id/timestamp/undefined from the
+// body, writes a fresh timestamp and lastEditor, and, when the client sent the timestamp
+// it last saw, makes the write conditional on it (optimistic locking).
+// Exposed so TransactWrite callers get exactly the same semantics as update().
+export const buildUpdateInput = <U extends object>(
+    tableName: string,
+    id: string,
+    body: U,
+    dateSplitKeys?: DateSplitKeys
+): UpdateInput => {
+    const filteredBody = Object.fromEntries(
+        Object.entries(body).filter(([key, val]) => val !== undefined && key !== 'id' && key !== 'timestamp')
+    ) as DynamoItem;
+
+    filteredBody.timestamp = new Date().toISOString();
+
+    const editorId = contextStorage.getStore()?.editorId;
+    if (editorId) {
+        filteredBody.lastEditor = editorId;
+    }
+
+    // Split datetime into monthYear/day if this resource carries one (session/sale)
+    const cleanBody = splitDatetime(filteredBody, dateSplitKeys);
+
+    const updateParts: string[] = [];
+    const expressionAttributeNames: Record<string, string> = {};
+    const expressionAttributeValues: DynamoItem = {};
+
+    Object.entries(cleanBody).forEach(([key, val], idx) => {
+        const attributeName = `#k${idx}`;
+        const attributeValue = `:v${idx}`;
+        updateParts.push(`${attributeName} = ${attributeValue}`);
+        expressionAttributeNames[attributeName] = key;
+        expressionAttributeValues[attributeValue] = val;
+    });
+
+    let conditionExpression = "attribute_exists(id)";
+
+    const expectedTimestamp = (body as { timestamp?: unknown }).timestamp;
+    if (typeof expectedTimestamp === 'string') {
+        conditionExpression += " AND (attribute_not_exists(#ts) OR #ts = :expectedTimestamp)";
+        expressionAttributeNames["#ts"] = "timestamp";
+        expressionAttributeValues[":expectedTimestamp"] = expectedTimestamp;
+    }
+
+    return {
+        TableName: tableName,
+        Key: { id },
+        UpdateExpression: `SET ${updateParts.join(', ')}`,
+        ConditionExpression: conditionExpression,
+        ExpressionAttributeNames: expressionAttributeNames,
+        ExpressionAttributeValues: expressionAttributeValues,
+    };
+};
+
+// After a failed condition, tell "row is gone" (null -> 404) from "row changed" (409)
+export const resolveConditionFailure = async (tableName: string, id: string): Promise<null> => {
+    const { Item: existingItem } = await docClient.send(new GetCommand({
+        TableName: tableName,
+        Key: { id },
+        ConsistentRead: true,
+    }));
+
+    if (!existingItem) {
+        return null;
+    }
+    throw new ConcurrencyConflictError();
+};
+
+// Turn a stored item into the validated API DTO (date recombined, audit fields dropped)
+export const hydrate = async <T extends object>(
+    item: DynamoItem,
+    dto: ClassConstructor<T>,
+    dateSplitKeys?: DateSplitKeys
+): Promise<T> => {
+    const mergedData = stripStorageOnlyFields(recombineDatetime(item, dateSplitKeys));
+
+    const instance = plainToInstance(dto, mergedData, {
+        enableImplicitConversion: true,
+    });
+
+    const errors = await validate(instance, { whitelist: true });
+    if (errors.length > 0) {
+        throw errors;
+    }
+
+    return instance;
+};
 
 // Update item in DynamoDB table
 export const update = async <T extends object, U extends object = Partial<T>>(
@@ -34,70 +132,15 @@ export const update = async <T extends object, U extends object = Partial<T>>(
         throw new Error("Body is required");
     }
 
-    // Filter undefined properties, id, timestamp from update body
-    const filteredBody = Object.fromEntries(
-        Object.entries(body || {}).filter(([key, val]) => val !== undefined && key !== 'id' && key !== 'timestamp')
-    ) as DynamoItem;
-
-    const updatedTimestamp = new Date().toISOString();
-    filteredBody.timestamp = updatedTimestamp;
-
-    // Retrieve active request editor identity (Cognito sub)
-    const editorId = contextStorage.getStore()?.editorId;
-    if (editorId) {
-        filteredBody.lastEditor = editorId;
-    }
-
-    // Split datetime into monthYear/day if this resource carries one (session/sale)
-    const cleanBody = splitDatetime(filteredBody, dateSplitKeys);
-
-    const updateParts: string[] = [];
-    const expressionAttributeNames: Record<string, string> = {};
-    const expressionAttributeValues: DynamoItem = {};
-
-    Object.entries(cleanBody).forEach(([key, val], idx) => {
-        const attributeName = `#k${idx}`;
-        const attributeValue = `:v${idx}`;
-        updateParts.push(`${attributeName} = ${attributeValue}`);
-        expressionAttributeNames[attributeName] = key;
-        expressionAttributeValues[attributeValue] = val;
-    });
-
-    const updateExpression = `SET ${updateParts.join(', ')}`;
-    let conditionExpression = "attribute_exists(id)";
-
-    if (body && 'timestamp' in body) {
-        const bodyWithTimestamp = body as { timestamp: string };
-        if (typeof bodyWithTimestamp.timestamp === 'string') {
-            conditionExpression += " AND (attribute_not_exists(#ts) OR #ts = :expectedTimestamp)";
-            expressionAttributeNames["#ts"] = "timestamp";
-            expressionAttributeValues[":expectedTimestamp"] = bodyWithTimestamp.timestamp;
-        }
-    }
-
     let response;
     try {
         response = await docClient.send(new UpdateCommand({
-            TableName: tableName,
-            Key: { id },
-            UpdateExpression: updateExpression,
-            ConditionExpression: conditionExpression,
-            ExpressionAttributeNames: expressionAttributeNames,
-            ExpressionAttributeValues: expressionAttributeValues,
+            ...buildUpdateInput(tableName, id, body, dateSplitKeys),
             ReturnValues: "ALL_NEW",
         }));
     } catch (err: unknown) {
         if (err instanceof Error && err.name === "ConditionalCheckFailedException") {
-            // Fetch item to distinguish missing resource from timestamp conflict
-            const { Item: existingItem } = await docClient.send(new GetCommand({
-                TableName: tableName,
-                Key: { id },
-            }));
-
-            if (!existingItem) {
-                return null;
-            }
-            throw new ConcurrencyConflictError();
+            return resolveConditionFailure(tableName, id);
         }
         throw err;
     }
@@ -107,32 +150,9 @@ export const update = async <T extends object, U extends object = Partial<T>>(
         return null;
     }
 
-    const mergedData = recombineDatetime(returnedItem as DynamoItem, dateSplitKeys);
+    const instance = await hydrate(returnedItem as DynamoItem, dto, dateSplitKeys);
 
-    const instance = plainToInstance(dto, mergedData, {
-        enableImplicitConversion: true,
-    });
-
-    const errors = await validate(instance, { whitelist: true });
-    if (errors.length > 0) {
-        throw errors;
-    }
-
-    // Invalidate only (see create.dynamo): priming here could cache this write's
-    // result after a newer concurrent write has already bumped the version
-    try {
-        await redisClient.incr(`version:${tableName}`);
-    } catch {
-        // Invalidation is best-effort; versioned cache keys expire via TTL
-    }
-
-    // Ensure lastEditor is not returned to the API response
-    if (instance) {
-        const instanceWithEditor = instance as T & { lastEditor?: string };
-        if (instanceWithEditor.lastEditor !== undefined) {
-            delete instanceWithEditor.lastEditor;
-        }
-    }
+    await invalidateTable(tableName);
 
     return instance;
 };

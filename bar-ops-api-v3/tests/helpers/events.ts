@@ -1,4 +1,4 @@
-import { ConditionalCheckFailedException } from '@aws-sdk/client-dynamodb';
+import { ConditionalCheckFailedException, TransactionCanceledException } from '@aws-sdk/client-dynamodb';
 import { type APIGatewayProxyEventV2 } from 'aws-lambda';
 
 interface EventOptions {
@@ -38,3 +38,12 @@ export const statusOf = (result: unknown): number | undefined => (result as { st
 
 export const conditionalCheckFailed = (): Error =>
     new ConditionalCheckFailedException({ message: 'The conditional request failed', $metadata: {} });
+
+// Shape of the SDK error DynamoDB returns when a TransactWriteItems is cancelled;
+// codes are per item, in request order
+export const transactionCanceled = (...codes: string[]): Error =>
+    new TransactionCanceledException({
+        message: `Transaction cancelled, please refer cancellation reasons for specific reasons [${codes.join(', ')}]`,
+        $metadata: {},
+        CancellationReasons: codes.map((Code) => ({ Code })),
+    });
