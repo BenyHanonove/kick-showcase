@@ -19,7 +19,8 @@ const MESSAGES = new ResourceMessages('התחברות', 'התחברויות');
 const SESSION_EXPIRED_MESSAGE = 'תוקף החיבור פג, יש להתחבר מחדש';
 
 const client = new CognitoIdentityProviderClient({});
-const CLIENT_ID = process.env.COGNITO_CLIENT_ID || '439ldfj689k03nmphv65aaepev';
+const CLIENT_ID = process.env.COGNITO_CLIENT_ID;
+if (!CLIENT_ID) throw new Error('CRITICAL: COGNITO_CLIENT_ID env variable is missing');
 
 // Process auth refresh operation request and return JSON HTTP response
 export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {

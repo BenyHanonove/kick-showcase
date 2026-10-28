@@ -23,8 +23,10 @@ const MESSAGES = new ResourceMessages('התחברות', 'התחברויות');
 const INVALID_CREDENTIALS_MESSAGE = 'שם משתמש או סיסמה שגויים';
 
 const client = new CognitoIdentityProviderClient({});
-const USER_POOL_ID = process.env.COGNITO_USER_POOL_ID || 'eu-west-1_EcYLFbA3Q';
-const CLIENT_ID = process.env.COGNITO_CLIENT_ID || '439ldfj689k03nmphv65aaepev';
+const USER_POOL_ID = process.env.COGNITO_USER_POOL_ID;
+if (!USER_POOL_ID) throw new Error('CRITICAL: COGNITO_USER_POOL_ID env variable is missing');
+const CLIENT_ID = process.env.COGNITO_CLIENT_ID;
+if (!CLIENT_ID) throw new Error('CRITICAL: COGNITO_CLIENT_ID env variable is missing');
 
 // Process auth login operation request and return JSON HTTP response
 export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
