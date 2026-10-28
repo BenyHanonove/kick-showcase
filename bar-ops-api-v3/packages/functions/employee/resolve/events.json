@@ -1,0 +1,8 @@
+[
+  {
+    "name": "Resolve Employee Link",
+    "content": {
+      "body": "{\"token\": \"sample-token-value\", \"otp\": \"1234\"}"
+    }
+  }
+]

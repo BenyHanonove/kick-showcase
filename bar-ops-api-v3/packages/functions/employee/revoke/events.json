@@ -1,0 +1,53 @@
+[
+  {
+    "name": "Revoke Employee Link - ADMIN",
+    "content": {
+      "pathParameters": {
+        "id": "12345678-1234-1234-1234-123456789012"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Revoke Employee Link - MANAGER",
+    "content": {
+      "pathParameters": {
+        "id": "12345678-1234-1234-1234-123456789012"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Revoke Employee Link - USERS",
+    "content": {
+      "pathParameters": {
+        "id": "12345678-1234-1234-1234-123456789012"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,68 @@
+[
+  {
+    "name": "Get Sale Summary By Month - ADMIN",
+    "content": {
+      "queryStringParameters": {
+        "monthYear": "2026-06"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Get Sale Summary By Month - MANAGER",
+    "content": {
+      "queryStringParameters": {
+        "monthYear": "2026-06"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Get Sale Summary By Month - USERS",
+    "content": {
+      "queryStringParameters": {
+        "monthYear": "2026-06"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Get Sale Summary By Month - Missing monthYear",
+    "content": {
+      "queryStringParameters": {},
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

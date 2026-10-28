@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Create Supplier - ADMIN",
+    "content": {
+      "body": "{\"name\": \"Acme Beverages\", \"phone\": \"123456789\", \"contactName\": \"John Doe\", \"address\": \"123 Main St, Tel Aviv\", \"notes\": \"Preferred supplier\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Supplier - MANAGER",
+    "content": {
+      "body": "{\"name\": \"Smith Distributors\", \"phone\": \"0987654321\", \"contactName\": \"Jane Smith\", \"address\": \"45 Market Rd, Haifa\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Supplier - Users",
+    "content": {
+      "body": "{\"name\": \"Bob LLC\", \"phone\": \"5551234567\", \"contactName\": \"Bob Builder\", \"address\": \"77 Workshop Ln, Jerusalem\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

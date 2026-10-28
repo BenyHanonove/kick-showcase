@@ -1,0 +1,53 @@
+[
+  {
+    "name": "Get Interval - ADMIN",
+    "content": {
+      "pathParameters": {
+        "id": "55555555-5555-4555-9555-555555555555"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Get Interval - MANAGER",
+    "content": {
+      "pathParameters": {
+        "id": "55555555-5555-4555-9555-555555555555"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Get Interval - USERS",
+    "content": {
+      "pathParameters": {
+        "id": "55555555-5555-4555-9555-555555555555"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

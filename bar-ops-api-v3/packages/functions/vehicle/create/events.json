@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Create Vehicle - ADMIN",
+    "content": {
+      "body": "{\"sessionId\": \"11111111-1111-4111-9111-111111111111\", \"desc\": \"הרכב של משה\", \"driverShiftId\": \"88888888-8888-4888-9888-888888888888\", \"sum\": 100, \"licensePlate\": \"123-45-678\", \"passengerShiftIds\": [\"77777777-7777-4777-9777-777777777777\"]}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Vehicle - MANAGER",
+    "content": {
+      "body": "{\"sessionId\": \"11111111-1111-4111-9111-111111111111\", \"desc\": \"הסעה צפון\", \"sum\": 0, \"passengerShiftIds\": [\"77777777-7777-4777-9777-777777777777\", \"66666666-6666-4666-9666-666666666666\"]}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Vehicle - Users",
+    "content": {
+      "body": "{\"sessionId\": \"11111111-1111-4111-9111-111111111111\", \"desc\": \"רכב פרטי\", \"sum\": 50, \"passengerShiftIds\": []}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

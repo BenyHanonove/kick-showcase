@@ -1,0 +1,53 @@
+[
+  {
+    "name": "Delete Tips - ADMIN",
+    "content": {
+      "pathParameters": {
+        "id": "aaaaaaaa-aaaa-4aaa-9aaa-aaaaaaaaaaaa"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Delete Tips - MANAGER",
+    "content": {
+      "pathParameters": {
+        "id": "aaaaaaaa-aaaa-4aaa-9aaa-aaaaaaaaaaaa"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Delete Tips - USERS",
+    "content": {
+      "pathParameters": {
+        "id": "aaaaaaaa-aaaa-4aaa-9aaa-aaaaaaaaaaaa"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

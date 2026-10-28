@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Cascade Delete - REMOVE Event",
+    "content": {
+      "detail": {
+        "eventName": "REMOVE",
+        "dynamodb": {
+          "Keys": {
+            "id": {
+              "S": "9d7bca88-1d2a-4db5-b8c2-3e289bf16ab8"
+            }
+          }
+        }
+      }
+    }
+  }
+]

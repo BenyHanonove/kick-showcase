@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Create Mission - ADMIN",
+    "content": {
+      "body": "{\"sessionId\": \"ca5e28a4-17c3-4d2b-aa90-67258380d32f\", \"name\": \"Setup Main Bar\", \"desc\": \"Prepare ice, clean glasses, and place alcohol bottles in position\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Mission - MANAGER",
+    "content": {
+      "body": "{\"sessionId\": \"ca5e28a4-17c3-4d2b-aa90-67258380d32f\", \"name\": \"Prepare Garnish\", \"desc\": \"Slice lemons, limes, and wash mint leaves\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Mission - Users (Unauthorized)",
+    "content": {
+      "body": "{\"sessionId\": \"ca5e28a4-17c3-4d2b-aa90-67258380d32f\", \"name\": \"Setup Main Bar\", \"desc\": \"Prepare ice and glasses\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "name": "List Consume - ADMIN",
+    "content": {
+      "queryStringParameters": {
+        "sessionId": "11111111-1111-4111-9111-111111111111"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "List Consume - MANAGER",
+    "content": {
+      "queryStringParameters": {
+        "sessionId": "11111111-1111-4111-9111-111111111111"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "List Consume - USERS",
+    "content": {
+      "queryStringParameters": {
+        "sessionId": "11111111-1111-4111-9111-111111111111"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "name": "Delete Mission - ADMIN",
+    "content": {
+      "pathParameters": {
+        "id": "b48d2bc3-e7df-4847-a8a2-192a6c8e31a0"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Delete Mission - MANAGER (Unauthorized)",
+    "content": {
+      "pathParameters": {
+        "id": "b48d2bc3-e7df-4847-a8a2-192a6c8e31a0"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Delete Mission - USERS (Unauthorized)",
+    "content": {
+      "pathParameters": {
+        "id": "b48d2bc3-e7df-4847-a8a2-192a6c8e31a0"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Update Expense - ADMIN",
+    "content": {
+      "pathParameters": {
+        "id": "12345678-1234-1234-1234-123456789012"
+      },
+      "body": "{\"name\": \"Office Supplies Updated\", \"amount\": 200.0}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Update Expense - MANAGER",
+    "content": {
+      "pathParameters": {
+        "id": "12345678-1234-1234-1234-123456789012"
+      },
+      "body": "{\"amount\": 350.0, \"desc\": \"Updated desc\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Update Expense - USERS",
+    "content": {
+      "pathParameters": {
+        "id": "12345678-1234-1234-1234-123456789012"
+      },
+      "body": "{\"name\": \"Coffee Updated\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Open Shift Registration - ADMIN",
+    "content": {
+      "pathParameters": {
+        "sessionId": "00000000-0000-4000-8000-000000000000"
+      },
+      "body": "{\"employeeId\":\"12345678-1234-1234-1234-123456789012\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Open Shift Registration - Missing Employee Id",
+    "content": {
+      "pathParameters": {
+        "sessionId": "00000000-0000-4000-8000-000000000000"
+      },
+      "body": "{}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Open Shift Registration - MANAGER",
+    "content": {
+      "pathParameters": {
+        "sessionId": "00000000-0000-4000-8000-000000000000"
+      },
+      "body": "{\"employeeId\":\"12345678-1234-1234-1234-123456789012\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Open Shift Registration - Missing Session Id",
+    "content": {
+      "pathParameters": {},
+      "body": "{\"employeeId\":\"12345678-1234-1234-1234-123456789012\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

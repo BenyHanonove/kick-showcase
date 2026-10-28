@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Interval INSERT Event",
+    "content": {
+      "detail": {
+        "eventName": "INSERT",
+        "dynamodb": {
+          "NewImage": {
+            "id": { "S": "interval-123" },
+            "shiftId": { "S": "77777777-7777-4777-9777-777777777777" },
+            "start": { "S": "2025-06-15T20:00:00.000Z" },
+            "end": { "S": "2025-06-15T22:30:00.000Z" }
+          }
+        }
+      }
+    }
+  }
+]

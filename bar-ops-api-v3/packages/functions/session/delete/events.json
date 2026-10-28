@@ -1,0 +1,53 @@
+[
+  {
+    "name": "Delete Session - ADMIN",
+    "content": {
+      "pathParameters": {
+        "id": "77777777-7777-4777-9777-777777777777"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Delete Session - MANAGER",
+    "content": {
+      "pathParameters": {
+        "id": "77777777-7777-4777-9777-777777777777"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Delete Session - USERS",
+    "content": {
+      "pathParameters": {
+        "id": "77777777-7777-4777-9777-777777777777"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,39 @@
+[
+  {
+    "name": "Define Auth Challenge - First Attempt",
+    "content": {
+      "request": {
+        "session": []
+      },
+      "response": {}
+    }
+  },
+  {
+    "name": "Define Auth Challenge - Success Verify",
+    "content": {
+      "request": {
+        "session": [
+          {
+            "challengeName": "CUSTOM_CHALLENGE",
+            "challengeResult": true
+          }
+        ]
+      },
+      "response": {}
+    }
+  },
+  {
+    "name": "Define Auth Challenge - Failure Verify",
+    "content": {
+      "request": {
+        "session": [
+          {
+            "challengeName": "CUSTOM_CHALLENGE",
+            "challengeResult": false
+          }
+        ]
+      },
+      "response": {}
+    }
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Resolve Shift Registration - Valid Token",
+    "content": {
+      "body": "{\"token\":\"replace-with-a-live-token\"}"
+    }
+  },
+  {
+    "name": "Resolve Shift Registration - Unknown Token",
+    "content": {
+      "body": "{\"token\":\"not-a-real-token\"}"
+    }
+  },
+  {
+    "name": "Resolve Shift Registration - Missing Token",
+    "content": {
+      "body": "{}"
+    }
+  }
+]

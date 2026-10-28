@@ -1,0 +1,10 @@
+name = "api-proxy"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+account_id = "669161ef6a16666d4faffecf70f48d5c"
+workers_dev = false
+
+routes = [
+  { pattern = "api.kicks.ltd", custom_domain = true },
+  { pattern = "ws.kicks.ltd", custom_domain = true },
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Update Employee - ADMIN",
+    "content": {
+      "pathParameters": {
+        "id": "12345678-1234-1234-1234-123456789012"
+      },
+      "body": "{\"firstName\": \"John Updated\", \"lastName\": \"Doe Updated\", \"instagram\": \"johndoe_updated\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Update Employee - MANAGER",
+    "content": {
+      "pathParameters": {
+        "id": "12345678-1234-1234-1234-123456789012"
+      },
+      "body": "{\"phone\": \"0555555555\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Update Employee - USERS",
+    "content": {
+      "pathParameters": {
+        "id": "12345678-1234-1234-1234-123456789012"
+      },
+      "body": "{\"identityNumber\": \"999888777\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

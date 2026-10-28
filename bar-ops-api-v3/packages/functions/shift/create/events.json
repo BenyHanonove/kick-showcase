@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Create Shift - ADMIN",
+    "content": {
+      "body": "{\"sessionId\": \"11111111-1111-4111-9111-111111111111\", \"employeeId\": \"88888888-8888-4888-9888-888888888888\", \"role\": \"bartender\", \"timing\": \"2025-06-15T18:00:00.000Z\", \"bonusTravel\": 50, \"bonusManage\": 0, \"bonusOther\": 0}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Shift - MANAGER",
+    "content": {
+      "body": "{\"sessionId\": \"11111111-1111-4111-9111-111111111111\", \"employeeId\": \"88888888-8888-4888-9888-888888888888\", \"role\": \"waiter\", \"timing\": \"2025-06-15T19:00:00.000Z\", \"bonusTravel\": 0, \"bonusManage\": 0, \"bonusOther\": 25}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Shift - Users",
+    "content": {
+      "body": "{\"sessionId\": \"11111111-1111-4111-9111-111111111111\", \"employeeId\": \"88888888-8888-4888-9888-888888888888\", \"role\": \"runner\", \"timing\": \"2025-06-15T20:00:00.000Z\", \"bonusTravel\": 0, \"bonusManage\": 0, \"bonusOther\": 0}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

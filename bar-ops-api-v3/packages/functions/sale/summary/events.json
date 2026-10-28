@@ -1,0 +1,53 @@
+[
+  {
+    "name": "Get Sale Summary - ADMIN",
+    "content": {
+      "pathParameters": {
+        "saleId": "77777777-7777-4777-9777-777777777777"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Get Sale Summary - MANAGER",
+    "content": {
+      "pathParameters": {
+        "saleId": "77777777-7777-4777-9777-777777777777"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Get Sale Summary - USERS",
+    "content": {
+      "pathParameters": {
+        "saleId": "77777777-7777-4777-9777-777777777777"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

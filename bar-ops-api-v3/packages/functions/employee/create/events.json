@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Create Employee - ADMIN",
+    "content": {
+      "body": "{\"firstName\": \"John\", \"lastName\": \"Doe\", \"identityNumber\": \"123456789\", \"phone\": \"0501234567\", \"instagram\": \"johndoe\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Employee - MANAGER",
+    "content": {
+      "body": "{\"firstName\": \"Jane\", \"lastName\": \"Smith\", \"identityNumber\": \"987654321\", \"phone\": \"0549876543\", \"instagram\": \"janesmith\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Employee - USERS",
+    "content": {
+      "body": "{\"firstName\": \"Bob\", \"lastName\": \"Jones\", \"identityNumber\": \"111222333\", \"phone\": \"0521112222\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

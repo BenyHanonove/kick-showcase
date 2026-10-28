@@ -1,0 +1,19 @@
+[
+  {
+    "name": "Cashier INSERT Event",
+    "content": {
+      "detail": {
+        "eventName": "INSERT",
+        "eventSourceARN": "arn:aws:dynamodb:eu-west-1:791954932774:table/BarOps-Cashier",
+        "dynamodb": {
+          "NewImage": {
+            "id": { "S": "cashier-123" },
+            "sessionId": { "S": "77777777-7777-4777-9777-777777777777" },
+            "location": { "S": "bar" },
+            "creditTip": { "N": "50" }
+          }
+        }
+      }
+    }
+  }
+]

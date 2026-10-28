@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Create Cashier - ADMIN",
+    "content": {
+      "body": "{\"sessionId\": \"00000000-0000-0000-0000-000000000000\", \"cash\": 100, \"credit\": 50, \"creditTip\": 10, \"location\": \"bar\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Cashier - MANAGER",
+    "content": {
+      "body": "{\"sessionId\": \"00000000-0000-0000-0000-000000000000\", \"cash\": 200, \"credit\": 100, \"creditTip\": 20, \"location\": \"tables\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Cashier - Users",
+    "content": {
+      "body": "{\"sessionId\": \"00000000-0000-0000-0000-000000000000\", \"cash\": 200, \"credit\": 100, \"creditTip\": 20, \"location\": \"tables\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

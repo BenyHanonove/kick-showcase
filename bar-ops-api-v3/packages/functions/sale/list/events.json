@@ -1,0 +1,88 @@
+[
+  {
+    "name": "List Sale - ADMIN",
+    "content": {
+      "queryStringParameters": {
+        "clientId": "66666666-6666-4666-9666-666666666666"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "List Sale - MANAGER",
+    "content": {
+      "queryStringParameters": {
+        "clientId": "66666666-6666-4666-9666-666666666666"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "List Sale - USERS",
+    "content": {
+      "queryStringParameters": {
+        "clientId": "66666666-6666-4666-9666-666666666666"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "List Sale - ADMIN (clientId + monthYear)",
+    "content": {
+      "queryStringParameters": {
+        "clientId": "66666666-6666-4666-9666-666666666666",
+        "monthYear": "2025-06"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "List Sale - ADMIN (monthYear only)",
+    "content": {
+      "queryStringParameters": {
+        "monthYear": "2025-06"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

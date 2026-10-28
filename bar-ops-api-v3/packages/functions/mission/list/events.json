@@ -1,0 +1,53 @@
+[
+  {
+    "name": "List Mission - ADMIN",
+    "content": {
+      "queryStringParameters": {
+        "sessionId": "ca5e28a4-17c3-4d2b-aa90-67258380d32f"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "List Mission - MANAGER",
+    "content": {
+      "queryStringParameters": {
+        "sessionId": "ca5e28a4-17c3-4d2b-aa90-67258380d32f"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "List Mission - USERS (Unauthorized)",
+    "content": {
+      "queryStringParameters": {
+        "sessionId": "ca5e28a4-17c3-4d2b-aa90-67258380d32f"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

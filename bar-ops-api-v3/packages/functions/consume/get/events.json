@@ -1,0 +1,53 @@
+[
+  {
+    "name": "Get Consume - ADMIN",
+    "content": {
+      "pathParameters": {
+        "id": "33333333-3333-4333-9333-333333333333"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Get Consume - MANAGER",
+    "content": {
+      "pathParameters": {
+        "id": "33333333-3333-4333-9333-333333333333"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Get Consume - USERS",
+    "content": {
+      "pathParameters": {
+        "id": "33333333-3333-4333-9333-333333333333"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

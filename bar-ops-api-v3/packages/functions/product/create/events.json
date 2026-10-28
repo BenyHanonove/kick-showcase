@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Create Product - ADMIN",
+    "content": {
+      "body": "{\"supplierId\": \"b72e1906-3ba2-4096-b93e-06b3598bed50\", \"name\": \"Vodka Premium\", \"price\": 120, \"volume\": 750, \"type\": \"alcohol\", \"isBase\": true}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Product - MANAGER",
+    "content": {
+      "body": "{\"supplierId\": \"b72e1906-3ba2-4096-b93e-06b3598bed50\", \"name\": \"Coca Cola\", \"price\": 10, \"volume\": 330, \"type\": \"soda\", \"isBase\": false}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Product - USERS",
+    "content": {
+      "body": "{\"supplierId\": \"b72e1906-3ba2-4096-b93e-06b3598bed50\", \"name\": \"Red Bull\", \"price\": 15, \"volume\": 250, \"type\": \"energy_drink\", \"isBase\": false}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

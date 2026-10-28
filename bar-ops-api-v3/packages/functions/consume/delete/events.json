@@ -1,0 +1,53 @@
+[
+  {
+    "name": "Delete Consume - ADMIN",
+    "content": {
+      "pathParameters": {
+        "id": "33333333-3333-4333-9333-333333333333"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Delete Consume - MANAGER",
+    "content": {
+      "pathParameters": {
+        "id": "33333333-3333-4333-9333-333333333333"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Delete Consume - USERS",
+    "content": {
+      "pathParameters": {
+        "id": "33333333-3333-4333-9333-333333333333"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

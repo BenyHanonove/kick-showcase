@@ -1,0 +1,13 @@
+[
+  {
+    "name": "Interval Sync Event",
+    "content": {
+      "detail-type": "IntervalSync",
+      "source": "interval.sync",
+      "detail": {
+        "shiftId": "77777777-7777-4777-9777-777777777777",
+        "totalHours": 2.5
+      }
+    }
+  }
+]

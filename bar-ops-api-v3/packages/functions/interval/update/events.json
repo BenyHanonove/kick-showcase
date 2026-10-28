@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Update Interval - ADMIN",
+    "content": {
+      "pathParameters": {
+        "id": "55555555-5555-4555-9555-555555555555"
+      },
+      "body": "{\"start\": \"2025-01-15T11:00:00.000Z\", \"end\": \"2025-01-15T15:00:00.000Z\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Update Interval - MANAGER",
+    "content": {
+      "pathParameters": {
+        "id": "55555555-5555-4555-9555-555555555555"
+      },
+      "body": "{\"end\": \"2025-01-15T18:00:00.000Z\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Update Interval - USERS",
+    "content": {
+      "pathParameters": {
+        "id": "55555555-5555-4555-9555-555555555555"
+      },
+      "body": "{\"start\": \"2025-01-15T09:30:00.000Z\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

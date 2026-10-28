@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Verify Auth Challenge Response - Correct Answer",
+    "content": {
+      "request": {
+        "privateChallengeParameters": {
+          "secretLoginCode": "123456"
+        },
+        "challengeAnswer": "123456"
+      },
+      "response": {}
+    }
+  },
+  {
+    "name": "Verify Auth Challenge Response - Incorrect Answer",
+    "content": {
+      "request": {
+        "privateChallengeParameters": {
+          "secretLoginCode": "123456"
+        },
+        "challengeAnswer": "000000"
+      },
+      "response": {}
+    }
+  }
+]

@@ -1,0 +1,204 @@
+/* Design tokens as CSS custom properties — mirrors src/plugins/theme/tokens.ts. */
+/* Loaded after vuetify/styles, before global.css (see src/main.ts). */
+
+:root {
+  /* Native elements (scrollbars, plain buttons) follow the system theme */
+  color-scheme: light dark;
+
+  /* Font family (app-wide; overrides Vuetify's hard-coded Roboto below) */
+  --bo-font-sans: 'Assistant', 'Heebo', system-ui, -apple-system, sans-serif;
+
+  /* Light Mode Colors (default) */
+  --bo-color-primary: #a85038;
+  --bo-color-primary-rgb: 168, 80, 56;
+  --bo-color-secondary: #6b7c59;
+  --bo-color-error: #c9302c;
+  --bo-color-warning: #d19f3d;
+  --bo-color-success: #4a7c59;
+  --bo-color-info: #4a7f9e;
+  --bo-color-background: #ffffff;
+  --bo-color-surface: #f5f3f1;
+  --bo-color-text-primary: #0f172a;
+  --bo-color-text-secondary: #475569;
+  --bo-color-border: #e5e7eb;
+
+  /* Spacing scale */
+  --bo-space-xs: 4px;
+  --bo-space-sm: 8px;
+  --bo-space-md: 16px;
+  --bo-space-lg: 24px;
+  --bo-space-xl: 32px;
+  --bo-space-2xl: 48px;
+
+  /* Card padding variants */
+  --bo-card-padding-compact: 12px;
+  --bo-card-padding-normal: 16px;
+  --bo-card-padding-spacious: 24px;
+
+  /* Responsive gap tokens */
+  --bo-gap-mobile: 8px;
+  --bo-gap-tablet: 16px;
+  --bo-gap-desktop: 24px;
+
+  /* Radius scale */
+  --bo-radius-sm: 10px;
+  --bo-radius-md: 14px;
+  --bo-radius-lg: 20px;
+  --bo-radius-xl: 28px;
+  --bo-radius-tight: 6px;
+  --bo-radius-loose: 32px;
+
+  /* Shadow scale — light mode optimized */
+  --bo-shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.06);
+  --bo-shadow-raised: 0 2px 6px rgba(15, 23, 42, 0.06), 0 12px 28px rgba(15, 23, 42, 0.1);
+  --bo-shadow-popover: 0 4px 12px rgba(15, 23, 42, 0.1), 0 20px 48px rgba(15, 23, 42, 0.16);
+  --bo-shadow-hover: 0 4px 8px rgba(15, 23, 42, 0.08);
+  --bo-shadow-drag: 0 8px 16px rgba(15, 23, 42, 0.12);
+  --bo-shadow-focused: 0 0 0 4px rgba(168, 80, 56, 0.1);
+
+  /* Transition timings */
+  --bo-transition-fast: 150ms ease;
+  --bo-transition-normal: 250ms ease-in-out;
+  --bo-transition-slow: 400ms ease-out;
+
+  /* Elevation levels */
+  --bo-elevation-base: 0;
+  --bo-elevation-raised: 1;
+  --bo-elevation-floating: 2;
+  --bo-elevation-modal: 3;
+  --bo-elevation-tooltip: 4;
+}
+
+/* Dark Mode Colors */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bo-color-primary: #e59074;
+    --bo-color-primary-rgb: 229, 144, 116;
+    --bo-color-secondary: #9aa88c;
+    --bo-color-error: #e07a63;
+    --bo-color-warning: #e3b06a;
+    --bo-color-success: #7cae8d;
+    --bo-color-info: #8aa6b5;
+    --bo-color-background: #1a1613;
+    --bo-color-surface: #241f1a;
+    --bo-color-text-primary: #f8f9fa;
+    --bo-color-text-secondary: #cbd5e1;
+    --bo-color-border: #374151;
+
+    /* Shadow scale — dark mode optimized (more prominent) */
+    --bo-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.4);
+    --bo-shadow-raised: 0 2px 8px rgba(0, 0, 0, 0.4), 0 12px 28px rgba(0, 0, 0, 0.5);
+    --bo-shadow-popover: 0 4px 16px rgba(0, 0, 0, 0.5), 0 20px 48px rgba(0, 0, 0, 0.6);
+    --bo-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --bo-shadow-drag: 0 8px 20px rgba(0, 0, 0, 0.5);
+    --bo-shadow-focused: 0 0 0 4px rgba(229, 144, 116, 0.2);
+  }
+}
+
+/* --- Cross-system rounding: map Vuetify's rounded utilities to the token scale --- */
+.rounded-sm {
+  border-radius: var(--bo-radius-sm) !important;
+}
+.rounded-md {
+  border-radius: var(--bo-radius-md) !important;
+}
+.rounded-lg {
+  border-radius: var(--bo-radius-lg) !important;
+}
+.rounded-xl {
+  border-radius: var(--bo-radius-xl) !important;
+}
+
+/* Ensure v-avatar always maintains circle geometry regardless of CDN chunk load timing */
+.v-avatar {
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  vertical-align: middle;
+}
+
+/* --- Font: defeat Vuetify's hard-coded Roboto on .v-application + .text-* classes --- */
+.v-application {
+  font-family: var(--bo-font-sans) !important;
+}
+.text-h1,
+.text-h2,
+.text-h3,
+.text-h4,
+.text-h5,
+.text-h6,
+.text-subtitle-1,
+.text-subtitle-2,
+.text-body-1,
+.text-body-2,
+.text-button,
+.text-caption,
+.text-overline {
+  font-family: var(--bo-font-sans) !important;
+}
+
+/* --- Elevation tiers -------------------------------------------------------- */
+/* Tier 1: base card surface */
+.v-card {
+  box-shadow: var(--bo-shadow-card);
+}
+
+/* Tier 2: raised solo inputs, with a focus lift */
+.v-text-field .v-field--variant-solo,
+.v-autocomplete .v-field--variant-solo,
+.v-select .v-field--variant-solo,
+.v-textarea .v-field--variant-solo {
+  box-shadow: var(--bo-shadow-card);
+  transition: box-shadow 0.15s ease;
+}
+.v-text-field .v-field--variant-solo.v-field--focused,
+.v-autocomplete .v-field--variant-solo.v-field--focused,
+.v-select .v-field--variant-solo.v-field--focused,
+.v-textarea .v-field--variant-solo.v-field--focused {
+  box-shadow: var(--bo-shadow-raised);
+}
+
+/* Tier 3: floating popovers — menus, dialogs, autocomplete dropdowns */
+.v-overlay__content {
+  box-shadow: var(--bo-shadow-popover);
+}
+
+/* --- Shadow utility classes -------------------------------------------------------- */
+.shadow-card {
+  box-shadow: var(--bo-shadow-card);
+}
+
+.shadow-raised {
+  box-shadow: var(--bo-shadow-raised);
+}
+
+.shadow-popover {
+  box-shadow: var(--bo-shadow-popover);
+}
+
+.shadow-hover {
+  box-shadow: var(--bo-shadow-hover);
+}
+
+.shadow-drag {
+  box-shadow: var(--bo-shadow-drag);
+}
+
+.shadow-focused {
+  box-shadow: var(--bo-shadow-focused);
+}
+
+/* --- Transition utility classes --------------------------------------------------- */
+.transition-fast {
+  transition: var(--bo-transition-fast);
+}
+
+.transition-normal {
+  transition: var(--bo-transition-normal);
+}
+
+.transition-slow {
+  transition: var(--bo-transition-slow);
+}

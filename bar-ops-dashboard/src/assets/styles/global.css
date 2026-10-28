@@ -1,0 +1,118 @@
+/* Hide scrollbars app-wide while keeping scroll behaviour intact */
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* legacy Edge/IE */
+}
+
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+  width: 0;
+  height: 0;
+}
+
+input[type='datetime-local'],
+input[type='date'],
+input[type='month'] {
+  text-align: right !important;
+  display: flex !important;
+  flex-direction: row-reverse !important;
+  direction: ltr !important;
+}
+
+input[type='datetime-local']::-webkit-datetime-edit-placeholder,
+input[type='date']::-webkit-datetime-edit-placeholder {
+  display: none !important;
+  visibility: hidden !important;
+  -webkit-appearance: none !important;
+}
+
+input[type='datetime-local']::-webkit-calendar-picker-indicator,
+input[type='date']::-webkit-calendar-picker-indicator {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
+
+/* Custom spacing utilities for layouts with fixed bottom footers */
+.pb-24 {
+  padding-bottom: 96px !important;
+}
+
+/* --- Keyboard Focus Indicator (WCAG 2.4.7), public pages only --- */
+.public-page :focus-visible {
+  outline: 2px solid var(--bo-color-primary, #a85038) !important;
+  outline-offset: 2px !important;
+}
+
+/* Keep Chrome's autofill from painting inputs yellow with unreadable text */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: rgb(var(--v-theme-on-surface)) !important;
+  caret-color: rgb(var(--v-theme-on-surface));
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+/* Sticky save buttons: lift + light sweep on hover */
+.sticky-save-btn {
+  overflow: hidden;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
+}
+.sticky-save-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+.sticky-save-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35) !important;
+}
+.sticky-save-btn:hover:not(:disabled)::after {
+  animation: sticky-save-shine 0.9s ease;
+}
+@keyframes sticky-save-shine {
+  to {
+    transform: translateX(120%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sticky-save-btn,
+  .sticky-save-btn:hover:not(:disabled) {
+    transform: none;
+  }
+  .sticky-save-btn:hover:not(:disabled)::after {
+    animation: none;
+  }
+}
+
+/* Accessible Skip Link */
+.skip-to-content {
+  position: absolute;
+  top: -120px;
+  right: 16px;
+  background-color: #1a1a1a;
+  color: #ffffff !important;
+  padding: 10px 18px;
+  font-weight: 700;
+  font-size: 0.875rem;
+  z-index: 10000;
+  border-radius: 4px;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: top 0.2s ease-in-out;
+}
+.skip-to-content:focus {
+  top: 16px;
+}
+

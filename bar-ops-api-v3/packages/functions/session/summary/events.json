@@ -1,0 +1,53 @@
+[
+  {
+    "name": "Get Session Summary - ADMIN",
+    "content": {
+      "pathParameters": {
+        "sessionId": "77777777-7777-4777-9777-777777777777"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Get Session Summary - MANAGER",
+    "content": {
+      "pathParameters": {
+        "sessionId": "77777777-7777-4777-9777-777777777777"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Get Session Summary - USERS",
+    "content": {
+      "pathParameters": {
+        "sessionId": "77777777-7777-4777-9777-777777777777"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

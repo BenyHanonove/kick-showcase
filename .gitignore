@@ -1,0 +1,8 @@
+.claude/
+.agent/
+.agents/
+_bmad/
+_bmad-output/
+
+# Local migration exports
+aws-migration/

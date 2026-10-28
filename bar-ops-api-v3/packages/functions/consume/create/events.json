@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Create Consume - ADMIN",
+    "content": {
+      "body": "{\"sessionId\": \"11111111-1111-4111-9111-111111111111\", \"productId\": \"22222222-2222-4222-9222-222222222222\", \"chargedPrice\": 12.5, \"order\": 10, \"arrived\": 8, \"left\": 2}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Consume - MANAGER",
+    "content": {
+      "body": "{\"sessionId\": \"11111111-1111-4111-9111-111111111111\", \"productId\": \"22222222-2222-4222-9222-222222222222\", \"order\": 5, \"arrived\": 5, \"left\": 0}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Consume - Users",
+    "content": {
+      "body": "{\"sessionId\": \"11111111-1111-4111-9111-111111111111\", \"productId\": \"22222222-2222-4222-9222-222222222222\", \"order\": 1, \"arrived\": 1, \"left\": 1}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

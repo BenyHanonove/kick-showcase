@@ -1,0 +1,53 @@
+[
+  {
+    "name": "List Interval - ADMIN",
+    "content": {
+      "queryStringParameters": {
+        "shiftId": "44444444-4444-4444-9444-444444444444"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "List Interval - MANAGER",
+    "content": {
+      "queryStringParameters": {
+        "shiftId": "44444444-4444-4444-9444-444444444444"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "List Interval - USERS",
+    "content": {
+      "queryStringParameters": {
+        "shiftId": "44444444-4444-4444-9444-444444444444"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,51 @@
+[
+  {
+    "name": "Notify Shifts - ADMIN",
+    "content": {
+      "pathParameters": {
+        "sessionId": "00000000-0000-4000-8000-000000000000"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Notify Shifts - MANAGER",
+    "content": {
+      "pathParameters": {
+        "sessionId": "00000000-0000-4000-8000-000000000000"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Notify Shifts - Missing Session Id",
+    "content": {
+      "pathParameters": {},
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

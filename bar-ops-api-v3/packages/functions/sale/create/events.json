@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Create Sale - ADMIN",
+    "content": {
+      "body": "{\"clientId\": \"66666666-6666-4666-9666-666666666666\", \"datetime\": \"2025-06-15T20:00:00.000Z\", \"name\": \"Summer Beach Sale\", \"location\": \"Tel Aviv Beach\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Sale - MANAGER",
+    "content": {
+      "body": "{\"clientId\": \"66666666-6666-4666-9666-666666666666\", \"datetime\": \"2025-07-04T22:00:00.000Z\", \"name\": \"Warehouse Clearance\", \"location\": \"Rooftop Bar\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Sale - Users",
+    "content": {
+      "body": "{\"clientId\": \"66666666-6666-4666-9666-666666666666\", \"datetime\": \"2025-08-20T18:30:00.000Z\", \"name\": \"Private Sale\", \"location\": \"Galilee Forest\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

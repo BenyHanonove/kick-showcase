@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Update Consume - ADMIN",
+    "content": {
+      "pathParameters": {
+        "id": "33333333-3333-4333-9333-333333333333"
+      },
+      "body": "{\"chargedPrice\": 15.0, \"left\": 0}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Update Consume - MANAGER",
+    "content": {
+      "pathParameters": {
+        "id": "33333333-3333-4333-9333-333333333333"
+      },
+      "body": "{\"order\": 12, \"arrived\": 10}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Update Consume - USERS",
+    "content": {
+      "pathParameters": {
+        "id": "33333333-3333-4333-9333-333333333333"
+      },
+      "body": "{\"left\": 3}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

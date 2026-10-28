@@ -1,0 +1,6 @@
+# SPA fallback so client routes like /employees/self-register resolve.
+# Cloudflare Pages serves a 404 for unknown paths without this.
+#
+# It also catches missing sub-resources, which hands the browser HTML under a
+# .js URL. functions/_middleware.js turns those back into an uncacheable 404.
+/*  /index.html  200

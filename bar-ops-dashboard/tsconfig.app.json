@@ -1,0 +1,43 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "src/plugins/cognito/.ts"],
+  "exclude": ["src/**/__tests__/*"],
+  "compilerOptions": {
+    "types": ["vite/client"],
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
+    "paths": {
+      // Global Core Aliases
+      "@router": ["./src/config/router/index.ts"],
+      "@stores": ["./src/config/store/index.ts"],
+      "@plugins": ["./src/config/index.ts"],
+      "@layout/*": ["./src/layouts/*"],
+      "@assets/*": ["./src/assets/*"],
+
+      // Modules Aliases
+      "@auth/*": ["./src/modules/auth/*"],
+      "@cashier/*": ["./src/modules/cashier/*"],
+      "@consume/*": ["./src/modules/consume/*"],
+      "@client/*": ["./src/modules/client/*"],
+      "@document/*": ["./src/modules/document/*"],
+      "@employee/*": ["./src/modules/employee/*"],
+      "@expense/*": ["./src/modules/expense/*"],
+      "@missions/*": ["./src/modules/missions/*"],
+      "@interval/*": ["./src/modules/interval/*"],
+      "@landing/*": ["./src/modules/landing/*"],
+      "@legal/*": ["./src/modules/legal/*"],
+      "@links/*": ["./src/modules/links/*"],
+      "@product/*": ["./src/modules/product/*"],
+      "@reservation/*": ["./src/modules/reservation/*"],
+      "@sale/*": ["./src/modules/sale/*"],
+      "@session/*": ["./src/modules/session/*"],
+      "@shared/*": ["./src/modules/shared/*"],
+      "@shift/*": ["./src/modules/shift/*"],
+      "@supplier/*": ["./src/modules/supplier/*"],
+      "@tips/*": ["./src/modules/tips/*"],
+      "@vehicle/*": ["./src/modules/vehicle/*"]
+    }
+  }
+}

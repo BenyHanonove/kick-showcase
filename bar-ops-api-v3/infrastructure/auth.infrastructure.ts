@@ -1,0 +1,78 @@
+/// <reference path="../.sst/platform/config.d.ts" />
+// Import external framework dependencies and status codes from third party packages
+import { region, account, COGNITO_USER_POOL_ID, COGNITO_CLIENT_ID, apiPermission } from "./_shared.infrastructure";
+
+// Import shared AWS services, guard security middleware, and utility helpers
+import { AWS_CONFIG } from "@env/config.env";
+
+const userPoolArn = $interpolate`arn:aws:cognito-idp:${region}:${account}:userpool/${COGNITO_USER_POOL_ID}`;
+
+// ARN of the verified SES identity for the From address
+const sesIdentityArn = $interpolate`arn:aws:ses:${region}:${account}:identity/${AWS_CONFIG.sesFromAddress}`;
+
+// CustomMessage only rewrites the email body, no AWS permissions needed
+new sst.aws.Function("AuthMessage", {
+  handler: "packages/functions/auth/message/index.handler",
+});
+
+new sst.aws.Function("AuthDefine", {
+  handler: "packages/functions/auth/define/index.handler",
+});
+
+new sst.aws.Function("AuthCreate", {
+  handler: "packages/functions/auth/create/index.handler",
+  environment: {
+    SES_FROM_ADDRESS: AWS_CONFIG.sesFromAddress!,
+  },
+  permissions: [
+    {
+      actions: ["ses:SendEmail", "ses:SendRawEmail"],
+      resources: [sesIdentityArn],
+    },
+  ],
+});
+
+new sst.aws.Function("AuthVerify", {
+  handler: "packages/functions/auth/verify/index.handler",
+});
+
+new sst.aws.Function("AuthPostConfirmation", {
+  handler: "packages/functions/auth/post-confirmation/index.handler",
+  permissions: [
+    {
+      actions: ["cognito-idp:AdminAddUserToGroup"],
+      resources: [userPoolArn],
+    },
+  ],
+});
+
+// Public HTTP routes on the manually-created HTTP API
+apiPermission("AuthLogin", new sst.aws.Function("AuthLogin", {
+  handler: "packages/functions/auth/login/index.handler",
+  environment: {
+    COGNITO_USER_POOL_ID,
+    COGNITO_CLIENT_ID,
+  },
+  permissions: [
+    {
+      actions: ["cognito-idp:AdminUserGlobalSignOut", "cognito-idp:AdminInitiateAuth"],
+      resources: [userPoolArn],
+    },
+  ],
+}));
+
+apiPermission("AuthRefresh", new sst.aws.Function("AuthRefresh", {
+  handler: "packages/functions/auth/refresh/index.handler",
+  environment: {
+    COGNITO_CLIENT_ID,
+  },
+  // Public InitiateAuth needs no Cognito IAM permission configuration setting for
+}));
+
+apiPermission("AuthLogout", new sst.aws.Function("AuthLogout", {
+  handler: "packages/functions/auth/logout/index.handler",
+  environment: {
+    COGNITO_CLIENT_ID,
+  },
+  // RevokeToken / GlobalSignOut needs no Cognito IAM permission either configuration setting for
+}));

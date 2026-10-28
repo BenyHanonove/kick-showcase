@@ -1,0 +1,17 @@
+// Import external framework dependencies and status codes from third party packages
+import { ensureAuth } from '../../shared/auth-guard.js';
+import api from '../../shared/api.js';
+
+export async function updateExpense(id, payload) {
+  await ensureAuth();
+  
+  console.log('ID parameter passed:', id);
+  console.log('Request body passed:', payload);
+  
+  let path = '/expense/{id}';
+  path = path.replace('{id}', id);
+  const response = await api.put(path, payload);
+  console.log('Response status:', response.status);
+  console.log('Response data received:', response.data);
+  return response;
+}

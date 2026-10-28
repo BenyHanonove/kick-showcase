@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Create Auth Challenge - New Session",
+    "content": {
+      "request": {
+        "userAttributes": {
+          "email": "testuser@example.com"
+        },
+        "session": []
+      },
+      "response": {}
+    }
+  },
+  {
+    "name": "Create Auth Challenge - Retry Attempt",
+    "content": {
+      "request": {
+        "userAttributes": {
+          "email": "testuser@example.com"
+        },
+        "session": [
+          {
+            "challengeName": "CUSTOM_CHALLENGE",
+            "challengeResult": false,
+            "challengeMetadata": "CODE-123456"
+          }
+        ]
+      },
+      "response": {}
+    }
+  }
+]

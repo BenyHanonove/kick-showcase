@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Create Interval - ADMIN",
+    "content": {
+      "body": "{\"shiftId\": \"44444444-4444-4444-9444-444444444444\", \"sessionId\": \"11111111-1111-4111-9111-111111111111\", \"start\": \"2025-01-15T10:00:00.000Z\", \"end\": \"2025-01-15T14:00:00.000Z\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Interval - MANAGER",
+    "content": {
+      "body": "{\"shiftId\": \"44444444-4444-4444-9444-444444444444\", \"sessionId\": \"11111111-1111-4111-9111-111111111111\", \"start\": \"2025-01-15T14:00:00.000Z\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Interval - Users",
+    "content": {
+      "body": "{\"shiftId\": \"44444444-4444-4444-9444-444444444444\", \"sessionId\": \"11111111-1111-4111-9111-111111111111\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

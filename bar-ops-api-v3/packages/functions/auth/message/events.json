@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Custom Message - Sign Up",
+    "content": {
+      "triggerSource": "CustomMessage_SignUp",
+      "request": {
+        "linkParameter": "https://example.com/confirm?code=123456"
+      },
+      "response": {}
+    }
+  },
+  {
+    "name": "Custom Message - Resend Code",
+    "content": {
+      "triggerSource": "CustomMessage_ResendCode",
+      "request": {
+        "linkParameter": "https://example.com/confirm?code=654321"
+      },
+      "response": {}
+    }
+  }
+]

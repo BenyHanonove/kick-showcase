@@ -1,0 +1,9 @@
+// Import external framework dependencies and status codes from third party packages
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+
+const client = new DynamoDBClient({});
+export const docClient = DynamoDBDocumentClient.from(client, {
+    marshallOptions: { removeUndefinedValues: true },
+    unmarshallOptions: { wrapNumbers: false },
+});

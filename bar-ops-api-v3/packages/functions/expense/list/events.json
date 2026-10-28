@@ -1,0 +1,53 @@
+[
+  {
+    "name": "List Expense - ADMIN",
+    "content": {
+      "queryStringParameters": {
+        "sessionId": "00000000-0000-0000-0000-000000000000"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "List Expense - MANAGER",
+    "content": {
+      "queryStringParameters": {
+        "sessionId": "00000000-0000-0000-0000-000000000000"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "List Expense - USERS",
+    "content": {
+      "queryStringParameters": {
+        "sessionId": "00000000-0000-0000-0000-000000000000"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

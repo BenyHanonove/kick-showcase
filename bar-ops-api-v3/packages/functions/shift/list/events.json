@@ -1,0 +1,53 @@
+[
+  {
+    "name": "List Shift - ADMIN",
+    "content": {
+      "queryStringParameters": {
+        "sessionId": "11111111-1111-4111-9111-111111111111"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "List Shift - MANAGER",
+    "content": {
+      "queryStringParameters": {
+        "sessionId": "11111111-1111-4111-9111-111111111111"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "List Shift - USERS",
+    "content": {
+      "queryStringParameters": {
+        "sessionId": "11111111-1111-4111-9111-111111111111"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

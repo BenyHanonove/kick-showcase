@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Create Reservation - ADMIN",
+    "content": {
+      "body": "{\"fullName\": \"TEST ADMIN\", \"phone\": \"0501111111\", \"eventType\": \"wedding\", \"eventDate\": \"2027-05-20\", \"guestCount\": 150, \"location\": \"TEST\", \"notes\": \"TEST\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Reservation - MANAGER",
+    "content": {
+      "body": "{\"fullName\": \"TEST MANAGER\", \"phone\": \"0502222222\", \"eventType\": \"company\", \"eventDate\": \"2027-06-10\", \"guestCount\": 80}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Reservation - USERS",
+    "content": {
+      "body": "{\"fullName\": \"TEST USER\", \"phone\": \"0503333333\", \"eventType\": \"private\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

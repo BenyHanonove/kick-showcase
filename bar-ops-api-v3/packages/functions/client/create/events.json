@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Create Client - ADMIN",
+    "content": {
+      "body": "{\"name\": \"John Doe\", \"brand\": \"JD Enterprises\", \"email\": \"john@example.com\", \"phone\": \"1234567890\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Client - MANAGER",
+    "content": {
+      "body": "{\"name\": \"Jane Smith\", \"brand\": \"Smith Co\", \"email\": \"jane@smith.co\", \"phone\": \"0987654321\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Client - Users",
+    "content": {
+      "body": "{\"name\": \"User Bob\", \"brand\": \"Bob LLC\", \"email\": \"\", \"phone\": \"5551234567\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

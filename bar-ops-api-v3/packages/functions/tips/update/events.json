@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Update Tips - ADMIN",
+    "content": {
+      "pathParameters": {
+        "id": "aaaaaaaa-aaaa-4aaa-9aaa-aaaaaaaaaaaa"
+      },
+      "body": "{\"cashTip\": 400, \"creditTip\": 500}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Update Tips - MANAGER",
+    "content": {
+      "pathParameters": {
+        "id": "aaaaaaaa-aaaa-4aaa-9aaa-aaaaaaaaaaaa"
+      },
+      "body": "{\"totalHours\": 7}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Update Tips - USERS",
+    "content": {
+      "pathParameters": {
+        "id": "aaaaaaaa-aaaa-4aaa-9aaa-aaaaaaaaaaaa"
+      },
+      "body": "{\"area\": \"tables\", \"runnerFeed\": 80}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Create Tips - ADMIN",
+    "content": {
+      "body": "{\"sessionId\": \"11111111-1111-4111-9111-111111111111\", \"area\": \"bar\", \"cashTip\": 320, \"creditTip\": 480, \"totalHours\": 8, \"runnerFeed\": 60}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Tips - MANAGER",
+    "content": {
+      "body": "{\"sessionId\": \"11111111-1111-4111-9111-111111111111\", \"area\": \"tables\", \"cashTip\": 150, \"creditTip\": 600, \"totalHours\": 6, \"runnerFeed\": 40}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Tips - Users",
+    "content": {
+      "body": "{\"sessionId\": \"11111111-1111-4111-9111-111111111111\", \"area\": \"bar\", \"cashTip\": 0, \"creditTip\": 0, \"totalHours\": 4, \"runnerFeed\": 0}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

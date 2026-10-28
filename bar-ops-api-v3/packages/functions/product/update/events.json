@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Update Product - ADMIN",
+    "content": {
+      "pathParameters": {
+        "id": "12345678-1234-1234-1234-123456789012"
+      },
+      "body": "{\"name\": \"Vodka Premium Updated\", \"price\": 130, \"isBase\": true}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Update Product - MANAGER",
+    "content": {
+      "pathParameters": {
+        "id": "12345678-1234-1234-1234-123456789012"
+      },
+      "body": "{\"price\": 12, \"volume\": 500}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Update Product - USERS",
+    "content": {
+      "pathParameters": {
+        "id": "12345678-1234-1234-1234-123456789012"
+      },
+      "body": "{\"type\": \"soda\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

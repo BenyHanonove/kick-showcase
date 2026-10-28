@@ -1,0 +1,53 @@
+[
+  {
+    "name": "List Vehicles - ADMIN",
+    "content": {
+      "queryStringParameters": {
+        "sessionId": "11111111-1111-4111-9111-111111111111"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "List Vehicles - MANAGER",
+    "content": {
+      "queryStringParameters": {
+        "sessionId": "11111111-1111-4111-9111-111111111111"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "List Vehicles - USERS",
+    "content": {
+      "queryStringParameters": {
+        "sessionId": "11111111-1111-4111-9111-111111111111"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

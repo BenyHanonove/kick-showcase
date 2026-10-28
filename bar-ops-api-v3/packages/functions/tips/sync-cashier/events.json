@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Cashier Sync Event",
+    "content": {
+      "detail-type": "CashierSync",
+      "source": "cashier.sync",
+      "detail": {
+        "sessionId": "77777777-7777-4777-9777-777777777777",
+        "creditTipBar": 120,
+        "creditTipTables": 80
+      }
+    }
+  }
+]

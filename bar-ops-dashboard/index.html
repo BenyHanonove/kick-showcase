@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta
+      name="description"
+      content="KICK - החברה הגדולה בישראל לשירותי בר לאירועים והפקות. צוותי ברמנים מקצועיים, ציוד מלא ושירות מקצה לקצה."
+    />
+    <meta name="apple-mobile-web-app-title" content="KICK" />
+    <title>KICK שירותי בר</title>
+
+    <!-- Link preview cards (WhatsApp, Facebook, LinkedIn) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="KICK" />
+    <meta property="og:locale" content="he_IL" />
+    <meta property="og:url" content="https://kicks.ltd/" />
+    <meta property="og:title" content="KICK שירותי בר" />
+    <meta
+      property="og:description"
+      content="החברה הגדולה בישראל לשירותי בר לאירועים והפקות. צוותי ברמנים מקצועיים, ציוד מלא ושירות מקצה לקצה."
+    />
+    <meta property="og:image" content="https://kicks.ltd/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="KICK שירותי בר" />
+
+    <!-- Link preview cards (X/Twitter) -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="KICK שירותי בר" />
+    <meta
+      name="twitter:description"
+      content="החברה הגדולה בישראל לשירותי בר לאירועים והפקות. צוותי ברמנים מקצועיים, ציוד מלא ושירות מקצה לקצה."
+    />
+    <meta name="twitter:image" content="https://kicks.ltd/og-image.png" />
+    <script>
+      // Purge any legacy service worker + its caches.
+      // Safari disables service workers in Private Browsing but keeps them in
+      // normal windows, so a stale SW can serve broken cached assets there and
+      // leave the app unable to open. Unregister the SW, delete its caches, and
+      // reload once when the current page is actually being controlled by it.
+      (function () {
+        if (!('serviceWorker' in navigator)) return;
+
+        var RELOAD_FLAG = 'sw-cleanup-reloaded';
+        // A controller means this document was served through a legacy SW, so
+        // the assets in flight may already be stale/broken.
+        var controlled = !!navigator.serviceWorker.controller;
+
+        function unregisterAll() {
+          return navigator.serviceWorker
+            .getRegistrations()
+            .then(function (registrations) {
+              return Promise.all(
+                registrations.map(function (r) {
+                  return r.unregister();
+                }),
+              );
+            })
+            .catch(function () {});
+        }
+
+        function deleteCaches() {
+          if (!('caches' in window)) return Promise.resolve();
+          return caches
+            .keys()
+            .then(function (keys) {
+              return Promise.all(
+                keys.map(function (key) {
+                  return caches.delete(key);
+                }),
+              );
+            })
+            .catch(function () {});
+        }
+
+        Promise.all([unregisterAll(), deleteCaches()]).then(function () {
+          // Reload once (per tab) so the fresh, network-served build takes over.
+          if (controlled) {
+            var alreadyReloaded;
+            try {
+              alreadyReloaded = sessionStorage.getItem(RELOAD_FLAG);
+              sessionStorage.setItem(RELOAD_FLAG, '1');
+            } catch (e) {
+              // sessionStorage unavailable: fall back to a single reload attempt.
+            }
+            if (!alreadyReloaded) window.location.reload();
+          }
+        });
+      })();
+    </script>
+    <script>
+      // Recover from a build chunk that fails to load.
+      //
+      // For a few seconds after a deploy an /assets/ chunk may not have reached
+      // every edge location yet, so it 404s, the module graph never resolves and
+      // the app renders nothing. The same happens when a browser replays a stale
+      // index.html naming chunks the current build no longer emits.
+      //
+      // Reloading fetches a fresh index.html with current chunk names, which is
+      // all the recovery either case needs. Resource errors do not bubble, so
+      // the listener has to run in the capture phase.
+      (function () {
+        var RELOAD_STAMP = 'asset-recovery-reloaded-at';
+        // Long enough that a reload landing on the same failure gives up rather
+        // than looping, short enough that a later failure can still recover.
+        var COOLDOWN_MS = 10000;
+
+        window.addEventListener(
+          'error',
+          function (event) {
+            var el = event.target;
+            if (!el || el === window) return;
+
+            // Only act on a failed build asset, not on runtime script errors.
+            var tag = el.tagName;
+            if (tag !== 'SCRIPT' && tag !== 'LINK') return;
+            var url = el.src || el.href || '';
+            if (url.indexOf('/assets/') === -1) return;
+
+            var last = 0;
+            try {
+              last = parseInt(sessionStorage.getItem(RELOAD_STAMP) || '0', 10) || 0;
+            } catch (e) {
+              // sessionStorage unavailable: treat as never reloaded.
+            }
+            // Already retried moments ago, so the build is genuinely broken.
+            if (Date.now() - last < COOLDOWN_MS) return;
+
+            try {
+              sessionStorage.setItem(RELOAD_STAMP, String(Date.now()));
+            } catch (e) {
+              // Ignore: a reload without the stamp still beats a blank page.
+            }
+            window.location.reload();
+          },
+          true,
+        );
+      })();
+    </script>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700&family=Caveat:wght@400;500;600&family=Oswald:wght@500;600;700&family=Heebo:wght@300;400;500;700;800;900&family=Anton&display=swap&subset=hebrew"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <style>
+      #app-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 999999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at 50% 45%, #181513 0%, #0d0c0b 100%);
+        overflow: hidden;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      .app-splash-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        padding: 24px;
+      }
+
+      .app-splash-glow {
+        position: absolute;
+        width: 280px;
+        height: 280px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(168, 80, 56, 0.22) 0%, rgba(229, 144, 116, 0.08) 45%, transparent 70%);
+        filter: blur(32px);
+        pointer-events: none;
+        animation: splash-glow-breathe 2.4s ease-in-out infinite alternate;
+      }
+
+      .app-splash-logo-wrap {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: splash-float 2.6s ease-in-out infinite alternate;
+      }
+
+      .app-splash-logo {
+        width: clamp(140px, 34vw, 220px);
+        height: auto;
+        color: #ffffff;
+        filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 15px rgba(229, 144, 116, 0.25));
+        transition: transform 0.3s ease;
+      }
+
+      .app-splash-track {
+        position: relative;
+        z-index: 1;
+        width: clamp(110px, 25vw, 150px);
+        height: 3px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 28px;
+      }
+
+      .app-splash-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 45%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, transparent, #a85038, #e59074, #ffffff, #e59074, #a85038, transparent);
+        animation: splash-progress 1.3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      }
+
+      #app-splash.app-splash-fade {
+        opacity: 0;
+        transform: scale(1.02);
+        filter: blur(4px);
+        pointer-events: none;
+        transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                    filter 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      @keyframes splash-glow-breathe {
+        0% { transform: scale(0.85); opacity: 0.5; }
+        100% { transform: scale(1.15); opacity: 0.95; }
+      }
+
+      @keyframes splash-float {
+        0% { transform: translateY(0) scale(1); }
+        50% { transform: translateY(-3px) scale(1.015); }
+        100% { transform: translateY(0) scale(1); }
+      }
+
+      @keyframes splash-progress {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(330%); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .app-splash-glow,
+        .app-splash-logo-wrap,
+        .app-splash-bar {
+          animation: none !important;
+        }
+        #app-splash.app-splash-fade {
+          transition: opacity 0.2s ease;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- App Startup Splash Screen (Instant zero-JS display) -->
+    <div id="app-splash" aria-hidden="true">
+      <div class="app-splash-inner">
+        <div class="app-splash-glow"></div>
+        <div class="app-splash-logo-wrap">
+          <svg class="app-splash-logo" xmlns="http://www.w3.org/2000/svg" viewBox="557 404 1362 581" role="img" aria-label="KICK">
+            <path fill-rule="nonzero" fill="currentColor" d="M 1485.5 405 C 1485.746094 405.015625 1486.664062 403.804688 1487.5 404.878906 L 1529.5 449.527344 L 1918.003906 448.996094 L 1917.855469 981.363281 L 1916.378906 982.769531 C 1722.820312 984.039062 1529.074219 981.890625 1335.453125 982.953125 C 1332.597656 982.96875 1330.140625 984.027344 1327.539062 984.039062 C 1294.933594 984.234375 1262.304688 983.984375 1229.703125 983.796875 L 1189.019531 941.5 L 1191.492188 939.992188 L 1872.0625 938.5625 L 1872 494 L 1569.5 494 L 1528.53125 450.921875 C 1224.1875 451.605469 919.878906 452.480469 615.453125 451.953125 L 602 453 L 602 898 C 717.5 897.683594 833.035156 898.402344 948.546875 898.046875 C 1014.039062 897.847656 1079.910156 896.0625 1145.550781 896.949219 L 1149.058594 898.441406 L 1188.996094 940.503906 L 558.011719 944 L 558 405 Z M 1485.5 405 "/>
+            <path fill-rule="nonzero" fill="currentColor" d="M 789 544 L 789 643 C 790.996094 642.976562 792.957031 641.164062 794.472656 639.972656 C 799.796875 635.785156 807.277344 628.027344 812.527344 623.027344 C 837.230469 599.492188 860.359375 574.210938 884.949219 550.546875 C 921.390625 550.632812 958.09375 551.964844 994.558594 551.058594 C 996.257812 551.015625 997.492188 550.738281 998.988281 550 L 998.054688 564.554688 L 893.984375 672.484375 L 893.003906 674.992188 C 897.726562 675.25 901.578125 677.355469 904.511719 680.988281 L 1027 827 L 883.5 827 L 812.546875 751.953125 C 805.328125 748.941406 799.128906 749.503906 793.472656 754.972656 C 792.710938 755.710938 789 760.144531 789 760.5 L 789 827 C 787.722656 826.453125 786.039062 828 785.5 828 L 677 828 L 677 544 Z M 789 544 "/>
+            <path fill-rule="nonzero" fill="currentColor" d="M 1602 544 L 1602 642 L 1605.949219 641.449219 C 1637.789062 612.464844 1667.921875 581.394531 1698.5 551 L 1821 551 C 1815.230469 556.996094 1810.859375 564.871094 1805.511719 571.011719 C 1799.351562 578.089844 1791.449219 584.542969 1784.972656 591.472656 C 1758.773438 619.515625 1731.886719 646.6875 1706.003906 674.988281 L 1717.539062 679.960938 C 1746.269531 716.039062 1777.582031 750.019531 1806.972656 785.527344 C 1808.933594 787.894531 1821 802.238281 1821 803.5 L 1821 827 L 1697.5 827 C 1681.070312 810.769531 1666.089844 793.054688 1650.027344 776.472656 C 1645.726562 772.035156 1629.160156 754.074219 1625.371094 752.125 C 1620.335938 749.535156 1613.917969 750.761719 1609.503906 754.003906 C 1608.539062 754.714844 1602 760.96875 1602 761.5 L 1602 827 L 1491 827 L 1491 544 Z M 1602 544 "/>
+            <path fill-rule="nonzero" fill="currentColor" d="M 1459 550 L 1459 651.5 C 1459 651.804688 1460.265625 652.265625 1460 653 L 1323.5 653 C 1296.859375 653 1278.316406 683.703125 1292.566406 706.933594 C 1296.941406 714.0625 1310.054688 723 1318.5 723 L 1459 723 L 1460 827 L 1261.5 827 C 1221.023438 793.417969 1177.5 767.691406 1168.292969 711.207031 C 1155.730469 634.152344 1205.992188 591.210938 1261.5 550 Z M 1459 550 "/>
+            <path fill-rule="nonzero" fill="currentColor" d="M 1141 544 L 1141 827 L 1063 827 L 1029 791.5 L 1029 544 Z M 1141 544 "/>
+          </svg>
+        </div>
+        <div class="app-splash-track">
+          <div class="app-splash-bar"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Failsafe: dismiss splash after 6 seconds if app mount is unexpectedly delayed
+      setTimeout(function () {
+        var s = document.getElementById('app-splash');
+        if (s && !s.classList.contains('app-splash-fade')) {
+          s.classList.add('app-splash-fade');
+          setTimeout(function () { s.remove(); }, 450);
+        }
+      }, 6000);
+    </script>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

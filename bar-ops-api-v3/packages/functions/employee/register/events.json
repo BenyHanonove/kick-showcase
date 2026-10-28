@@ -1,0 +1,8 @@
+[
+  {
+    "name": "Register Employee",
+    "content": {
+      "body": "{\"firstName\": \"Alice\", \"lastName\": \"Wonder\", \"identityNumber\": \"222333444\", \"phone\": \"0532223333\", \"instagram\": \"alicewonder\"}"
+    }
+  }
+]

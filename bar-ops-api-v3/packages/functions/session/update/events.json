@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Update Session - ADMIN",
+    "content": {
+      "pathParameters": {
+        "id": "77777777-7777-4777-9777-777777777777"
+      },
+      "body": "{\"name\": \"Summer Beach Party Updated\", \"peopleAmount\": 300, \"type\": \"techno\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Update Session - MANAGER",
+    "content": {
+      "pathParameters": {
+        "id": "77777777-7777-4777-9777-777777777777"
+      },
+      "body": "{\"location\": \"New Location\", \"type\": \"house\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Update Session - USERS",
+    "content": {
+      "pathParameters": {
+        "id": "77777777-7777-4777-9777-777777777777"
+      },
+      "body": "{\"datetime\": \"2025-06-16T20:00:00.000Z\", \"type\": \"concert\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

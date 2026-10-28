@@ -1,0 +1,53 @@
+[
+  {
+    "name": "Employee Summary - ADMIN",
+    "content": {
+      "pathParameters": {
+        "sessionId": "dadaa048-85ec-4bdc-a597-7a6d3f031e19"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Employee Summary - MANAGER",
+    "content": {
+      "pathParameters": {
+        "sessionId": "dadaa048-85ec-4bdc-a597-7a6d3f031e19"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Employee Summary - USERS",
+    "content": {
+      "pathParameters": {
+        "sessionId": "dadaa048-85ec-4bdc-a597-7a6d3f031e19"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "name": "Delete Expense - ADMIN",
+    "content": {
+      "pathParameters": {
+        "id": "12345678-1234-1234-1234-123456789012"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Delete Expense - MANAGER",
+    "content": {
+      "pathParameters": {
+        "id": "12345678-1234-1234-1234-123456789012"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Delete Expense - USERS",
+    "content": {
+      "pathParameters": {
+        "id": "12345678-1234-1234-1234-123456789012"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

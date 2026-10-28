@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Update Sale - ADMIN",
+    "content": {
+      "pathParameters": {
+        "id": "77777777-7777-4777-9777-777777777777"
+      },
+      "body": "{\"name\": \"Summer Beach Sale Updated\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Update Sale - MANAGER",
+    "content": {
+      "pathParameters": {
+        "id": "77777777-7777-4777-9777-777777777777"
+      },
+      "body": "{\"location\": \"New Location\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Update Sale - USERS",
+    "content": {
+      "pathParameters": {
+        "id": "77777777-7777-4777-9777-777777777777"
+      },
+      "body": "{\"datetime\": \"2025-06-16T20:00:00.000Z\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

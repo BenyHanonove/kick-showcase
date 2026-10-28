@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Create Session - ADMIN",
+    "content": {
+      "body": "{\"clientId\": \"66666666-6666-4666-9666-666666666666\", \"datetime\": \"2025-06-15T20:00:00.000Z\", \"name\": \"Summer Beach Party\", \"peopleAmount\": 250, \"location\": \"Tel Aviv Beach\", \"type\": \"techno\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Session - MANAGER",
+    "content": {
+      "body": "{\"clientId\": \"66666666-6666-4666-9666-666666666666\", \"datetime\": \"2025-07-04T22:00:00.000Z\", \"name\": \"Rooftop Concert\", \"peopleAmount\": 120, \"location\": \"Rooftop Bar\", \"type\": \"concert\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Create Session - Users",
+    "content": {
+      "body": "{\"clientId\": \"66666666-6666-4666-9666-666666666666\", \"datetime\": \"2025-08-20T18:30:00.000Z\", \"name\": \"Forest Festival\", \"peopleAmount\": 500, \"location\": \"Galilee Forest\", \"type\": \"nature_party\"}",
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]

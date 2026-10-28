@@ -1,0 +1,53 @@
+[
+  {
+    "name": "Get Shift - ADMIN",
+    "content": {
+      "pathParameters": {
+        "id": "99999999-9999-4999-9999-999999999999"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Admin"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Get Shift - MANAGER",
+    "content": {
+      "pathParameters": {
+        "id": "99999999-9999-4999-9999-999999999999"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Manager"]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "Get Shift - USERS",
+    "content": {
+      "pathParameters": {
+        "id": "99999999-9999-4999-9999-999999999999"
+      },
+      "requestContext": {
+        "authorizer": {
+          "jwt": {
+            "claims": {
+              "cognito:groups": ["Users"]
+            }
+          }
+        }
+      }
+    }
+  }
+]
