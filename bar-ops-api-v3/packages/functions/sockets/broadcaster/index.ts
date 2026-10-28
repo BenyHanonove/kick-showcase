@@ -1,8 +1,9 @@
 import { DynamoDBStreamEvent } from 'aws-lambda';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, ScanCommand, DeleteCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, DeleteCommand } from '@aws-sdk/lib-dynamodb';
 import { ApiGatewayManagementApiClient, PostToConnectionCommand } from '@aws-sdk/client-apigatewaymanagementapi';
 
+import { scanAll } from '@aws/dynamo/paginate.dynamo';
 import { logger } from '@utils/logger/logger.util';
 
 const docClient = DynamoDBDocumentClient.from(new DynamoDBClient({}));
@@ -37,11 +38,12 @@ export const handler = async (event: DynamoDBStreamEvent): Promise<void> => {
   // 1. Fetch active WebSocket clients with their room membership
   let connections: ConnectionRecord[] = [];
   try {
-    const result = await docClient.send(new ScanCommand({
+    // Paginated: a single Scan page would silently skip connections past 1MB
+    const items = await scanAll({
       TableName: process.env.TABLE!,
       ProjectionExpression: 'connectionId, roomId'
-    }));
-    connections = (result.Items || []).map(item => ({
+    });
+    connections = items.map(item => ({
       connectionId: String(item.connectionId),
       roomId: item.roomId ? String(item.roomId) : undefined
     }));
