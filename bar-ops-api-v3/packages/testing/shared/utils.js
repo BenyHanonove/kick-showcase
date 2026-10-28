@@ -14,8 +14,8 @@ export function generateUniquePhone() {
   return '05' + Math.floor(10000000 + Math.random() * 90000000).toString();
 }
 
-// The only number allow-listed as a WhatsApp test recipient, so
-// Use in message-sending flows only: it is NOT unique, so
+// The only number allow-listed as a WhatsApp test recipient, so it cannot be randomized.
+// Use in message-sending flows only: it is NOT unique, so suites using it must not overlap.
 export const VERIFIED_TEST_PHONE = '0507799799';
 
 // Unwrap API response payload (handles { data: { data }

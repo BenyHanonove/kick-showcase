@@ -41,7 +41,7 @@ async function assertRejects(fn, status, label) {
   assert.strictEqual(error.status, status, `${label}: expected ${status} but got ${error.status ?? error.message}`);
 }
 
-// Session get may return a row or a single object,
+// Session get may return a row or a single object, so accept both
 function findSession(response, id) {
   const data = extractData(response);
   if (Array.isArray(data)) return data.find(session => session.id === id);
@@ -73,7 +73,7 @@ async function createFixtures() {
     firstName: 'TEST',
     lastName: 'TEST',
     identityNumber: generateUniqueId(),
-    // Opening registration sends a real WhatsApp message, so this must
+    // Opening registration sends a real WhatsApp message, so this must be the allow-listed number
     phone: VERIFIED_TEST_PHONE,
     type: 'waiter'
   }));
@@ -131,7 +131,7 @@ async function runAdminLifecycle() {
     assert.strictEqual(resolved.session.location, 'TEST', 'resolve should return the event location');
     assert.strictEqual(resolved.registered, false, 'a fresh token should report the employee as not yet registered');
 
-    // Roles are picked from the static enum on the page,
+    // Roles are picked from the static enum on the page, so resolve must not send them
     assert.ok(!('roles' in resolved), 'resolve should not send a roles list');
 
     // The ids the token holds must never reach the employee
@@ -142,7 +142,7 @@ async function runAdminLifecycle() {
       assert.ok(!(field in resolved), `resolve should not expose "${field}"`);
     }
 
-    // The employee registers: the token carries who and which event,
+    // The employee registers: the token carries who and which event, the body only the role
     const registerResponse = await registerShift(token, { role: 'waiter', notes: 'אגיע ב-20:30' });
     assert.strictEqual(registerResponse.status, 201, 'register should create the shift');
     const registered = extractData(registerResponse);
@@ -153,7 +153,7 @@ async function runAdminLifecycle() {
       assert.ok(!(field in registered), `register should not expose "${field}"`);
     }
 
-    // Admin read-back: the shift is real, timed to the event,
+    // Admin read-back: the shift is real, timed to the event, and owned by the token holder
     const shifts = extractData(await listShifts({ sessionId: fixtures.sessionId }));
     const created = shifts.find(shift => shift.id === shiftId);
     assert.ok(created, 'the registered shift should appear on the session');

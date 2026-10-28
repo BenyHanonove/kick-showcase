@@ -21,10 +21,11 @@ import { ShiftRegistration } from '@dtos/shift/shift.enum';
 
 const MESSAGES = new ResourceMessages('משמרת', 'משמרות');
 
-// Generic message for any invalid/expired/spent token - never reveals which
+// Generic message for any invalid/expired/spent token, so a caller cannot tell which case hit
 const INVALID_LINK_MESSAGE = 'הקישור אינו תקין או שפג תוקפו';
 
-// The one refusal that names its reason, because the employee
+// The one refusal that names its reason: the employee holds a valid link and needs to
+// know they are already on the event rather than retrying
 const ALREADY_REGISTERED_MESSAGE = 'כבר שובצת לאירוע זה';
 
 const invalidLinkResponse = (): APIGatewayProxyResultV2 => ({
@@ -46,7 +47,8 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
 
         const { token, role, notes } = body;
 
-        // Read the token first: a refused registration must not burn it
+        // Read the token first to learn who and which event; nothing is consumed until the
+        // transaction below, so a refused registration leaves the link usable
         const tokenRes = await docClient.send(new GetCommand({
             TableName: process.env.TOKEN_TABLE!,
             Key: { token },
@@ -64,7 +66,8 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
 
         const { sessionId, employeeId } = tokenItem;
 
-        // One shift per employee per event; the token survives so
+        // One shift per employee per event. Refusing here leaves the token intact, so the
+        // employee is told they are already staffed instead of losing the link
         const existing = await list(process.env.TABLE!, ShiftDto, {
             indexName: 'SessionIdIndex',
             keyConditionExpression: 'sessionId = :sessionId',

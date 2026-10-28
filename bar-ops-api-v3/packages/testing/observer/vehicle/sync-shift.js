@@ -113,7 +113,7 @@ export async function runSyncTest() {
   const shiftResponse = await createShift(shiftPayload);
   const shiftId = extractId(shiftResponse);
 
-  // Create Vehicle driven by the shift (sum syncs to the
+  // Create Vehicle driven by the shift (sum syncs to the shift's bonusTravel)
   const vehiclePayload = {
     sessionId: sessionId,
     driverShiftId: shiftId,

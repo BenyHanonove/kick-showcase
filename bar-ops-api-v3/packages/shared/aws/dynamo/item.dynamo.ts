@@ -5,15 +5,15 @@ export type DynamoAttributeValue = string | number | boolean | object | null | u
 // A raw DynamoDB item: attribute name -> attribute value
 export type DynamoItem = Record<string, DynamoAttributeValue>;
 
-// Field names for the split-datetime GSI pattern, all overridable per
-// nothing here is baked into a fixed list, so a
+// Field names for the split-datetime GSI pattern, overridable per call so a table
+// with different attribute names can reuse the same helpers.
 export interface DateSplitKeys {
     monthYearKey?: string; // default 'monthYear'
     dayKey?: string;       // default 'day'
     datetimeKey?: string;  // default 'datetime'
 }
 
-// True when an item carries a split monthYear/day pair that
+// True when an item carries a split monthYear/day pair that has not been recombined yet
 const hasSplitDatetime = (item: DynamoItem, keys: DateSplitKeys = {}): boolean => {
     const { monthYearKey = 'monthYear', dayKey = 'day', datetimeKey = 'datetime' } = keys;
     return (

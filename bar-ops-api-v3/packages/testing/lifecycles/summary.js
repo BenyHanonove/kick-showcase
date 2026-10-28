@@ -78,7 +78,7 @@ async function deleteFixtures({ clientId, saleId, supplierId, productId, consume
   await deleteSupplier(supplierId);
 }
 
-// Full flow as admin: build a sale with consumes, then
+// Full flow as admin: build a sale with consumes, then check its monthly cost/sold totals
 async function runAdminLifecycle() {
   const fixtures = await createFixtures();
 

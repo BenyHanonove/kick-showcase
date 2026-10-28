@@ -61,7 +61,7 @@ export const handler = RolesGuard([UserRole.ADMIN], async (event: APIGatewayProx
             normalized: formatWhatsAppPhone(rawPhone),
         });
 
-        // Overwrite semantics: drop any existing token for this employee before
+        // Overwrite semantics: drop any existing token for this employee before issuing a new one
         const existing = await docClient.send(new QueryCommand({
             TableName: process.env.TOKEN_TABLE!,
             IndexName: 'EmployeeIdIndex',
@@ -107,7 +107,7 @@ export const handler = RolesGuard([UserRole.ADMIN], async (event: APIGatewayProx
             buttonParamChars: token.length,
         });
 
-        // Deliver the link over WhatsApp; the token in the button
+        // Deliver the link over WhatsApp; the token rides in the template's URL button
         const sendResult = await sendWhatsAppTemplate(employeeInstance.phone, TEMPLATE_NAME, {
             bodyParams: [employeeInstance.firstName],
             buttonUrlParam: token,

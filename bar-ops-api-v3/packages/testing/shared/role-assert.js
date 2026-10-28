@@ -42,7 +42,7 @@ export function assertFieldsPresent(obj, fields, label = 'response') {
   }
 }
 
-// Assert the object matches the current role's view of the
+// Assert the object matches the current role's view of the entity (manager-dropped fields absent)
 export function assertRoleView(entity, obj, label = entity) {
   const drops = managerDrops(entity);
   if (drops.length === 0) return;

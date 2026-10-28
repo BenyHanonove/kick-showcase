@@ -18,7 +18,7 @@ import { EmployeeDto } from '@dtos/employee/employee.dto';
 
 const MESSAGES = new ResourceMessages('עובד', 'עובדים');
 
-// Generic message for any invalid/expired/used token - avoids leaking which
+// Generic message for any invalid/expired/used token, so a caller cannot tell which case hit
 const INVALID_LINK_MESSAGE = 'הקישור אינו תקין או שפג תוקפו';
 
 const invalidLinkResponse = (): APIGatewayProxyResultV2 => ({

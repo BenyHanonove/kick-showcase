@@ -17,7 +17,7 @@ import { ResolveShiftRegistrationDto } from '@dtos/shift/resolve.dto';
 
 const MESSAGES = new ResourceMessages('משמרת', 'משמרות');
 
-// Generic message for any invalid/expired/spent token - never reveals which
+// Generic message for any invalid/expired/spent token, so a caller cannot tell which case hit
 const INVALID_LINK_MESSAGE = 'הקישור אינו תקין או שפג תוקפו';
 
 const invalidLinkResponse = (): APIGatewayProxyResultV2 => ({

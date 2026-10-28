@@ -34,7 +34,8 @@ export const remove = async (
     return !!result.Attributes;
 };
 
-// Cascade delete related records. Token tables key on `token`, hence
+// Delete every row whose GSI field matches (cascade from a parent). `keyName` is the
+// table's partition key: "id" for entity tables, "token" for the link-token tables.
 export const cascadeDeleteByField = async (
     tableName: string,
     indexName: string,

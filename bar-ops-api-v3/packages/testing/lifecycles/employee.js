@@ -35,7 +35,7 @@ function findEmployee(response, id) {
 }
 
 // The public register response is intentionally id-less (enumeration guard), so the
-// registered row's id is resolved as admin by matching its
+// registered row's id is resolved by matching its unique test phone. The caller must
 // already be in an admin context (list is admin/manager-only).
 async function resolveRegisteredId(phone) {
   const data = extractData(await listEmployees());

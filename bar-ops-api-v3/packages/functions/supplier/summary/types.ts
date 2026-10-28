@@ -15,13 +15,13 @@ export interface ProductConsume extends ConsumeDto {
     name: string
 }
 
-// One event block in the report type definition structure for
+// One event (session or sale) in the supplier report, with the supplier's consumes in it
 export interface SupplierEventReport {
     event: SessionDto | SaleDto;
     consumes: ProductConsume[];
 }
 
-// Everything the PDF generator needs for document layout generation and
+// Everything the PDF generator needs to lay out one supplier's monthly report
 export interface SupplierReportData {
     supplier: SupplierDto;
     monthYear: string; // YYYY-MM
