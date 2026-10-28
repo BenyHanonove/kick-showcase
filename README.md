@@ -54,7 +54,8 @@ flowchart LR
   SPA --> PAGES
   SPA -- "REST + Bearer" --> PROXY --> HTTP
   SPA -- "WSS (token in subprotocol)" --> PROXY --> WSAPI
-  HTTP --> AUTH <--> COG
+  HTTP --> AUTH
+  AUTH <--> COG
   HTTP --> L
   L --> DDB
   L <--> REDIS
