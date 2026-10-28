@@ -1,0 +1,17 @@
+# Copy to wrangler.toml (gitignored) and fill in your own values.
+name = "api-proxy"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+account_id = "<CLOUDFLARE_ACCOUNT_ID>"
+workers_dev = false
+
+routes = [
+  { pattern = "api.example.com", custom_domain = true },
+  { pattern = "ws.example.com", custom_domain = true },
+]
+
+[vars]
+# HTTP API Gateway invoke URL
+API_ORIGIN = "https://<HTTP_API_ID>.execute-api.<region>.amazonaws.com"
+# WebSocket API invoke URL, including the stage path
+WS_ORIGIN = "https://<WS_API_ID>.execute-api.<region>.amazonaws.com/production"
