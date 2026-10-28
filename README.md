@@ -193,6 +193,36 @@ flowchart LR
 | **9** | **Cache** | **Versioned Redis** | On **`200 / 201`**, runs `INCR version:BarOps-<Table>` and primes the updated item |
 | **10** | **Async CDC** | **Stream → Pipe → Bus** | Triggers 18 observer Lambdas (cascades/sync) + broadcasts `{ store, action, id }` over WebSocket |
 
+### Accountless Staff Management (WhatsApp Bot & Ephemeral Single-Use Public Tokens)
+
+In large outdoor productions, staff members (bartenders, waiters, runners) change from event to event. Requiring casual workers to register accounts, remember passwords, or install an app creates friction in the field. Instead, **all staff interactions happen through an automated WhatsApp Cloud API bot backed by short-lived, single-use tokens**:
+
+```mermaid
+flowchart LR
+  subgraph Admin["1. Manager Dashboard"]
+    OPEN["POST /shift/open/:sessionId<br/>POST /employee/link/:id<br/>POST /shift/notify/:sessionId"]
+  end
+
+  subgraph Bot["2. Token Minting & WhatsApp Bot"]
+    TOK[("DynamoDB Token Tables<br/>used = false · TTL = 1h–24h<br/>+ snapshotted display fields")]
+    WA["WhatsApp Cloud API<br/>Approved Templates + Button URL"]
+  end
+
+  subgraph Public["3. Unauthenticated Public Routes (No User Account)"]
+    RES["POST /shift/resolve<br/>POST /employee/resolve<br/>(Reads token snapshot only)"]
+    ACT["POST /shift/register<br/>POST /employee/claim<br/>(TransactWrite: burn token + write row)"]
+  end
+
+  OPEN --> TOK --> WA -->|"One-tap link (?token=...)"| RES --> ACT
+  ACT -.->|"Conditional Delete / Update<br/>prevents replay & double-spend"| TOK
+```
+
+| Flow | Trigger (`Admin` / Bot) | Public Route (No Account Needed) | Token Lifetime & Atomic Security Guarantee |
+| :--- | :--- | :--- | :--- |
+| **Shift Self-Registration** | `POST /shift/open/{sessionId}` mints token in `BarOps-ShiftToken` and sends WhatsApp template `shift_availability_request` | `POST /shift/resolve` → `POST /shift/register` (`/shift-register?token=...`) | **24h TTL.** Event name, date, and location are snapshotted onto the token row so `resolve` never queries core tables. `TransactWriteCommand` atomically **deletes** the token (`used = false AND expiresAt > now`) and **puts** the shift (`deterministicId(sessionId, employeeId)` + `attribute_not_exists(id)`). |
+| **Employee Onboarding & Details Claim** | `POST /employee/link/{id}` mints token in `BarOps-EmployeeToken` and sends WhatsApp link to complete missing profile/ID fields | `POST /employee/resolve` → `POST /employee/claim` (`/employee-update?token=...`) | **1h TTL.** `TransactWriteCommand` atomically marks `used = true` (`Condition: used = false AND expiresAt > now`) and updates the employee record with optimistic concurrency (`timestamp`). |
+| **Arrival Hours & Shift Reminders** | `POST /shift/notify/{sessionId}` & `POST /shift/notification/{sessionId}` | Direct WhatsApp push (`shift_assignment_notice`) | Once managers assign exact arrival hours (`timing`), the bot fans out personalized arrival schedules and locations to every staffed worker on the event. |
+
 ---
 
 ## Interface Screenshots
