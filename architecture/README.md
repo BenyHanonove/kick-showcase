@@ -111,28 +111,23 @@ copy-paste path.
 7. **User-facing strings are Hebrew** and come from `ResourceMessages` (backend) or
    the composable/view (frontend).
 
-## 5. What is *not* in code (console-managed)
+## 5. Infrastructure as code & tenancy
 
-This is the single biggest trap for a new feature. These resources are created by hand
-in the AWS console and only *referenced* by the IaC:
+- **IaC (`bar-ops-api-v3/infrastructure/`):** DynamoDB tables, the HTTP and WebSocket API Gateways, the EventBridge bus, Cognito pools, DLQs, X-Ray tracing, and CloudWatch alarms are declared in SST/Pulumi with `import` support for adopting the existing console-created production resources. See [infrastructure-as-code.md](infrastructure-as-code.md) for the stage model and one-time import procedure.
+- **Tenancy:** Each deployment is single-tenant by design (clients are rows in `BarOps-Client`, not tenants). See [multi-tenancy.md](multi-tenancy.md) for the silo vs. pooled multi-tenant design notes.
 
-| Resource | Where it is declared | Consequence |
-| --- | --- | --- |
-| DynamoDB tables + GSIs | Console; referenced via `dynamoTable()` | Create the table **before** deploying |
-| HTTP API Gateway (one per stage) | Console; ID read from `.env.<stage>` (`HTTP_API_ID`) in [`_shared.infrastructure.ts`](../bar-ops-api-v3/infrastructure/_shared.infrastructure.ts) | Routes + integrations are wired by hand, per stage |
-| API Gateway CORS + throttling | Console | A new origin (e.g. `http://localhost:5173`) must be added there |
-| WebSocket API | Console | Same as above |
-| Cognito user pool + app client | Console; IDs read from `.env.<stage>` | Shared by both stages |
-| Redis (Upstash/hosted) | `.env.<stage>` + SSM parameter | `REDIS_HOST`/`REDIS_PORT` must exist or deploy throws |
+## 6. Health snapshot
 
-## 6. Health snapshot — 2026-09-04
+CI is the source of truth: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml)
+runs on every push and pull request.
 
-| Check | Command | Result |
-| --- | --- | --- |
-| Backend types | `npx tsc --noEmit` (bar-ops-api-v3) | ✅ clean |
-| Frontend types | `npm run type-check` (vue-tsc) | ✅ clean |
-| Frontend lint | `npx eslint .` | ✅ clean |
-| Git tree | `git status` | ✅ clean |
+| Job | Steps |
+| --- | --- |
+| `dashboard` | `npm ci` → `npm run type-check` (vue-tsc) → `npm run lint` → `npm test` (Vitest) |
+| `api` | `npm ci --ignore-scripts` → `npm run typecheck` (tsc, Lambda code only) → `npm test` (Vitest) |
 
-Known operational notes: `quotation.js` is skipped in the API test suite (model not in
-use), and `/employee/notify` has no API Gateway route yet.
+The black-box API suites in [`packages/testing/`](../bar-ops-api-v3/packages/testing/)
+need a deployed stage and Cognito test users, so they run in the deploy pipeline
+(`npm run deploy:barops`: deploy dev → clean → test as each role → deploy production),
+not in public CI. Known operational notes: `quotation.js` is skipped in the API test
+suite (model not in use), and `/employee/notify` has no API Gateway route yet.
