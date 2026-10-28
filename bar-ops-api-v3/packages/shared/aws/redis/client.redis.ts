@@ -3,6 +3,7 @@ import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
 
 import { AWS_CONFIG } from '@env/config.env';
 import { logger } from '@utils/logger/logger.util';
+import { traceClient } from '@utils/observability/tracer.util';
 
 const rawHost = AWS_CONFIG.redis.host;
 // REDIS_HOST must be bare hostname, not the Upstash REST URL
@@ -21,7 +22,7 @@ const resolvePassword = async (): Promise<string | undefined> => {
   const paramName = AWS_CONFIG.redis.passwordParam;
   if (!paramName) return undefined;
 
-  const ssm = new SSMClient({});
+  const ssm = traceClient(new SSMClient({}));
   const result = await ssm.send(new GetParameterCommand({ Name: paramName, WithDecryption: true }));
   return result.Parameter?.Value;
 };

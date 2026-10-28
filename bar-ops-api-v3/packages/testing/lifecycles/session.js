@@ -71,7 +71,7 @@ async function runManagerChecks() {
     const sessionsByClientOnly = extractData(await listSessions({ clientId: clientId }));
     assert.ok(Array.isArray(sessionsByClientOnly) && sessionsByClientOnly.some(s => s.id === sessionId), 'session list by client only as manager should contain the active session');
 
-    // Date-range lookup (day-precision) must find it inside its day and
+    // Date-range lookup (day-precision) must find it inside its day and exclude it outside
     const sessionsInRange = extractData(await listSessions({ clientId: clientId, startDate: '2026-06-01', endDate: '2026-06-01' }));
     assert.ok(Array.isArray(sessionsInRange) && sessionsInRange.some(s => s.id === sessionId), 'session list by date range as manager should contain the session on its exact day');
 

@@ -1,8 +1,7 @@
-import { ScanCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { plainToInstance, type ClassConstructor } from "class-transformer";
 import { validate } from "class-validator";
-import { docClient } from "./client.dynamo";
-import { type DynamoItem, type DateSplitKeys, recombineDatetime } from "./item.dynamo";
+import { queryAll, scanAll } from "./paginate.dynamo";
+import { type DynamoItem, type DateSplitKeys, recombineDatetime, stripStorageOnlyFields } from "./item.dynamo";
 
 import { redisClient, CACHE_TTL_SECONDS, getTableVersion } from "@aws/redis/client.redis";
 import { logger } from '@utils/logger/logger.util';
@@ -15,7 +14,7 @@ export interface ListOptions {
     expressionAttributeValues?: Record<string, string | number | boolean | null | undefined>;
 }
 
-// Fetch list of items from DynamoDB table
+// Fetch every matching item (Query when a key condition is given, otherwise Scan), cached per table version
 export const list = async <T extends object>(
     tableName: string,
     dto: ClassConstructor<T>,
@@ -49,26 +48,27 @@ export const list = async <T extends object>(
         logger.error("Redis read error in list helper:", err);
     }
 
-    let items: DynamoItem[] = [];
-
-    if (options?.keyConditionExpression) {
-        const response = await docClient.send(new QueryCommand({
+    // Follows LastEvaluatedKey to the end so callers always get the full result set
+    const items: DynamoItem[] = options?.keyConditionExpression
+        ? await queryAll({
             TableName: tableName,
             IndexName: options.indexName,
             KeyConditionExpression: options.keyConditionExpression,
             FilterExpression: options.filterExpression,
             ExpressionAttributeNames: options.expressionAttributeNames,
             ExpressionAttributeValues: options.expressionAttributeValues,
-        }));
-        items = (response.Items || []) as DynamoItem[];
-    } else {
-        const response = await docClient.send(new ScanCommand({
+        })
+        : await scanAll({
             TableName: tableName,
-        }));
-        items = (response.Items || []) as DynamoItem[];
-    }
+            // Expression maps are only legal on a Scan when a filter references them
+            ...(options?.filterExpression && {
+                FilterExpression: options.filterExpression,
+                ExpressionAttributeNames: options.expressionAttributeNames,
+                ExpressionAttributeValues: options.expressionAttributeValues,
+            }),
+        });
 
-    const processedItems = items.map((item) => recombineDatetime(item, dateSplitKeys));
+    const processedItems = items.map((item) => stripStorageOnlyFields(recombineDatetime(item, dateSplitKeys)));
 
     const instances = plainToInstance(dto, processedItems, {
         enableImplicitConversion: true,

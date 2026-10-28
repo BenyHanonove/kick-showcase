@@ -1,7 +1,8 @@
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import { type APIGatewayProxyEventV2, type APIGatewayProxyResultV2 } from "aws-lambda";
+import { traceClient } from "@utils/observability/tracer.util";
 
-const lambda = new LambdaClient({});
+const lambda = traceClient(new LambdaClient({}));
 
 export async function invokeLambda(
     functionName: string,

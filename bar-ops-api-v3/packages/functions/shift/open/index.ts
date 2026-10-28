@@ -60,7 +60,8 @@ const readData = <T>(result: APIGatewayProxyStructuredResultV2): T | null => {
     }
 };
 
-// Naive local string, no offset - parse directly so the
+// Timings are naive Israel-local strings with no offset. Parse the digits directly so the
+// Lambda's UTC clock never shifts the hour shown to the employee
 const formatDatetime = (isoString: string): string => {
     const match = isoString.match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?/);
     if (!match) return isoString;
@@ -75,7 +76,7 @@ export const handler = RolesGuard([UserRole.ADMIN], async (event: APIGatewayProx
     if (!WHATSAPP_SERVICE_ENABLED) return whatsAppUnavailableResponse();
 
     try {
-        // Path id is the session registration is being opened for
+        // Path id: the session whose registration is being opened
         const sessionId = extractId(event, 'sessionId', MESSAGES.ERROR.MISSING_ID);
         if (typeof sessionId !== 'string') return sessionId;
 
@@ -127,7 +128,7 @@ export const handler = RolesGuard([UserRole.ADMIN], async (event: APIGatewayProx
             };
         }
 
-        // The session only names the client, so the brand needs
+        // The session only names the client, so the brand needs a lookup through client/get
         const clientRes = await invokeLambda(
             process.env.CLIENT_GET_LAMBDA_NAME!,
             { pathParameters: { id: session.clientId } },
@@ -164,7 +165,8 @@ export const handler = RolesGuard([UserRole.ADMIN], async (event: APIGatewayProx
         const expiresAtEpoch = Math.floor(now.getTime() / 1000) + TOKEN_TTL_HOURS * 60 * 60;
         const token = generateToken();
 
-        // Everything the public page renders is snapshotted here, so resolve
+        // Everything the public page renders is snapshotted here, so resolve can answer from
+        // the token row alone without reading the session or employee
         const item: ShiftRegistrationTokenDto = {
             id: uuidv4(),
             token,
@@ -197,7 +199,8 @@ export const handler = RolesGuard([UserRole.ADMIN], async (event: APIGatewayProx
             expiresAt: new Date(expiresAtEpoch * 1000).toISOString(),
         });
 
-        // An employee with no phone still gets a token, it
+        // An employee with no phone still gets a token, it is just not sent; the manager can
+        // share the link by hand
         if (!employee.phone) {
             logger.warn('[open] 5. no phone on file', { employeeId });
             return {

@@ -18,11 +18,12 @@ const MESSAGES = new ResourceMessages('משמרת', 'משמרות');
 // Revoke all active shift registration tokens for specified session event record
 export const handler = RolesGuard([UserRole.ADMIN], async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
     try {
-        // Path id is the session registration is being closed for
+        // Path id: the session whose registration is being closed
         const sessionId = extractId(event, 'sessionId', MESSAGES.ERROR.MISSING_ID);
         if (typeof sessionId !== 'string') return sessionId;
 
-        // Every outstanding link for the session dies at once; the
+        // Every outstanding link for the session dies at once; the token table is keyed on
+        // `token`, so that is the delete key
         const revoked = await cascadeDeleteByField(
             process.env.TOKEN_TABLE!,
             'SessionIdIndex',
@@ -33,7 +34,7 @@ export const handler = RolesGuard([UserRole.ADMIN], async (event: APIGatewayProx
 
         logger.info('[revoke] registration closed', { sessionId, revoked });
 
-        // Idempotent: a session with no live tokens is already closed,
+        // Idempotent: a session with no live tokens is already closed, so revoked = 0 is a success
         const data = plainToInstance(RevokeShiftRegistrationResultDto, { revoked });
 
         return {

@@ -1,19 +1,13 @@
 import 'reflect-metadata';
 
 import { type EventBridgeEvent, type DynamoDBRecord } from 'aws-lambda';
-import { v4 as uuidv4 } from 'uuid';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, QueryCommand, BatchWriteCommand } from '@aws-sdk/lib-dynamodb';
+import { PutCommand } from '@aws-sdk/lib-dynamodb';
 
+import { docClient } from '@aws/dynamo/client.dynamo';
 import { cascadeDeleteByField } from '@aws/dynamo/delete.dynamo';
-import { redisClient } from '@aws/redis/client.redis';
+import { invalidateTable } from '@aws/dynamo/create.dynamo';
+import { deterministicId } from '@utils/id/deterministic-id.util';
 import { logger } from '@utils/logger/logger.util';
-
-const client = new DynamoDBClient({});
-const docClient = DynamoDBDocumentClient.from(client, {
-    marshallOptions: { removeUndefinedValues: true },
-    unmarshallOptions: { wrapNumbers: false },
-});
 
 // Shape of a tips record seeded for a session
 interface SessionTipRecord {
@@ -42,35 +36,43 @@ export const lambdaHandler = async (event: EventBridgeEvent<string, DynamoDBReco
         const sessionId = record.dynamodb?.Keys?.id?.S;
         if (!sessionId) return;
 
-        // On INSERT, seed default tips rows per service area
+        // On INSERT, seed one tips row per service area. EventBridge delivers at least
+        // once, so the row id is derived from (session, area) and the put only succeeds
+        // if that row does not exist yet: a redelivery is a no-op, not a duplicate row.
         if (record.eventName === 'INSERT') {
-            const writeRequests = (['bar', 'tables'] as const).map((area) => ({
-                PutRequest: {
-                    Item: {
-                        id: uuidv4(),
-                        sessionId,
-                        area,
-                        cashTip: 0,
-                        creditTip: 0,
-                        runnerFeed: 50,
-                        totalHours: 0,
-                        timestamp: new Date().toISOString(),
-                    } as SessionTipRecord,
-                },
-            }));
+            const tableName = process.env.TABLE!;
+            const timestamp = new Date().toISOString();
+            let created = 0;
 
-            await docClient.send(new BatchWriteCommand({
-                RequestItems: {
-                    [process.env.TABLE!]: writeRequests
+            for (const area of ['bar', 'tables'] as const) {
+                const item: SessionTipRecord = {
+                    id: deterministicId('session-tips', sessionId, area),
+                    sessionId,
+                    area,
+                    cashTip: 0,
+                    creditTip: 0,
+                    runnerFeed: 50,
+                    totalHours: 0,
+                    timestamp,
+                };
+                try {
+                    await docClient.send(new PutCommand({
+                        TableName: tableName,
+                        Item: item,
+                        ConditionExpression: 'attribute_not_exists(id)',
+                    }));
+                    created++;
+                } catch (err) {
+                    if (err instanceof Error && err.name === 'ConditionalCheckFailedException') {
+                        // Already seeded by an earlier delivery of this event
+                        continue;
+                    }
+                    throw err;
                 }
-            }));
-
-            // Invalidate Redis list cache for Tips table
-            try {
-                await redisClient.incr(`version:${process.env.TABLE!}`);
-            } catch (err) {
-                logger.error("Redis version increment error in tips observer INSERT:", err);
             }
+
+            if (created > 0) await invalidateTable(tableName);
+            else logger.info('[tips observer] duplicate INSERT delivery ignored', { sessionId });
         }
 
         // On REMOVE, cascade delete all tips for that session

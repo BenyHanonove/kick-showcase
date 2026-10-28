@@ -40,7 +40,7 @@ async function createFixtures() {
     firstName: 'TEST',
     lastName: 'TEST',
     identityNumber: generateUniqueId(),
-    // Shift notification sends a real WhatsApp message, so this must
+    // Shift notification sends a real WhatsApp message, so this must be the allow-listed number
     phone: VERIFIED_TEST_PHONE,
     type: 'waiter'
   });

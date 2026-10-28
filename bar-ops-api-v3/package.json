@@ -14,7 +14,9 @@
     "deploy:prod": "sst deploy --stage production",
     "deploy:barops": "node packages/testing/pipeline/deploy.js",
     "test:dev": "node packages/testing/pipeline/run-tests.js",
-    "clean:dev": "node packages/testing/pipeline/clean-dev.js"
+    "clean:dev": "node packages/testing/pipeline/clean-dev.js",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.ci.json --noEmit"
   },
   "devDependencies": {
     "@aws-sdk/client-apigatewaymanagementapi": "^3.1041.0",
@@ -30,13 +32,19 @@
     "@pdf-lib/fontkit": "^1.1.1",
     "@pulumi/aws": "^7.28.0",
     "@types/aws-lambda": "^8.10.161",
+    "@types/ioredis-mock": "^8.2.8",
     "@types/node": "^24.10.1",
     "@types/uuid": "^10.0.0",
+    "aws-sdk-client-mock": "^4.1.0",
+    "ioredis-mock": "^8.13.1",
     "sst": "^4.15.2",
     "tsx": "^4.22.4",
-    "typescript": "^6.0.0"
+    "typescript": "^6.0.0",
+    "vitest": "^3.2.7"
   },
   "dependencies": {
+    "@aws-lambda-powertools/logger": "^2.36.0",
+    "@aws-lambda-powertools/tracer": "^2.36.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
     "exceljs": "^4.4.0",

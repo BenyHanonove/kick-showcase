@@ -43,7 +43,7 @@ interface RecipientResult {
     reason?: string;
 }
 
-// Timings without a zone suffix are already Israel local -
+// Timings without a zone suffix are already Israel local and are formatted as-is
 const NAIVE_DATETIME = /^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2})(?::\d{2}(?:\.\d+)?)?)?$/;
 
 // Helper to format timing string in Israel timezone (Asia/Jerusalem)
@@ -99,7 +99,7 @@ export const handler = RolesGuard([UserRole.ADMIN], async (event: APIGatewayProx
     if (!WHATSAPP_SERVICE_ENABLED) return whatsAppUnavailableResponse();
 
     try {
-        // Path id is the session being broadcast to
+        // Path id: the session whose staff receive the broadcast
         const sessionId = extractId(event, 'id', MESSAGES.ERROR.MISSING_ID);
         if (typeof sessionId !== 'string') return sessionId;
 
@@ -212,7 +212,7 @@ export const handler = RolesGuard([UserRole.ADMIN], async (event: APIGatewayProx
                 shiftTiming: shift.timing ?? '(falls back to session datetime)',
             });
 
-            // Raw phone in, same as the employee link lambda -
+            // Raw phone in, same as the employee link lambda: sendWhatsAppTemplate normalizes it
             const sendResult = await sendWhatsAppTemplate(rawPhone, TEMPLATE_NAME, { bodyParams });
 
             if (sendResult.success) {

@@ -1,5 +1,6 @@
-import { DeleteCommand, QueryCommand, BatchWriteCommand } from "@aws-sdk/lib-dynamodb";
+import { DeleteCommand, BatchWriteCommand } from "@aws-sdk/lib-dynamodb";
 import { docClient } from "./client.dynamo";
+import { queryAll } from "./paginate.dynamo";
 
 import { redisClient } from "@aws/redis/client.redis";
 import { logger } from '@utils/logger/logger.util';
@@ -33,7 +34,8 @@ export const remove = async (
     return !!result.Attributes;
 };
 
-// Cascade delete related records. Token tables key on `token`, hence
+// Delete every row whose GSI field matches (cascade from a parent). `keyName` is the
+// table's partition key: "id" for entity tables, "token" for the link-token tables.
 export const cascadeDeleteByField = async (
     tableName: string,
     indexName: string,
@@ -41,16 +43,13 @@ export const cascadeDeleteByField = async (
     fieldValue: string,
     keyName: string = "id"
 ): Promise<number> => {
-    const result = await docClient.send(
-        new QueryCommand({
-            TableName: tableName,
-            IndexName: indexName,
-            KeyConditionExpression: `${fieldName} = :val`,
-            ExpressionAttributeValues: { ":val": fieldValue },
-        })
-    );
-
-    const items = result.Items || [];
+    // Paginate so a parent with more than 1MB of children is fully cleaned up
+    const items = await queryAll({
+        TableName: tableName,
+        IndexName: indexName,
+        KeyConditionExpression: `${fieldName} = :val`,
+        ExpressionAttributeValues: { ":val": fieldValue },
+    });
     if (items.length === 0) return 0;
 
     const deleteRequests = items

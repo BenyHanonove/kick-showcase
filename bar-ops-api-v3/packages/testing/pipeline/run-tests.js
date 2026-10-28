@@ -32,8 +32,8 @@ const SKIP = [...WHATSAPP_SUITES];
 
 // These create an employee on VERIFIED_TEST_PHONE - the only allow-listed WhatsApp
 // recipient, so the number cannot be randomized. Employee create rejects a duplicate
-// phone with 409, so two of them overlapping fails whichever
-// creates the fixture (non-admin paths go through asAdmin), so they
+// phone with 409, so two of them overlapping fails whichever one creates the fixture
+// second (non-admin paths go through asAdmin too), so they run one at a time.
 const EXCLUSIVE = ['shift-registration.js', 'shift.js', 'employee-token.js'];
 
 // Collect runnable tests for a role: lifecycles always, observer suites admin-only
@@ -106,7 +106,7 @@ async function runRoleTests(stage, role, envFile, runLogsDir) {
   const startTime = Date.now();
   const run = file => runTestFile(file, stage, role, envFile);
 
-  // Batched first, then the phone-sharing tests alone so they never
+  // Batched first, then the phone-sharing tests one at a time so they never overlap
   const results = [
     ...await runInBatches(parallel, CONCURRENCY, run),
     ...await runInBatches(shared, 1, run)
