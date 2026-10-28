@@ -1,6 +1,6 @@
 /// <reference path="../.sst/platform/config.d.ts" />
 import * as aws from "@pulumi/aws";
-import { dynamoTable, stageResourceName, lambdaName, region, account, FONTS_PREFIX, apiPermission } from "./_shared.infrastructure";
+import { dynamoTable, stageResourceName, lambdaName, region, account, FONTS_PREFIX, apiPermission, lambdaArn } from "./_shared.infrastructure";
 
 import { AWS_CONFIG } from "@env/config.env";
 
@@ -139,14 +139,12 @@ const employeeSummary = new sst.aws.Function("EmployeeSummary", {
   },
   permissions: [
     { actions: ["dynamodb:BatchGetItem"], resources: [employee.arn] },
-    { actions: ["lambda:InvokeFunction"], resources: ["*"] },
     {
-      actions: ["s3:GetObject"],
-      resources: [$interpolate`arn:aws:s3:::${AWS_CONFIG.s3.globalBucket}/*`],
-    },
-    {
-      actions: ["s3:ListBucket"],
-      resources: [$interpolate`arn:aws:s3:::${AWS_CONFIG.s3.globalBucket}`],
+      actions: ["lambda:InvokeFunction"],
+      resources: [
+        lambdaArn("session", "get"),
+        lambdaArn("shift", "list"),
+      ],
     },
   ],
   nodejs: {

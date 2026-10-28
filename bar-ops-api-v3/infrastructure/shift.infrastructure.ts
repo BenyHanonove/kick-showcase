@@ -1,6 +1,6 @@
 /// <reference path="../.sst/platform/config.d.ts" />
 import * as aws from "@pulumi/aws";
-import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, lambdaName, region, account, apiPermission, subscribeToBus } from "./_shared.infrastructure";
+import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, lambdaName, region, account, apiPermission, subscribeToBus, lambdaArn } from "./_shared.infrastructure";
 
 import { AWS_CONFIG } from "@env/config.env";
 
@@ -128,9 +128,9 @@ apiPermission("ShiftOpen", new sst.aws.Function("ShiftOpen", {
     {
       actions: ["lambda:InvokeFunction"],
       resources: [
-        $interpolate`arn:aws:lambda:${region}:${account}:function:${lambdaName("session", "get")}`,
-        $interpolate`arn:aws:lambda:${region}:${account}:function:${lambdaName("client", "get")}`,
-        $interpolate`arn:aws:lambda:${region}:${account}:function:${lambdaName("employee", "get")}`,
+        lambdaArn("session", "get"),
+        lambdaArn("client", "get"),
+        lambdaArn("employee", "get"),
       ],
     },
   ],
@@ -186,7 +186,14 @@ const shiftNotification = new sst.aws.Function("ShiftNotification", {
     WHATSAPP_PHONE_NUMBER_ID: AWS_CONFIG.whatsapp.phoneNumberId!,
   },
   permissions: [
-    { actions: ["lambda:InvokeFunction"], resources: ["*"] },
+    {
+      actions: ["lambda:InvokeFunction"],
+      resources: [
+        lambdaArn("session", "get"),
+        lambdaArn("shift", "list"),
+        lambdaArn("employee", "list"),
+      ],
+    },
   ],
 });
 
@@ -204,8 +211,8 @@ const shiftNotify = new sst.aws.Function("ShiftNotify", {
     {
       actions: ["lambda:InvokeFunction"],
       resources: [
-        $interpolate`arn:aws:lambda:${region}:${account}:function:${lambdaName("session", "get")}`,
-        $interpolate`arn:aws:lambda:${region}:${account}:function:${lambdaName("employee", "notify")}`,
+        lambdaArn("session", "get"),
+        lambdaArn("employee", "notify"),
       ],
     },
   ],

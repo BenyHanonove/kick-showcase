@@ -1,6 +1,6 @@
 /// <reference path="../.sst/platform/config.d.ts" />
 import * as aws from "@pulumi/aws";
-import { dynamoTable, createStreamPipe, stageResourceName, lambdaName, region, account, FONTS_PREFIX, apiPermission } from "./_shared.infrastructure";
+import { dynamoTable, createStreamPipe, stageResourceName, lambdaName, region, account, FONTS_PREFIX, apiPermission, lambdaArn } from "./_shared.infrastructure";
 
 import { AWS_CONFIG } from "@env/config.env";
 
@@ -69,11 +69,22 @@ const supplierSummary = new sst.aws.Function("SupplierSummary", {
     FONTS_PREFIX,
   },
   permissions: [
-    { actions: ["lambda:InvokeFunction"], resources: ["*"] },
+    {
+      actions: ["lambda:InvokeFunction"],
+      resources: [
+        lambdaArn("session", "list"),
+        lambdaArn("sale", "list"),
+        lambdaArn("consume", "batch"),
+        lambdaArn("product", "list"),
+      ],
+    },
     { actions: ["dynamodb:GetItem"], resources: [supplier.arn] },
+    // Fonts only
     {
       actions: ["s3:GetObject"],
-      resources: [$interpolate`arn:aws:s3:::${AWS_CONFIG.s3.globalBucket}/*`],
+      resources: [
+        $interpolate`arn:aws:s3:::${AWS_CONFIG.s3.globalBucket}/${FONTS_PREFIX}/*`,
+      ],
     },
   ],
   nodejs: {

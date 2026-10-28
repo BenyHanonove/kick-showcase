@@ -1,6 +1,6 @@
 /// <reference path="../.sst/platform/config.d.ts" />
 import * as aws from "@pulumi/aws";
-import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, lambdaName, region, account, FONTS_PREFIX, PDF_TEMPLATE_KEY, apiPermission, subscribeToBus } from "./_shared.infrastructure";
+import { dynamoTable, projectBus, createStreamPipe, getStreamArnPrefix, stageResourceName, lambdaName, region, account, FONTS_PREFIX, PDF_TEMPLATE_KEY, apiPermission, subscribeToBus, lambdaArn } from "./_shared.infrastructure";
 
 import { AWS_CONFIG } from "@env/config.env";
 
@@ -72,11 +72,26 @@ const sessionSummary = new sst.aws.Function("SessionSummary", {
     PDF_TEMPLATE_KEY,
   },
   permissions: [
-    { actions: ["lambda:InvokeFunction"], resources: ["*"] },
+    {
+      actions: ["lambda:InvokeFunction"],
+      resources: [
+        lambdaArn("session", "get"),
+        lambdaArn("client", "get"),
+        lambdaArn("cashier", "list"),
+        lambdaArn("consume", "list"),
+        lambdaArn("expense", "list"),
+        lambdaArn("product", "list"),
+      ],
+    },
+    // Fonts and PDF template only
     {
       actions: ["s3:GetObject"],
-      resources: [$interpolate`arn:aws:s3:::${AWS_CONFIG.s3.globalBucket}/*`],
+      resources: [
+        $interpolate`arn:aws:s3:::${AWS_CONFIG.s3.globalBucket}/${FONTS_PREFIX}/*`,
+        $interpolate`arn:aws:s3:::${AWS_CONFIG.s3.globalBucket}/pdf/*`,
+      ],
     },
+    // ListBucket turns a missing asset into NoSuchKey instead of AccessDenied
     {
       actions: ["s3:ListBucket"],
       resources: [$interpolate`arn:aws:s3:::${AWS_CONFIG.s3.globalBucket}`],

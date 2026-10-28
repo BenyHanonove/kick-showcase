@@ -18,6 +18,8 @@ export default $config({
       throw new Error(`Missing .env.${$app.stage} — refusing to deploy stage "${$app.stage}" with production values`);
     }
 
+    const { region, account } = await import("./infrastructure/_config.infrastructure");
+
     $transform(sst.aws.Function, (args, opts, name) => {
       if (!args) return;
       args.runtime ??= "nodejs24.x";
@@ -60,7 +62,7 @@ export default $config({
       // Grant every function read access to its stage's Redis password parameter
       const ssmPermission = {
         actions: ["ssm:GetParameter"],
-        resources: [`arn:aws:ssm:*:*:parameter${redisPasswordParam}`],
+        resources: [$interpolate`arn:aws:ssm:${region}:${account}:parameter${redisPasswordParam}`],
       };
       const permsInput = args.permissions;
       if (isOutputLike<(typeof ssmPermission)[]>(permsInput)) {
